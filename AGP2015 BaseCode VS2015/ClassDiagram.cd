@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="C_Attack">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAEAEAAAgABAAIAAgCwAAAYAIIAAiEACAAiAIAAACAA=</HashCode>
+      <FileName>Attack.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Character">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEBCAEAAAAQAQAAABAAQAAIAGCSQBQAAAACAACAo=</HashCode>
+      <FileName>Character.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Flee">
+    <Position X="2.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Flee.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HeavyAttack">
+    <Position X="10.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HeavyAttack.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ItemUse">
+    <Position X="4.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAEAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ItemUse.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LightAttack">
+    <Position X="6.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>LightAttack.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Poison">
+    <Position X="0.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Poison.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Stun">
+    <Position X="8.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Stun.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Item">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAAEAAAUAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Item.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Collisions">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAACAAAAAAAAAAQAAAAAAAAAAAACABAAUABAAA=</HashCode>
+      <FileName>Collisions.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="md2model">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAgIQAAQgABAAAAAAAAAAAQEAABACQAAAAAAAQIgACU=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="md2_header_t">
+    <Position X="13" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAWACAJAAAAAAAEAABAAAAAAmAAAAAACAAAAAAsAwA=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="md2_frame_t">
+    <Position X="7.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAACAAAEAAAAAAAAAEAABAA=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="md2_glcmd_t">
+    <Position X="5.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIQAAAABAAA=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="rt3d::lightStruct">
+    <Position X="11.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAIAIAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>rt3d.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="rt3d::materialStruct">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAABAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>rt3d.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
