@@ -3,7 +3,7 @@
 // Most of the OpenGL code for dealing with buffer objects, etc has been moved to a 
 // utility library, to make creation and display of mesh objects as simple as possible
 
-//Edited by the B0$$
+//Edited by the IAN
 
 // Windows specific: Uncomment the following line to open a console window for debug output
 #if _DEBUG
