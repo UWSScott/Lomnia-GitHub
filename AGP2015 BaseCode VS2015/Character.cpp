@@ -26,7 +26,7 @@ void Character::draw(glm::mat4 object)
 {
 	glUseProgram(shaderProgram);
 	glCullFace(GL_FRONT);
-	glActiveTexture(GL_TEXTURE1);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	//Animation

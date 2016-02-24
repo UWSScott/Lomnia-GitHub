@@ -29,7 +29,8 @@
 #include "stdafx.h" //http://sourceforge.net/p/wpbdc/website/ci/master/tree/Judge/StdAfx.h
 #include <list>
 
-//#include "Character.h"
+#include "Character.h"
+#include "Camera.h"
 
 /*#include "Stun.h"
 #include "Poison.h"
@@ -147,7 +148,8 @@ std::clock_t start;
 double duration;
 glm::vec3 oldPlayerPos;
 
-
+Camera Game_Camera = Camera();
+Character character = Character();
 
 
 // textToTexture
@@ -586,6 +588,9 @@ void init(void) {
 	enemyPos = getEnemyPos();
 
 	enemyMove = moveEnemy();
+
+	Game_Camera.InitalStats();
+	character.InitalStats(shaderProgram);
 	
 }
 
@@ -620,7 +625,7 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-
+	Game_Camera.update(character.getModelEye(), character.getRotation());
 
 
 	/*if (inCombat == false)
@@ -796,7 +801,6 @@ void draw(SDL_Window * window) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-
 	glm::mat4 projection(1.0);
 	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 1920.0f / 1080.0f, 1.0f, 150.0f);
 	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
@@ -806,7 +810,7 @@ void draw(SDL_Window * window) {
 
 	glm::mat4 modelview(1.0); // set base position for scene
 	mvStack.push(modelview);
-	if (camera == 1) {
+	/*if (camera == 1) {
 		at = moveForward(eye, r, 1.0f);
 		mvStack.top() = glm::lookAt(eye, at, up);
 	}
@@ -815,7 +819,9 @@ void draw(SDL_Window * window) {
 	at = glm::vec3(playerPos.x, playerPos.y + heightOfCam, playerPos.z);
 		eye = moveForward(at, r, -5.0f);
 		mvStack.top() = glm::lookAt(eye, at, up);
-	}
+	}*/
+	//mvStack.top() = glm::lookAt(Game_Camera.eye, Game_Camera.at, Game_Camera.up);
+	Game_Camera.draw(mvStack.top(), character.getModelEye());
 
 	// draw a skybox
 	glUseProgram(skyboxProgram);
@@ -957,6 +963,8 @@ void draw(SDL_Window * window) {
 	rt3d::drawMesh(meshObjects[1], md2VertCount, GL_TRIANGLES);
 	mvStack.pop();
 	glCullFace(GL_BACK);
+
+	character.draw(mvStack.top());
 
 	// remember to use at least one pop operation per push...
 	mvStack.pop(); // initial matrix

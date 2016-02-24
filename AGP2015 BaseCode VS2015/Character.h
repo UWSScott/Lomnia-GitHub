@@ -33,6 +33,13 @@ public:
 	int xp = 0;
 	bool canDie = true;
 
+	Character() {};
+	virtual void Update();
+	virtual void InitalStats(GLuint setShaderProgram);
+	virtual void draw(glm::mat4 object);
+	virtual  glm::vec3 getModelEye();
+	virtual int getRotation();
+
 protected:
 	glm::vec3 modelEye;
 	glm::vec3 modelAt;
@@ -41,14 +48,8 @@ protected:
 	md2model tmpModel;
 	GLuint md2VertCount = 0;
 
-	Character() {};
 	virtual glm::vec3 MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d);
-	virtual int getRotation();
-	virtual  glm::vec3 getModelEye();
-	virtual void draw(glm::mat4 object);
 	virtual bool isDead();
-	virtual void Update();
-	virtual void InitalStats(GLuint setShaderProgram);
 };
 
 /*class Character : public Gameobject
