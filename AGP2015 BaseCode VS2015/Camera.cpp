@@ -10,7 +10,7 @@ glm::vec3 Camera::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d) {
 /*The camera information is not loaded from a file, instead hardcoded.*/
 void Camera::InitalStats()
 {
-	eye = { 0.0f, 2.5f, 10.0f };
+	position = { 0.0f, 2.5f, 10.0f };
 	at = { 0.0f, 1.0f, -6.0 };
 	up = { 0.0f, 1.0f, 0.0f };
 
@@ -47,14 +47,16 @@ void Camera::draw(glm::mat4 &object, glm::vec3 modelEye)
 		at = MoveForward(modelEye, 0, 1.0f);
 		break;
 	case 3:
-		at = MoveForward(eye, rotation, 1.0f);
+		at = MoveForward(position, rotation, 1.0f);
+		object = glm::lookAt(position, at, up);
+		return;
 		break;
 	default:
 		at = MoveForward(modelEye, 0, 1.0f);
 		break;
 	}
 
-	object = glm::lookAt(eye, at, up);
+	object = glm::lookAt(position, at, up);
 	object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
 	object = glm::translate(object, -modelEye);
 }
@@ -76,9 +78,9 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 	switch (camera_Type)
 	{
 	case 1:
-		eye.x = modelEye.x + 6.0f;
-		eye.y = modelEye.y + 20.0f;
-		eye.z = modelEye.z + 10.0f;
+		position.x = modelEye.x + 6.0f;
+		position.y = modelEye.y + 20.0f;
+		position.z = modelEye.z + 10.0f;
 		break;
 	case 2:
 
@@ -86,13 +88,16 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 	case 3:
 		if (keys[SDL_SCANCODE_W])
 		{
-			modelEye = MoveForward(modelEye, rotation, 0.2f);
-		} else if (keys[SDL_SCANCODE_S]){
-			modelEye = MoveForward(modelEye, rotation, -0.2f);
+			position = MoveForward(position, rotation, 0.1f);
+		}
+		else if (keys[SDL_SCANCODE_S]) {
+			position = MoveForward(position, rotation, -0.1f);
 		}
 
-		if (keys[SDL_SCANCODE_A]) rotation -= 5.0f;
-		if (keys[SDL_SCANCODE_D]) rotation += 5.0f;
+		if (keys[SDL_SCANCODE_A]) rotation -= 1.0f;
+		if (keys[SDL_SCANCODE_D]) rotation += 1.0f;
+		if (keys[SDL_SCANCODE_R]) position.y += 0.1f;
+		if (keys[SDL_SCANCODE_F]) position.y -= 0.1f;
 		break;
 	default:
 		break;
