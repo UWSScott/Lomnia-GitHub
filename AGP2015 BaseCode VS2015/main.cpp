@@ -10,6 +10,7 @@
 #pragma comment(linker, "/subsystem:\"console\" /entry:\"WinMainCRTStartup\"")
 #endif
 
+//#include "FileLoader.h"
 #include "rt3d.h"
 #include "rt3dObjLoader.h"
 #include <glm/glm.hpp>
@@ -416,7 +417,7 @@ SDL_Window * setupRC(SDL_GLContext &context) {
  
     // Create 800x600 window 
     window = SDL_CreateWindow("SDL/GLM/OpenGL Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        1920, 1080, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
+        800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
 	if (!window) // Check window was created OK
         rt3d::exitFatalError("Unable to create window");
  
