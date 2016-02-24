@@ -157,10 +157,13 @@
     <ClCompile Include="Gameobject.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemUse.cpp" />
+    <ClCompile Include="Level_001.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="md2model.cpp" />
+    <ClCompile Include="Prefab.cpp" />
     <ClCompile Include="rt3d.cpp" />
     <ClCompile Include="rt3dObjLoader.cpp" />
+    <ClCompile Include="Skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="anorms.h" />
@@ -178,8 +181,10 @@
     <ClInclude Include="LightAttack.h" />
     <ClInclude Include="md2model.h" />
     <ClInclude Include="Poison.h" />
+    <ClInclude Include="Prefab.h" />
     <ClInclude Include="rt3d.h" />
     <ClInclude Include="rt3dObjLoader.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="Stun.h" />
   </ItemGroup>

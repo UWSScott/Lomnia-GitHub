@@ -41,7 +41,6 @@ public:
 	virtual int getRotation();
 
 protected:
-	glm::vec3 modelEye;
 	glm::vec3 modelAt;
 	glm::vec3 modelUp;
 	int currentAnimation = 0;

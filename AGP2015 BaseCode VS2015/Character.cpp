@@ -16,10 +16,10 @@ int Character::getRotation()
 	return rotation;
 }
 
-/* returns modelEye of player (Location of player) */
+/* returns position of player (Location of player) */
 glm::vec3 Character::getModelEye()
 {
-	return modelEye;
+	return position;
 }
 
 void Character::draw(glm::mat4 object)
@@ -36,8 +36,8 @@ void Character::draw(glm::mat4 object)
 	// drawing the player model
 
 	//glBindTexture(GL_TEXTURE_2D, texture);
-	modelAt = MoveForward(modelEye, rotation, 1.0f);
-	object = glm::translate(object, MoveForward(modelEye, rotation, 1.0f));
+	modelAt = MoveForward(position, rotation, 1.0f);
+	object = glm::translate(object, MoveForward(position, rotation, 1.0f));
 	object = glm::rotate(object, float((90.0f - rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
 	object = glm::scale(object, glm::vec3(scale.x*0.05, scale.y*0.05, scale.z*0.05));
 	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
@@ -59,9 +59,8 @@ void Character::InitalStats(GLuint setShaderProgram)
 		2.0f  // shininess
 	};
 
-	currentAnimation = 0;
-	meshIndexCount = 0;
-	md2VertCount = 0;
+	scale = glm::vec3(1, 1, 1);
+	position = glm::vec3(1, 3, 1);
 
 	FileLoader* fileLoader = new FileLoader;
 	texture = fileLoader->loadBitmap("hobgoblin2.bmp");
@@ -91,7 +90,7 @@ void Character::Update()
 		if (keys[SDL_SCANCODE_W])
 		{
 			currentAnimation = 1;
-			modelEye = MoveForward(modelEye, rotation, 0.2f);
+			position = MoveForward(position, rotation, 0.2f);
 		}
 		else {
 			//currentAnim = 0;
@@ -99,7 +98,7 @@ void Character::Update()
 		if (keys[SDL_SCANCODE_S])
 		{
 			currentAnimation = 1;
-			modelEye = MoveForward(modelEye, rotation, -0.2f);
+			position = MoveForward(position, rotation, -0.2f);
 		}
 
 		if (keys[SDL_SCANCODE_A]) rotation -= 5.0f;
