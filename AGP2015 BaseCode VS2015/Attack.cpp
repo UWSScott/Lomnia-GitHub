@@ -2,7 +2,7 @@
 #include "Character.h"
 
 
-float C_Attack::damageCalc(Character& a, Character& b) //A is attacker, B is victim
+/*float C_Attack::damageCalc(Character& a, Character& b) //A is attacker, B is victim
 {
 	float res = b.ResSelect(resType); //Sets the resistance value according to the element of the attack being used (eg. fireRes for fire attacks)
 	int damage = (a.strength +  (rand() % maxDamage + minDamage)); //Damage is comprised of both statistic strength and the power of the weapon
@@ -37,4 +37,4 @@ void C_Attack::BlockedAttack(Character& attacker, Character &opponent)
 	blockingTime = 0;
 	blockingStatus = 1;
 	Attack(attacker, opponent, 2);
-}
+}*/

@@ -1,8 +1,115 @@
 #include "Character.h"
 
+glm::vec3 Character::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d)
+{
+	return glm::vec3(cam.x + d*std::sin(angle*DEG_TO_RAD), cam.y, cam.z - d*std::cos(angle*DEG_TO_RAD));
+}
+
+bool Character::isDead()
+{
+	return (health <= 0 && canDie);
+}
+
+// returns the current rotation of the model
+int Character::getRotation()
+{
+	return rotation;
+}
+
+/* returns modelEye of player (Location of player) */
+glm::vec3 Character::getModelEye()
+{
+	return modelEye;
+}
+
+void Character::draw(glm::mat4 object)
+{
+	glUseProgram(shaderProgram);
+	glCullFace(GL_FRONT);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	//Animation
+	tmpModel.Animate(currentAnimation, 0.1);
+	rt3d::updateMesh(meshObject, RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
+
+	// drawing the player model
+
+	//glBindTexture(GL_TEXTURE_2D, texture);
+	modelAt = MoveForward(modelEye, rotation, 1.0f);
+	object = glm::translate(object, MoveForward(modelEye, rotation, 1.0f));
+	object = glm::rotate(object, float((90.0f - rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
+	object = glm::scale(object, glm::vec3(scale.x*0.05, scale.y*0.05, scale.z*0.05));
+	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
+
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
+	rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
+	glCullFace(GL_BACK);
+}
+
+void Character::InitalStats(GLuint setShaderProgram)
+{
+	//LoadFromFile();
+	shaderProgram = setShaderProgram;
+	material =
+	{
+		{ 0.4f, 0.2f, 0.2f, 1.0f }, // ambient
+		{ 0.8f, 0.5f, 0.5f, 1.0f }, // diffuse
+		{ 1.0f, 0.8f, 0.8f, 1.0f }, // specular
+		2.0f  // shininess
+	};
+
+	currentAnimation = 0;
+	meshIndexCount = 0;
+	md2VertCount = 0;
+
+	FileLoader* fileLoader = new FileLoader;
+	texture = fileLoader->loadBitmap("hobgoblin2.bmp");
+
+	/* Initialize default output device */
+	if (!BASS_Init(-1, 44100, 0, 0, NULL))
+		std::cout << "Can't initialize device";
+
+	/*samples = new HSAMPLE[4];
+	samples[0] = fileLoader->loadSample("Sound/Coin.wav");
+	samples[1] = fileLoader->loadSample("Sound/Hurt.wav");
+	samples[2] = fileLoader->loadSample("Sound/Dead.wav");
+	samples[3] = fileLoader->loadSample("Sound/Win.wav");*/
+	delete fileLoader;
+
+	meshObject = tmpModel.ReadMD2Model("arnould.MD2");
+	md2VertCount = tmpModel.getVertDataSize();
+}
+
+void Character::Update()
+{
+	const Uint8 *keys = SDL_GetKeyboardState(NULL);
+
+	if (!isDead())
+	{
+		currentAnimation = 0;
+		if (keys[SDL_SCANCODE_W])
+		{
+			currentAnimation = 1;
+			modelEye = MoveForward(modelEye, rotation, 0.2f);
+		}
+		else {
+			//currentAnim = 0;
+		}
+		if (keys[SDL_SCANCODE_S])
+		{
+			currentAnimation = 1;
+			modelEye = MoveForward(modelEye, rotation, -0.2f);
+		}
+
+		if (keys[SDL_SCANCODE_A]) rotation -= 5.0f;
+		if (keys[SDL_SCANCODE_D]) rotation += 5.0f;
+	}
+}
+
+
+/*
 #include "rt3d.h"
-
-
 #include "Stun.h"
 #include "Poison.h"
 #include "ItemUse.h"
@@ -188,4 +295,4 @@ float Character::ResSelect(int resType)
 		if (resType == 2) { res = waterRes; }
 		if (resType == 3) { res = windRes; }
 		return res;
-	}
+	}*/

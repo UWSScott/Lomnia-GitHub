@@ -1,22 +1,57 @@
 #pragma once
 #ifndef CHARACTER_H
 #define CHARACTER_H
+#include "Gameobject.h"
 
-#include <iostream>
-#include <string>
-using namespace std;
+//#include <iostream>
+//#include <string>
+//using namespace std;
+//#include <list>
+//#include "Attack.h"
 
-#include <list>
-#include "Attack.h"
+class Character : public Gameobject
+{
+private:
+	float peviousTime = 0;
+public:
+	string characterName = "";
+	int health = 10;
+	int max_Health = 10;
+	int manaPool;
+	int max_Mana = 10;
+	int strength = 5;
+	int max_Strength = 10;
+	int defence = 5;
+	int max_Defence = 5;
+	//Weapon
+	//Armor
+	//Inventory List
+	float resistance_Fire = 0;
+	float resistance_Water = 0;
+	float resistance_Air = 0;
+	int coins = 0;
+	int xp = 0;
+	bool canDie = true;
 
-/*#include "Stun.h"
-#include "Poison.h"
-#include "ItemUse.h"
-#include "Flee.h"
-#include "HeavyAttack.h"
-#include "LightAttack.h"*/
+protected:
+	glm::vec3 modelEye;
+	glm::vec3 modelAt;
+	glm::vec3 modelUp;
+	int currentAnimation = 0;
+	md2model tmpModel;
+	GLuint md2VertCount = 0;
 
-class Character
+	Character() {};
+	virtual glm::vec3 MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d);
+	virtual int getRotation();
+	virtual  glm::vec3 getModelEye();
+	virtual void draw(glm::mat4 object);
+	virtual bool isDead();
+	virtual void Update();
+	virtual void InitalStats(GLuint setShaderProgram);
+};
+
+/*class Character : public Gameobject
 {
 private:
 	float peviousTime = 0;
@@ -44,6 +79,6 @@ public:
 	void BeingAttacked(C_Attack s_attack);
 	void Update(float time);
 	void Damage(int damageValue);
-};
+};*/
 
 #endif

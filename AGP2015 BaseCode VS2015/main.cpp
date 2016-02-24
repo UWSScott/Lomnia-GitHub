@@ -10,7 +10,7 @@
 #pragma comment(linker, "/subsystem:\"console\" /entry:\"WinMainCRTStartup\"")
 #endif
 
-//#include "FileLoader.h"
+#include "FileLoader.h"
 #include "rt3d.h"
 #include "rt3dObjLoader.h"
 #include <glm/glm.hpp>
@@ -29,16 +29,17 @@
 #include "stdafx.h" //http://sourceforge.net/p/wpbdc/website/ci/master/tree/Judge/StdAfx.h
 #include <list>
 
-#include "Character.h"
-#include "Stun.h"
+//#include "Character.h"
+
+/*#include "Stun.h"
 #include "Poison.h"
 #include "ItemUse.h"
 #include "Flee.h"
 #include "HeavyAttack.h"
 #include "LightAttack.h"
-#include "Collisions.h"
+#include "Collisions.h"*/
 
-list<C_Attack> queuedAttacks = list<C_Attack>();
+//list<C_Attack> queuedAttacks = list<C_Attack>();
 
 using namespace std;
 
@@ -138,8 +139,9 @@ int goalY = 0;
 int totalCells = ((SIZE - 1) / 2)*((SIZE - 1) / 2);
 
 //Combat variables
-Character player = Character("PLAYER", 100, 100, 10, 10, 1.0, 1.0, 1.0, 1.0, true);
-Character enemy = Character("ENEMY"  , 25, 0, 14, 10, 1.0, 2.0, 0.5, 1.0, false);
+//Character player = Character("PLAYER", 100, 100, 10, 10, 1.0, 1.0, 1.0, 1.0, true);
+//Character enemy = Character("ENEMY"  , 25, 0, 14, 10, 1.0, 2.0, 0.5, 1.0, false);
+//Character player = new Character();
 bool inCombat = false;
 std::clock_t start;
 double duration;
@@ -587,7 +589,7 @@ void init(void) {
 	
 }
 
-bool Collision(Collisions circle, Collisions circle2) {
+/*bool Collision(Collisions circle, Collisions circle2) {
 	GLfloat radius = circle.getRadius();
 	GLfloat x = circle.getX();
 	GLfloat z = circle.getZ();
@@ -606,7 +608,7 @@ bool Collision(Collisions circle, Collisions circle2) {
 		return false;
 	}
 
-}
+}*/
 
 glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d) {
 	return glm::vec3(pos.x + d*std::sin(r*DEG_TO_RADIAN), pos.y, pos.z - d*std::cos(r*DEG_TO_RADIAN));
@@ -621,7 +623,7 @@ void update(void) {
 
 
 
-	if (inCombat == false)
+	/*if (inCombat == false)
 	{
 		enemyAnim = 1;
 		if (keys[SDL_SCANCODE_W])
@@ -655,9 +657,9 @@ void update(void) {
 	} else {
 		currentAnim = 14;
 		enemyAnim = 10;
-	}
+	}*/
 
-	if (player.health > 0)
+	/*if (player.health > 0)
 	{
 		if (keys[SDL_SCANCODE_W]) { if(inCombat == false) playerPos = moveForward(playerPos, r, 0.1f);  eye = moveForward(eye, r, 0.1f); }
 		if (keys[SDL_SCANCODE_S]) { if(inCombat == false) playerPos = moveForward(playerPos, -r - 180, -0.1f); eye = moveForward(eye, r, -0.1f); }
@@ -688,7 +690,7 @@ void update(void) {
 
 		/*I need someone to block the input so it's not spammed when a button is pressed.
 		Someone said they had this working for something else? */
-		if (keys[SDL_SCANCODE_0]) { if (inCombat == false) { cout << "COMBAT BEGINS!" << endl; inCombat = true; } }
+	/*	if (keys[SDL_SCANCODE_0]) { if (inCombat == false) { cout << "COMBAT BEGINS!" << endl; inCombat = true; } }
 		if (pressedButton == false)
 		{
 			if (keys[SDL_SCANCODE_1]) player.queuedAttacks.push_back(LightAttack());
@@ -727,12 +729,12 @@ void update(void) {
 	} else {
 		currentAnim = 5;
 		enemyAnim = 7;
-	}
+	}*/
 
-	player.Update((float)duration);
-	enemy.Update((float)duration);
+	//player.Update((float)duration);
+	//enemy.Update((float)duration);
 
-	Collisions playerCircle = playerCircle.CollisionCircles(playerPos.x, playerPos.z, 1.0f);
+	/*Collisions playerCircle = playerCircle.CollisionCircles(playerPos.x, playerPos.z, 1.0f);
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
 			
@@ -744,9 +746,9 @@ void update(void) {
 				}
 			}
 		}
-	}
+	}*/
 
-	oldPlayerPos = playerPos;
+	//oldPlayerPos = playerPos;
 
 	/*Movement should be handled inside the enemy class for the full game.
 	Create checks before moving to ensure the enemy isn't dead/incombat or idle etc.
@@ -757,17 +759,17 @@ void update(void) {
 	out what we need to do for that instance of collison. (ie, pickup weapon, start combat, stop movement etc.)
 	-Scott */
 
-	if(inCombat == false && enemy.health > 0)
-		enemyPos = glm::vec3(enemyPos.x + enemyMove.x, enemyPos.y, enemyPos.z + enemyMove.y);
+	//if(inCombat == false && enemy.health > 0)
+		//enemyPos = glm::vec3(enemyPos.x + enemyMove.x, enemyPos.y, enemyPos.z + enemyMove.y);
 
-	Collisions enemyCircle = enemyCircle.CollisionCircles(enemyPos.x, enemyPos.z,1.0f);
+	/*Collisions enemyCircle = enemyCircle.CollisionCircles(enemyPos.x, enemyPos.z,1.0f);
 	if (inCombat == false && Collision(playerCircle, enemyCircle) == true && player.health > 0 && enemy.health > 0) {
 		cout << "PLAYER SPOTTED! -- BEGINING COMBAT!" << endl;
 		inCombat = true;
 		return;
-	}
+	}*/
 
-	for (int i = 0; i < SIZE; i++) {
+	/*for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
 
 			if (Level[i][j].display == '*')
@@ -781,7 +783,7 @@ void update(void) {
 				}
 			}
 		}
-	}
+	}*/
 }
 
 

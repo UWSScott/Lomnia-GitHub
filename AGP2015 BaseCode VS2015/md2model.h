@@ -1,3 +1,6 @@
+#ifndef MD2MODEL_H
+#define MD2MODEL_H
+
 /* md2model.h - based on original:
  * md2.c -- md2 model loader
 
@@ -187,3 +190,4 @@ public:
 	GLuint getVertDataCount() { return vertDataSize/3; }
 	int getCurrentAnim() {return currentAnim;}
 };
+#endif
