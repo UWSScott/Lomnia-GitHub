@@ -5,8 +5,6 @@
 
 #define IDLE 0
 #define WALKING 1
-#define IDLE 2
-#define IDLE 3
 
 //#include <iostream>
 //#include <string>

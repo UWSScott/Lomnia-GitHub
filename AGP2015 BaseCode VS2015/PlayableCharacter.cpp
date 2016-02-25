@@ -3,6 +3,7 @@
 
 PlayableCharacter::PlayableCharacter(string setName, int setHealth, int setStrength)
 {
+	rotation = 0;
 	characterName = setName;
 	health = setHealth;
 	strength = setStrength;
@@ -17,8 +18,8 @@ void PlayableCharacter::Input()
 	if (inCombat == false)
 	{
 		characterState = IDLE;
-		if (keys[SDL_SCANCODE_A]) { characterState = IDLE;  rotation += 1.0f; }
-		if (keys[SDL_SCANCODE_D]) { characterState = IDLE;  rotation -= 1.0f; }
+		if (keys[SDL_SCANCODE_A]) { characterState = IDLE;  rotation -= 1.0f; }
+		if (keys[SDL_SCANCODE_D]) { characterState = IDLE;  rotation += 1.0f; }
 		if (keys[SDL_SCANCODE_W]) { characterState = WALKING;  position = MoveForward(position, rotation, 0.1f); }
 		if (keys[SDL_SCANCODE_S]) { characterState = WALKING;  position = MoveForward(position, rotation, -0.1f); }
 	}
