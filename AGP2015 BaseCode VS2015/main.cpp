@@ -638,7 +638,7 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	Game_Camera.update(character->getModelEye(), character->getRotation());
-
+	character->Update();
 
 	/*if (inCombat == false)
 	{

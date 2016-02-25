@@ -41,10 +41,10 @@ void Camera::draw(glm::mat4 &object, glm::vec3 modelEye)
 	switch (camera_Type)
 	{
 	case 1:
-		at = MoveForward(modelEye, 0, 1.0f);
+		at = MoveForward(position, 0, 1.0f);
 		break;
 	case 2:
-		at = MoveForward(modelEye, 0, 1.0f);
+		at = MoveForward(position, 0, 1.0f);
 		break;
 	case 3:
 		at = MoveForward(position, rotation, 1.0f);
@@ -52,13 +52,17 @@ void Camera::draw(glm::mat4 &object, glm::vec3 modelEye)
 		return;
 		break;
 	default:
-		at = MoveForward(modelEye, 0, 1.0f);
+		at = MoveForward(position, 0, 1.0f);
 		break;
 	}
 
 	object = glm::lookAt(position, at, up);
+	//object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
+	//object = glm::translate(object, -modelEye);
+
+	object = glm::translate(object, position);
 	object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
-	object = glm::translate(object, -modelEye);
+	object = glm::translate(object, -position);
 }
 
 
@@ -78,9 +82,10 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 	switch (camera_Type)
 	{
 	case 1:
-		position.x = modelEye.x + 6.0f;
-		position.y = modelEye.y + 20.0f;
-		position.z = modelEye.z + 10.0f;
+		position.x = modelEye.x - 2.0f;
+		position.y = modelEye.y + 1.0f;
+		position.z = modelEye.z - 1.0f;
+		rotation = playerRotation;
 		break;
 	case 2:
 
