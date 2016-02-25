@@ -110,7 +110,7 @@ void Character::Update()
 		if (keys[SDL_SCANCODE_W])
 		{
 			currentAnimation = 1;
-			position = MoveForward(position, rotation, 0.2f);
+			position = MoveForward(position, rotation, 0.1f);
 		}
 		else {
 			//currentAnim = 0;
@@ -118,7 +118,7 @@ void Character::Update()
 		if (keys[SDL_SCANCODE_S])
 		{
 			currentAnimation = 1;
-			position = MoveForward(position, rotation, -0.2f);
+			position = MoveForward(position, rotation, -0.1f);
 		}
 
 		if (keys[SDL_SCANCODE_A]) rotation -= 5.0f;

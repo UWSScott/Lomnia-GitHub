@@ -27,7 +27,7 @@ public:
 	glm::vec3 at;
 	glm::vec3 up;
 private:
-	int camera_Type = 3; //1-Normal(locked), 2-Cinematic Camera, 3-Free camera
+	int camera_Type = 1; //1-Normal(locked), 2-Cinematic Camera, 3-Free camera
 	HSAMPLE *songs = NULL;
 };
 

@@ -28,7 +28,6 @@ void PlayableCharacter::Input()
 void PlayableCharacter::Update()
 {
 	Input();
-
 }
 
 
@@ -44,8 +43,6 @@ void PlayableCharacter::draw(glm::mat4 object)
 	//Animation
 	tmpModel.Animate(currentAnimation, 0.1);
 	rt3d::updateMesh(meshObject, RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
-
-	// drawing the player model
 
 	//glBindTexture(GL_TEXTURE_2D, texture);
 	modelAt = MoveForward(position, rotation, 1.0f);
