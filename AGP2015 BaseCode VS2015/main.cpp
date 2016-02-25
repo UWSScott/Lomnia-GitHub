@@ -10,6 +10,7 @@
 #pragma comment(linker, "/subsystem:\"console\" /entry:\"WinMainCRTStartup\"")
 #endif
 
+#include "FileLoader.h"
 #include "rt3d.h"
 #include "rt3dObjLoader.h"
 #include <glm/glm.hpp>
@@ -29,15 +30,20 @@
 #include <list>
 
 #include "Character.h"
-#include "Stun.h"
+#include "Weapon.h"
+#include "PlayableCharacter.h"
+#include "Camera.h"
+#include "Skybox.h"
+
+/*#include "Stun.h"
 #include "Poison.h"
 #include "ItemUse.h"
 #include "Flee.h"
 #include "HeavyAttack.h"
 #include "LightAttack.h"
-#include "Collisions.h"
+#include "Collisions.h"*/
 
-list<C_Attack> queuedAttacks = list<C_Attack>();
+//list<C_Attack> queuedAttacks = list<C_Attack>();
 
 using namespace std;
 
@@ -137,15 +143,23 @@ int goalY = 0;
 int totalCells = ((SIZE - 1) / 2)*((SIZE - 1) / 2);
 
 //Combat variables
-Character player = Character("PLAYER", 100, 100, 10, 10, 1.0, 1.0, 1.0, 1.0, true);
-Character enemy = Character("ENEMY"  , 25, 0, 14, 10, 1.0, 2.0, 0.5, 1.0, false);
+//Character player = Character("PLAYER", 100, 100, 10, 10, 1.0, 1.0, 1.0, 1.0, true);
+//Character enemy = Character("ENEMY"  , 25, 0, 14, 10, 1.0, 2.0, 0.5, 1.0, false);
+//Character player = new Character();
 bool inCombat = false;
 std::clock_t start;
 double duration;
 glm::vec3 oldPlayerPos;
 
+Camera Game_Camera = Camera();
+//Character character = Character();
+PlayableCharacter* character = new PlayableCharacter();
+Weapon weaponTest = Weapon();// "Scott's Saber", "Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
+Skybox skyboxTest = Skybox();
 
-
+const char *skyboxFiles[6] = {
+	"red-sky/red_sky_front.bmp", "red-sky/red_sky_back.bmp", "red-sky/red_sky_right.bmp", "red-sky/red_sky_left.bmp", "red-sky/red_sky_top.bmp", "red-sky/red_sky_top.bmp"
+};
 
 // textToTexture
 GLuint textToTexture(const char * str, GLuint textID/*, TTF_Font *font, SDL_Color colour, GLuint &w,GLuint &h */) {
@@ -416,7 +430,7 @@ SDL_Window * setupRC(SDL_GLContext &context) {
  
     // Create 800x600 window 
     window = SDL_CreateWindow("SDL/GLM/OpenGL Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        1920, 1080, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
+        800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
 	if (!window) // Check window was created OK
         rt3d::exitFatalError("Unable to create window");
  
@@ -583,10 +597,16 @@ void init(void) {
 	enemyPos = getEnemyPos();
 
 	enemyMove = moveEnemy();
+
+	character = new PlayableCharacter("Arnold", 10, 10);
+	Game_Camera.InitalStats();
+	character->InitalStats(shaderProgram);
+	skyboxTest.InitalStats(skyboxFiles);
+	weaponTest.InitalStats(shaderProgram);
 	
 }
 
-bool Collision(Collisions circle, Collisions circle2) {
+/*bool Collision(Collisions circle, Collisions circle2) {
 	GLfloat radius = circle.getRadius();
 	GLfloat x = circle.getX();
 	GLfloat z = circle.getZ();
@@ -605,7 +625,7 @@ bool Collision(Collisions circle, Collisions circle2) {
 		return false;
 	}
 
-}
+}*/
 
 glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d) {
 	return glm::vec3(pos.x + d*std::sin(r*DEG_TO_RADIAN), pos.y, pos.z - d*std::cos(r*DEG_TO_RADIAN));
@@ -617,10 +637,10 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
+	Game_Camera.update(character->getModelEye(), character->getRotation());
 
 
-
-	if (inCombat == false)
+	/*if (inCombat == false)
 	{
 		enemyAnim = 1;
 		if (keys[SDL_SCANCODE_W])
@@ -654,9 +674,9 @@ void update(void) {
 	} else {
 		currentAnim = 14;
 		enemyAnim = 10;
-	}
+	}*/
 
-	if (player.health > 0)
+	/*if (player.health > 0)
 	{
 		if (keys[SDL_SCANCODE_W]) { if(inCombat == false) playerPos = moveForward(playerPos, r, 0.1f);  eye = moveForward(eye, r, 0.1f); }
 		if (keys[SDL_SCANCODE_S]) { if(inCombat == false) playerPos = moveForward(playerPos, -r - 180, -0.1f); eye = moveForward(eye, r, -0.1f); }
@@ -687,7 +707,7 @@ void update(void) {
 
 		/*I need someone to block the input so it's not spammed when a button is pressed.
 		Someone said they had this working for something else? */
-		if (keys[SDL_SCANCODE_0]) { if (inCombat == false) { cout << "COMBAT BEGINS!" << endl; inCombat = true; } }
+	/*	if (keys[SDL_SCANCODE_0]) { if (inCombat == false) { cout << "COMBAT BEGINS!" << endl; inCombat = true; } }
 		if (pressedButton == false)
 		{
 			if (keys[SDL_SCANCODE_1]) player.queuedAttacks.push_back(LightAttack());
@@ -726,12 +746,12 @@ void update(void) {
 	} else {
 		currentAnim = 5;
 		enemyAnim = 7;
-	}
+	}*/
 
-	player.Update((float)duration);
-	enemy.Update((float)duration);
+	//player.Update((float)duration);
+	//enemy.Update((float)duration);
 
-	Collisions playerCircle = playerCircle.CollisionCircles(playerPos.x, playerPos.z, 1.0f);
+	/*Collisions playerCircle = playerCircle.CollisionCircles(playerPos.x, playerPos.z, 1.0f);
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
 			
@@ -743,9 +763,9 @@ void update(void) {
 				}
 			}
 		}
-	}
+	}*/
 
-	oldPlayerPos = playerPos;
+	//oldPlayerPos = playerPos;
 
 	/*Movement should be handled inside the enemy class for the full game.
 	Create checks before moving to ensure the enemy isn't dead/incombat or idle etc.
@@ -756,17 +776,17 @@ void update(void) {
 	out what we need to do for that instance of collison. (ie, pickup weapon, start combat, stop movement etc.)
 	-Scott */
 
-	if(inCombat == false && enemy.health > 0)
-		enemyPos = glm::vec3(enemyPos.x + enemyMove.x, enemyPos.y, enemyPos.z + enemyMove.y);
+	//if(inCombat == false && enemy.health > 0)
+		//enemyPos = glm::vec3(enemyPos.x + enemyMove.x, enemyPos.y, enemyPos.z + enemyMove.y);
 
-	Collisions enemyCircle = enemyCircle.CollisionCircles(enemyPos.x, enemyPos.z,1.0f);
+	/*Collisions enemyCircle = enemyCircle.CollisionCircles(enemyPos.x, enemyPos.z,1.0f);
 	if (inCombat == false && Collision(playerCircle, enemyCircle) == true && player.health > 0 && enemy.health > 0) {
 		cout << "PLAYER SPOTTED! -- BEGINING COMBAT!" << endl;
 		inCombat = true;
 		return;
-	}
+	}*/
 
-	for (int i = 0; i < SIZE; i++) {
+	/*for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
 
 			if (Level[i][j].display == '*')
@@ -780,7 +800,7 @@ void update(void) {
 				}
 			}
 		}
-	}
+	}*/
 }
 
 
@@ -793,7 +813,6 @@ void draw(SDL_Window * window) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-
 	glm::mat4 projection(1.0);
 	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 1920.0f / 1080.0f, 1.0f, 150.0f);
 	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
@@ -803,7 +822,8 @@ void draw(SDL_Window * window) {
 
 	glm::mat4 modelview(1.0); // set base position for scene
 	mvStack.push(modelview);
-	if (camera == 1) {
+
+	/*if (camera == 1) {
 		at = moveForward(eye, r, 1.0f);
 		mvStack.top() = glm::lookAt(eye, at, up);
 	}
@@ -812,16 +832,22 @@ void draw(SDL_Window * window) {
 	at = glm::vec3(playerPos.x, playerPos.y + heightOfCam, playerPos.z);
 		eye = moveForward(at, r, -5.0f);
 		mvStack.top() = glm::lookAt(eye, at, up);
-	}
+	}*/
+	//mvStack.top() = glm::lookAt(Game_Camera.eye, Game_Camera.at, Game_Camera.up);
+	Game_Camera.draw(mvStack.top(), character->getModelEye());
 
 	// draw a skybox
-	glUseProgram(skyboxProgram);
-	rt3d::setUniformMatrix4fv(skyboxProgram, "projection", glm::value_ptr(projection));
+//	glUseProgram(skyboxProgram);
+	rt3d::setUniformMatrix4fv(skyboxTest.shaderProgram, "projection", glm::value_ptr(projection));
+	skyboxTest.draw(mvStack.top());
+	//glDepthMask(GL_FALSE); // make sure depth test is off
+	//glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
+	//mvStack.push(glm::mat4(mvRotOnlyMat3));
 
-	glDepthMask(GL_FALSE); // make sure depth test is off
-	glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
-	mvStack.push(glm::mat4(mvRotOnlyMat3));
+	
 
+
+	/*
 	// front
 	mvStack.push(mvStack.top());
 	glBindTexture(GL_TEXTURE_2D, skybox[0]);
@@ -862,7 +888,7 @@ void draw(SDL_Window * window) {
 
 	// back to remainder of rendering
 	glDepthMask(GL_TRUE); // make sure depth test is on
-
+	*/
 
 	glUseProgram(shaderProgram);
 
@@ -954,6 +980,9 @@ void draw(SDL_Window * window) {
 	rt3d::drawMesh(meshObjects[1], md2VertCount, GL_TRIANGLES);
 	mvStack.pop();
 	glCullFace(GL_BACK);
+
+	character->draw(mvStack.top());
+	//weaponTest.draw(mvStack.top(), character.position, character.currentAnimation, character.rotation);
 
 	// remember to use at least one pop operation per push...
 	mvStack.pop(); // initial matrix
