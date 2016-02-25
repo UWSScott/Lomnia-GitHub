@@ -41,13 +41,13 @@ void Camera::draw(glm::mat4 &object, glm::vec3 modelEye)
 	switch (camera_Type)
 	{
 	case 1:
-		at = MoveForward(position, 0, 1.0f);
+		at = MoveForward(modelEye, 0, 1.0f);
 		break;
 	case 2:
 		at = MoveForward(position, 0, 1.0f);
 		break;
 	case 3:
-		at = MoveForward(position, rotation, 1.0f);
+		at = MoveForward(position, 0, 1.0f);
 		object = glm::lookAt(position, at, up);
 		return;
 		break;
@@ -55,14 +55,16 @@ void Camera::draw(glm::mat4 &object, glm::vec3 modelEye)
 		at = MoveForward(position, 0, 1.0f);
 		break;
 	}
-
 	object = glm::lookAt(position, at, up);
+	object = glm::translate(object, modelEye);
+	object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
+	object = glm::translate(object, -modelEye);
+
+	//object = glm::lookAt(position, at, up);
+
+	//object = glm::translate(object, modelEye);
 	//object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
 	//object = glm::translate(object, -modelEye);
-
-	object = glm::translate(object, position);
-	object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
-	object = glm::translate(object, -position);
 }
 
 
@@ -76,29 +78,23 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 		if (camera_Type > 3)
 			camera_Type = 1;
 
-		cout << camera_Type << endl;
+		cout << endl << endl << camera_Type << endl << endl << endl;
 	}
 
 	switch (camera_Type)
 	{
 	case 1:
-		position.x = modelEye.x - 2.0f;
-		position.y = modelEye.y + 1.0f;
-		position.z = modelEye.z - 1.0f;
+		position.x = modelEye.x;
+		position.y = modelEye.y + 1.5f;
+		position.z = modelEye.z + 4.0f;
 		rotation = playerRotation;
 		break;
 	case 2:
 
 		break;
 	case 3:
-		if (keys[SDL_SCANCODE_W])
-		{
-			position = MoveForward(position, rotation, 0.1f);
-		}
-		else if (keys[SDL_SCANCODE_S]) {
-			position = MoveForward(position, rotation, -0.1f);
-		}
-
+		if (keys[SDL_SCANCODE_W]) position = MoveForward(position, rotation, 0.1f);
+		if (keys[SDL_SCANCODE_S]) position = MoveForward(position, rotation, -0.1f);
 		if (keys[SDL_SCANCODE_A]) rotation -= 1.0f;
 		if (keys[SDL_SCANCODE_D]) rotation += 1.0f;
 		if (keys[SDL_SCANCODE_R]) position.y += 0.1f;
