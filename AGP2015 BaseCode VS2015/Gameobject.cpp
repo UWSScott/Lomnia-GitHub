@@ -1,9 +1,9 @@
 #include "Gameobject.h"
 #define DEG_TO_RAD 0.017453293
 //Hi Ian write this!!!dsadsfsdfdsjhfdsjka
-fdsafjdksafds
-dasafjkadsfjkdsal
-fjkdasfjkd
+//fdsafjdksafds
+//dasafjkadsfjkdsal
+//fjkdasfjkd
 
 void Gameobject::draw(glm::mat4 object, GLuint s_shaderUsed)
 {
