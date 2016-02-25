@@ -7,7 +7,7 @@
 //#include <string>
 //using namespace std;
 //#include <list>
-//#include "Attack.h"
+#include "Weapon.h"
 
 class Character : public Gameobject
 {
@@ -23,6 +23,7 @@ public:
 	int max_Strength = 10;
 	int defence = 5;
 	int max_Defence = 5;
+	//Weapon weapon = Weapon("Scott's Saber", "Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
 	//Weapon
 	//Armor
 	//Inventory List
@@ -39,11 +40,11 @@ public:
 	virtual void draw(glm::mat4 object);
 	virtual  glm::vec3 getModelEye();
 	virtual int getRotation();
-
+	int currentAnimation = 0;
 protected:
 	glm::vec3 modelAt;
 	glm::vec3 modelUp;
-	int currentAnimation = 0;
+
 	md2model tmpModel;
 	GLuint md2VertCount = 0;
 

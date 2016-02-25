@@ -30,6 +30,8 @@
 #include <list>
 
 #include "Character.h"
+#include "Weapon.h"
+#include "PlayableCharacter.h"
 #include "Camera.h"
 #include "Skybox.h"
 
@@ -150,7 +152,9 @@ double duration;
 glm::vec3 oldPlayerPos;
 
 Camera Game_Camera = Camera();
-Character character = Character();
+//Character character = Character();
+PlayableCharacter character = PlayableCharacter("Arnold", 10, 10);
+Weapon weaponTest = Weapon();// "Scott's Saber", "Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
 Skybox skyboxTest = Skybox();
 
 const char *skyboxFiles[6] = {
@@ -597,6 +601,7 @@ void init(void) {
 	Game_Camera.InitalStats();
 	character.InitalStats(shaderProgram);
 	skyboxTest.InitalStats(skyboxFiles);
+	weaponTest.InitalStats(shaderProgram);
 	
 }
 
@@ -976,6 +981,7 @@ void draw(SDL_Window * window) {
 	glCullFace(GL_BACK);
 
 	character.draw(mvStack.top());
+	weaponTest.draw(mvStack.top(), character.position, character.currentAnimation, character.rotation);
 
 	// remember to use at least one pop operation per push...
 	mvStack.pop(); // initial matrix

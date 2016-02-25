@@ -17,8 +17,8 @@ using namespace std;
 class Gameobject
 {
 public:
-	glm::vec3 position;
-	glm::vec3 scale;
+	glm::vec3 position = glm::vec3(1,1,1);
+	glm::vec3 scale = glm::vec3(1,1,1);
 	float rotation;
 	string collisionName = "DEFAULT";
 	rt3d::materialStruct material;

@@ -45,6 +45,9 @@ void Character::draw(glm::mat4 object)
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
 	rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
 	glCullFace(GL_BACK);
+
+	//if (weapon.getEquiped())
+	//	weapon.draw(object, position, currentAnimation, rotation);
 }
 
 void Character::InitalStats(GLuint setShaderProgram)
@@ -60,9 +63,10 @@ void Character::InitalStats(GLuint setShaderProgram)
 	};
 
 	scale = glm::vec3(1, 1, 1);
-	position = glm::vec3(1, 3, 1);
+	position = glm::vec3(-3, 3, -3);
 
 	FileLoader* fileLoader = new FileLoader;
+	//texture = fileLoader->loadBitmap("hobgoblin2.bmp");
 	texture = fileLoader->loadBitmap("hobgoblin2.bmp");
 
 	/* Initialize default output device */

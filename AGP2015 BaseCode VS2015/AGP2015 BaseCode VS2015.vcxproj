@@ -160,10 +160,12 @@
     <ClCompile Include="Level_001.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="md2model.cpp" />
+    <ClCompile Include="PlayableCharacter.cpp" />
     <ClCompile Include="Prefab.cpp" />
     <ClCompile Include="rt3d.cpp" />
     <ClCompile Include="rt3dObjLoader.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="anorms.h" />
@@ -180,6 +182,7 @@
     <ClInclude Include="ItemUse.h" />
     <ClInclude Include="LightAttack.h" />
     <ClInclude Include="md2model.h" />
+    <ClInclude Include="PlayableCharacter.h" />
     <ClInclude Include="Poison.h" />
     <ClInclude Include="Prefab.h" />
     <ClInclude Include="rt3d.h" />
@@ -187,6 +190,7 @@
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="Stun.h" />
+    <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="fabric.bmp" />

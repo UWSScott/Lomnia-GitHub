@@ -22,6 +22,12 @@
     <Filter Include="Header Files\Item">
       <UniqueIdentifier>{ed2dcc4f-e08d-4bbe-a06c-9a697a657ef6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Models">
+      <UniqueIdentifier>{c94e1dc5-ef48-42c1-819f-925dfa7fbded}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Models\Textures">
+      <UniqueIdentifier>{8353259b-1b2b-42f2-9958-7f9c5be0ee87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -67,6 +73,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayableCharacter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -134,13 +146,19 @@
     <ClInclude Include="Skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlayableCharacter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="fabric.bmp">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="hobgoblin2.bmp">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Models\Textures</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -161,12 +179,6 @@
     <None Include="textured.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="tris.MD2">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="arnould.MD2">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="Partical_sword.md2">
       <Filter>Resource Files</Filter>
     </None>
@@ -176,6 +188,12 @@
     </None>
     <None Include="cubeMap.vert">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="arnould.MD2">
+      <Filter>Resource Files\Models</Filter>
+    </None>
+    <None Include="tris.MD2">
+      <Filter>Resource Files\Models</Filter>
     </None>
   </ItemGroup>
 </Project>
