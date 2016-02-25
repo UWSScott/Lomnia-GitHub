@@ -1,5 +1,10 @@
 #include "Gameobject.h"
 
+#define DEG_TO_RAD 0.017453293
+
+
+
+
 void Gameobject::setShader(GLuint s_shaderProgram)
 { 
 	shaderProgram = s_shaderProgram;
