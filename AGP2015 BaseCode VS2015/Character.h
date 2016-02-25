@@ -23,7 +23,7 @@ public:
 	int max_Strength = 10;
 	int defence = 5;
 	int max_Defence = 5;
-	//Weapon weapon = Weapon("Scott's Saber", "Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
+	Weapon* weapon = new Weapon();
 	//Weapon
 	//Armor
 	//Inventory List

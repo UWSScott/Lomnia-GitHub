@@ -2,6 +2,7 @@
 
 Weapon::Weapon(string s_objectName, char *modelName, char *textureName, int s_cost, float s_damage, float s_speed, string s_type, int s_rarity, GLuint s_shaderprogram)
 {
+	collisionName = s_objectName;
 	shaderProgram = s_shaderprogram;
 	material =
 	{

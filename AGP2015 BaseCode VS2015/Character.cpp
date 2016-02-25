@@ -46,8 +46,8 @@ void Character::draw(glm::mat4 object)
 	rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 
-	//if (weapon.getEquiped())
-	//	weapon.draw(object, position, currentAnimation, rotation);
+	if (weapon->getEquiped())
+		weapon->draw(object, position, currentAnimation, rotation);
 }
 
 void Character::InitalStats(GLuint setShaderProgram)

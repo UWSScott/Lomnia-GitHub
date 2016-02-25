@@ -8,6 +8,7 @@ class PlayableCharacter : public Character
 private:
 public:
 	PlayableCharacter() {};
+	~PlayableCharacter() {};
 	PlayableCharacter(string setName, int setHealth, int setStrength);
 	virtual void draw(glm::mat4 object);
 	//weapon = Weapon("Scott's Saber", "Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);

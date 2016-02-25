@@ -6,6 +6,9 @@ PlayableCharacter::PlayableCharacter(string setName, int setHealth, int setStren
 	characterName = setName;
 	health = setHealth;
 	strength = setStrength;
+	weapon = new Weapon("Scott's Saber", "Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
+	weapon->setEquiped(true);
+	cout << " name: " << weapon->collisionName;
 }
 
 
@@ -33,6 +36,6 @@ void PlayableCharacter::draw(glm::mat4 object)
 	rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 
-	//if (weapon.getEquiped())
-	//	weapon.draw(object, position, currentAnimation, rotation);
+	if (weapon->getEquiped())
+		weapon->draw(object, position, currentAnimation, rotation);
 }

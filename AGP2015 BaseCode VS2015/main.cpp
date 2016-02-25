@@ -153,7 +153,7 @@ glm::vec3 oldPlayerPos;
 
 Camera Game_Camera = Camera();
 //Character character = Character();
-PlayableCharacter character = PlayableCharacter("Arnold", 10, 10);
+PlayableCharacter* character = new PlayableCharacter();
 Weapon weaponTest = Weapon();// "Scott's Saber", "Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
 Skybox skyboxTest = Skybox();
 
@@ -598,8 +598,9 @@ void init(void) {
 
 	enemyMove = moveEnemy();
 
+	character = new PlayableCharacter("Arnold", 10, 10);
 	Game_Camera.InitalStats();
-	character.InitalStats(shaderProgram);
+	character->InitalStats(shaderProgram);
 	skyboxTest.InitalStats(skyboxFiles);
 	weaponTest.InitalStats(shaderProgram);
 	
@@ -636,7 +637,7 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	Game_Camera.update(character.getModelEye(), character.getRotation());
+	Game_Camera.update(character->getModelEye(), character->getRotation());
 
 
 	/*if (inCombat == false)
@@ -833,7 +834,7 @@ void draw(SDL_Window * window) {
 		mvStack.top() = glm::lookAt(eye, at, up);
 	}*/
 	//mvStack.top() = glm::lookAt(Game_Camera.eye, Game_Camera.at, Game_Camera.up);
-	Game_Camera.draw(mvStack.top(), character.getModelEye());
+	Game_Camera.draw(mvStack.top(), character->getModelEye());
 
 	// draw a skybox
 //	glUseProgram(skyboxProgram);
@@ -980,8 +981,8 @@ void draw(SDL_Window * window) {
 	mvStack.pop();
 	glCullFace(GL_BACK);
 
-	character.draw(mvStack.top());
-	weaponTest.draw(mvStack.top(), character.position, character.currentAnimation, character.rotation);
+	character->draw(mvStack.top());
+	//weaponTest.draw(mvStack.top(), character.position, character.currentAnimation, character.rotation);
 
 	// remember to use at least one pop operation per push...
 	mvStack.pop(); // initial matrix

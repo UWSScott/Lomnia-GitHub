@@ -14,6 +14,7 @@ public:
 	virtual void InitalStats(GLuint s_shaderprogram);
 	void draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimation, int playerRotation);
 	bool getEquiped() { return equiped; }
+	void setEquiped(bool setting) { equiped = setting; }
 protected:
 	bool equiped = false;
 	int cost = 0;
