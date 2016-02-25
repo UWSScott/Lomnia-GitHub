@@ -45,18 +45,9 @@ GLuint loadCubeMapTex(const char *fname[6], GLuint *texID)
 
 /* Sets inital stats for the skybox. Shaderprogram is passed in from light class.
 Textures are loaded into array of textures - (skybox taken from lab tutorial).*/
-void Skybox::InitalStats(GLuint setShaderProgram, const char *skyboxmap[6])
+void Skybox::InitalStats(const char *skyboxmap[6])
 {
-	shaderProgram = setShaderProgram;
-
-	FileLoader* fileLoader = new FileLoader;
-	textures[0] = fileLoader->loadBitmap("red-sky/red_sky_front.bmp");
-	textures[1] = fileLoader->loadBitmap("red-sky/red_sky_back.bmp");
-	textures[2] = fileLoader->loadBitmap("red-sky/red_sky_right.bmp");
-	textures[3] = fileLoader->loadBitmap("red-sky/red_sky_left.bmp");
-	textures[4] = fileLoader->loadBitmap("red-sky/red_sky_top.bmp");
-	textures[5] = fileLoader->loadBitmap("red-sky/red_sky_top.bmp");
-	delete fileLoader;
+	shaderProgram = rt3d::initShaders("cubeMap.vert", "cubeMap.frag");
 
 	vector<GLfloat> verts;
 	vector<GLfloat> norms;
@@ -66,9 +57,7 @@ void Skybox::InitalStats(GLuint setShaderProgram, const char *skyboxmap[6])
 	GLuint size = indices.size();
 	meshIndexCount = size;
 	meshObject = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
-
-
-	//loadCubeMapTex(skyboxmap, &textures[0]);
+	loadCubeMapTex(skyboxmap, &textures[0]);
 }
 
 /* Handles draw event for the skybox.
@@ -77,55 +66,78 @@ void Skybox::InitalStats(GLuint setShaderProgram, const char *skyboxmap[6])
 After all sides are drawn, depth mask is reset to true. */
 void Skybox::draw(glm::mat4 object)
 {
-	/*//mvStack.push(mvStack.top());
+
 	glUseProgram(shaderProgram);
+	//glm::mat4 modelview(1.0);
+	mvStack.push(object);
+	mvStack.push(mvStack.top());
 	glDepthMask(GL_FALSE); // make sure writing to update depth test is off
 	glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
 	mvStack.push(glm::mat4(mvRotOnlyMat3));
+
 	glCullFace(GL_FRONT); // drawing inside of cube!
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textures[0]);
 	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.5f, 1.5f, 1.5f));
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
 	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
-	//mvStack.pop();
+	mvStack.pop();
 	glCullFace(GL_BACK); // drawing inside of cube!
-	glDepthMask(GL_TRUE); // make sure depth test is on*/
 
-	glDepthMask(GL_FALSE);
-	glm::mat4 modelview(1.0);
-	mvStack.push(object);
 
-	mvStack.push(mvStack.top());
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
-	object = glm::scale(object, glm::vec3(2.0f, 2.0f, 2.0f));
-	object = glm::translate(object, glm::vec3(0.0f, 0.0f, -2.0f));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
-	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
+						 // back to remainder of rendering
+	glDepthMask(GL_TRUE); // make sure depth test is on
 
-	mvStack.push(mvStack.top());
-	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, 2.0f));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
+	//mvStack.push(object);
+	//mvStack.push(mvStack.top());
+	//glUseProgram(shaderProgram);
+	//glDepthMask(GL_FALSE); // make sure writing to update depth test is off
+	//glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
+	//mvStack.push(glm::mat4(mvRotOnlyMat3));
+	//glCullFace(GL_FRONT); // drawing inside of cube!
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_CUBE_MAP, textures[0]);
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.5f, 1.5f, 1.5f));
+	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
+	//mvStack.pop();
+	//glCullFace(GL_BACK); // drawing inside of cube!
+	//glDepthMask(GL_TRUE); // make sure depth test is on*/
 
-	mvStack.push(mvStack.top());
-	glBindTexture(GL_TEXTURE_2D, textures[2]);
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-2.0f, 0.0f, 0.0f));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
+	//glDepthMask(GL_FALSE);
+	//glm::mat4 modelview(1.0);
+	//mvStack.push(object);
 
-	mvStack.push(mvStack.top());
-	glBindTexture(GL_TEXTURE_2D, textures[3]);
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(2.0f, 0.0f, 0.0f));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
+	//mvStack.push(mvStack.top());
+	//glBindTexture(GL_TEXTURE_2D, textures[0]);
+	//object = glm::scale(object, glm::vec3(2.0f, 2.0f, 2.0f));
+	//object = glm::translate(object, glm::vec3(0.0f, 0.0f, -2.0f));
+	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
+	//rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
+	//mvStack.pop();
 
-	glDepthMask(GL_TRUE);
+	//mvStack.push(mvStack.top());
+	//glBindTexture(GL_TEXTURE_2D, textures[1]);
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
+	//mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, 2.0f));
+	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
+	//mvStack.pop();
+
+	//mvStack.push(mvStack.top());
+	//glBindTexture(GL_TEXTURE_2D, textures[2]);
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
+	//mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-2.0f, 0.0f, 0.0f));
+	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
+	//mvStack.pop();
+
+	//mvStack.push(mvStack.top());
+	//glBindTexture(GL_TEXTURE_2D, textures[3]);
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
+	//mvStack.top() = glm::translate(mvStack.top(), glm::vec3(2.0f, 0.0f, 0.0f));
+	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
+	//mvStack.pop();
+
+	//glDepthMask(GL_TRUE);
 }

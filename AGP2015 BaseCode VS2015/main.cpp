@@ -153,12 +153,8 @@ Camera Game_Camera = Camera();
 Character character = Character();
 Skybox skyboxTest = Skybox();
 
-//const char *skyboxFiles[6] = {
-//	"red-sky/red_sky_front.bmp", "red-sky/red_sky_back.bmp", "red-sky/red_sky_right.bmp", "red-sky/red_sky_left.bmp", "red-sky/red_sky_top.bmp", "red-sky/red_sky_top.bmp"
-//};
-
 const char *skyboxFiles[6] = {
-	"town-skybox/Town_bk.bmp", "town-skybox/Town_ft.bmp", "town-skybox/Town_rt.bmp", "town-skybox/Town_lf.bmp", "town-skybox/Town_up.bmp", "town-skybox/Town_dn.bmp"
+	"red-sky/red_sky_front.bmp", "red-sky/red_sky_back.bmp", "red-sky/red_sky_right.bmp", "red-sky/red_sky_left.bmp", "red-sky/red_sky_top.bmp", "red-sky/red_sky_top.bmp"
 };
 
 // textToTexture
@@ -600,7 +596,7 @@ void init(void) {
 
 	Game_Camera.InitalStats();
 	character.InitalStats(shaderProgram);
-	skyboxTest.InitalStats(skyboxProgram, skyboxFiles);
+	skyboxTest.InitalStats(skyboxFiles);
 	
 }
 
@@ -835,14 +831,15 @@ void draw(SDL_Window * window) {
 	Game_Camera.draw(mvStack.top(), character.getModelEye());
 
 	// draw a skybox
-	glUseProgram(skyboxProgram);
-	rt3d::setUniformMatrix4fv(skyboxProgram, "projection", glm::value_ptr(projection));
-
+//	glUseProgram(skyboxProgram);
+	rt3d::setUniformMatrix4fv(skyboxTest.shaderProgram, "projection", glm::value_ptr(projection));
+	skyboxTest.draw(mvStack.top());
 	//glDepthMask(GL_FALSE); // make sure depth test is off
 	//glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
 	//mvStack.push(glm::mat4(mvRotOnlyMat3));
 
-	skyboxTest.draw(mvStack.top());
+	
+
 
 	/*
 	// front
