@@ -1,4 +1,5 @@
 #include "Gameobject.h"
+//T
 
 void Gameobject::setShader(GLuint s_shaderProgram)
 { 
