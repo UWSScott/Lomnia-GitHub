@@ -24,7 +24,6 @@
 
 #include <ctime>
 #include <iostream>
-#include <ctime>
 #include <windows.h>
 #include <conio.h>
 #include <fstream>
@@ -36,6 +35,7 @@
 #include "PlayableCharacter.h"
 #include "Camera.h"
 #include "Skybox.h"
+#include "Prefab.h"
 
 /*#include "Stun.h"
 #include "Poison.h"
@@ -114,35 +114,7 @@ float heightOfCam = 0;
 
 TTF_Font * textFont;
 
-#define SIZE 17
-// CELL STRUCTURE
-struct Cell
-{
-	bool visited;
-	bool top_wall;
-	bool bot_wall;
-	bool left_wall;
-	bool right_wall;
-	char display;
-};
 
-// FUNCTION DECLARATIONS
-void Initialize(Cell Level[][SIZE]);
-//void ClearScreen();
-//void Redraw(Cell Level[][SIZE]);
-void GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &goalX, int &goalY);
-void SaveMaze();
-void LoadMaze();
-
-
-
-
-Cell Level[SIZE][SIZE];
-int posX = 0;
-int posY = 0;
-int goalX = 0;
-int goalY = 0;
-int totalCells = ((SIZE - 1) / 2)*((SIZE - 1) / 2);
 
 //Combat variables
 //Character player = Character("PLAYER", 100, 100, 10, 10, 1.0, 1.0, 1.0, 1.0, true);
@@ -158,6 +130,7 @@ Camera Game_Camera = Camera();
 PlayableCharacter* character = new PlayableCharacter();
 Weapon weaponTest = Weapon();// "Scott's Saber", "Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
 Skybox skyboxTest = Skybox();
+Prefab* houseTest = new Prefab();
 
 const char *skyboxFiles[6] = {
 	"red-sky/red_sky_front.bmp", "red-sky/red_sky_back.bmp", "red-sky/red_sky_right.bmp", "red-sky/red_sky_left.bmp", "red-sky/red_sky_top.bmp", "red-sky/red_sky_top.bmp"
@@ -213,205 +186,8 @@ GLuint textToTexture(const char * str, GLuint textID/*, TTF_Font *font, SDL_Colo
 	return texture;
 }
 
-// INITIALIZE MAZE
-void Initialize(Cell Level[][SIZE]) {
-	for (int i = 0; i<SIZE; i++) {
-		for (int j = 0; j<SIZE; j++) {
-			Level[i][j].display = '*';
-			Level[i][j].visited = false;
-			Level[i][j].top_wall = true;
-			Level[i][j].bot_wall = true;
-			Level[i][j].left_wall = true;
-			Level[i][j].right_wall = true;
-		}
-	}
-	for (int i = 1; i<SIZE - 1; i++) {
-		for (int j = 1; j<SIZE - 1; j++) {
-			// Border Cells have fewer accessible walls
-			Level[1][j].top_wall = false;
-			Level[SIZE - 2][j].bot_wall = false;
-			Level[i][1].left_wall = false;
-			Level[i][SIZE - 2].right_wall = false;
-		}
-	}
-}
-
-// GENERATE MAZE
-void GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &goalX, int &goalY) {
-	srand((unsigned)time(NULL));                                                                            // Pick random start cell
-	int random = 0;
-	int randomX = ((2 * rand()) + 1) % (SIZE - 1);                                          // Generate a random odd number between 1 and SIZE
-	int randomY = ((2 * rand()) + 1) % (SIZE - 1);                                          // Generate a random odd number between 1 and SIZE
-	posX = randomX *3;                                                                 // Save player's initial X position
-	posY = randomY * 3;                                                                 // Save player's initial Y position
-	int visitedCells = 1;
-	//int totalCells = ((SIZE - 1) / 2)*((SIZE - 1) / 2);
-	int percent = 0;
-	stack<int> back_trackX, back_trackY;                                            // Stack is used to trace the reverse path
-
-	Level[randomY][randomX].display = '_';                                          // Set S as the start cell
-	Level[randomY][randomX].visited = true;                                         // Set start cell as visited;
-
-	while (visitedCells < totalCells)
-	{
-		if (((Level[randomY - 2][randomX].visited == false) && (Level[randomY][randomX].top_wall == true && Level[randomY - 2][randomX].bot_wall == true)) ||
-			((Level[randomY + 2][randomX].visited == false) && (Level[randomY][randomX].bot_wall == true && Level[randomY + 2][randomX].top_wall == true)) ||
-			((Level[randomY][randomX - 2].visited == false) && (Level[randomY][randomX].left_wall == true && Level[randomY][randomX - 2].right_wall == true)) ||
-			((Level[randomY][randomX + 2].visited == false) && (Level[randomY][randomX].right_wall == true && Level[randomY][randomX + 2].left_wall == true)))
-		{
-			random = (rand() % 4) + 1;              // Pick a random wall 1-4 to knock down
-
-													// GO UP
-			if ((random == 1) && (randomY > 1)) {
-				if (Level[randomY - 2][randomX].visited == false) {        // If not visited
-					Level[randomY - 1][randomX].display = '_';        // Delete display
-					Level[randomY - 1][randomX].visited = true;       // Mark cell as visited
-					Level[randomY][randomX].top_wall = false;       // Knock down wall
-
-					back_trackX.push(randomX);                      // Push X for back track
-					back_trackY.push(randomY);                      // Push Y for back track
-
-					randomY -= 2;                                   // Move to next cell
-					Level[randomY][randomX].visited = true;         // Mark cell moved to as visited
-					Level[randomY][randomX].display = '_';          // Update path
-					Level[randomY][randomX].bot_wall = false;       // Knock down wall
-					visitedCells++;                                 // Increase visitedCells counter
-				}
-				else
-					continue;
-			}
-
-			// GO DOWN
-			else if ((random == 2) && (randomY < SIZE - 2)) {
-				if (Level[randomY + 2][randomX].visited == false) {        // If not visited
-					Level[randomY + 1][randomX].display = '_';        // Delete display
-					Level[randomY + 1][randomX].visited = true;       // Mark cell as visited
-					Level[randomY][randomX].bot_wall = false;       // Knock down wall
-
-					back_trackX.push(randomX);                      // Push X for back track
-					back_trackY.push(randomY);                      // Push Y for back track
-
-					randomY += 2;                                   // Move to next cell
-					Level[randomY][randomX].visited = true;         // Mark cell moved to as visited
-					Level[randomY][randomX].display = '_';          // Update path
-					Level[randomY][randomX].top_wall = false;       // Knock down wall
-					visitedCells++;                                 // Increase visitedCells counter
-				}
-				else
-					continue;
-			}
-
-			// GO LEFT
-			else if ((random == 3) && (randomX > 1)) {
-				if (Level[randomY][randomX - 2].visited == false) {        // If not visited
-					Level[randomY][randomX - 1].display = '_';        // Delete display
-					Level[randomY][randomX - 1].visited = true;       // Mark cell as visited
-					Level[randomY][randomX].left_wall = false;      // Knock down wall
-
-					back_trackX.push(randomX);                      // Push X for back track
-					back_trackY.push(randomY);                      // Push Y for back track
-
-					randomX -= 2;                                   // Move to next cell
-					Level[randomY][randomX].visited = true;         // Mark cell moved to as visited
-					Level[randomY][randomX].display = '_';          // Update path
-					Level[randomY][randomX].right_wall = false;     // Knock down wall
-					visitedCells++;                                 // Increase visitedCells counter
-				}
-				else
-					continue;
-			}
-
-			// GO RIGHT
-			else if ((random == 4) && (randomX < SIZE - 2)) {
-				if (Level[randomY][randomX + 2].visited == false) {        // If not visited
-					Level[randomY][randomX + 1].display = '_';        // Delete display
-					Level[randomY][randomX + 1].visited = true;       // Mark cell as visited
-					Level[randomY][randomX].right_wall = false;     // Knock down wall
-
-					back_trackX.push(randomX);                      // Push X for back track
-					back_trackY.push(randomY);                      // Push Y for back track
-
-					randomX += 2;                                   // Move to next cell
-					Level[randomY][randomX].visited = true;         // Mark cell moved to as visited
-					Level[randomY][randomX].display = '_';          // Update path
-					Level[randomY][randomX].left_wall = false;      // Knock down wall
-					visitedCells++;                                 // Increase visitedCells counter
-				}
-				else
-					continue;
-			}
-
-			percent = (visitedCells * 100 / totalCells * 100) / 100;                // Progress in percentage
-			cout << endl << "       Generating a Random Maze... " << percent << "%" << endl;
-		}
-		else {
-			randomX = back_trackX.top();
-			back_trackX.pop();
-
-			randomY = back_trackY.top();
-			back_trackY.pop();
-		}
-
-		//ClearScreen();
-		//Redraw(Level);
-	}
-
-	goalX = randomX;
-	goalY = randomY;
-	Level[goalY][goalX].display = '.';
-	//system("cls");
-	//ClearScreen();
-	//Redraw(Level);
-	//cout << endl << "\a\t   Complete!" << endl;
-}
-
 // SAVE MAZE -- Cell Level[][SIZE]
-void SaveMaze() {
-	ofstream output;
-	char file[20] = "MazeSeed";
-	char input;
-	int passes = 0;
-	cout << endl << "Saving Maze....";
-	//cin >> input;
 
-	/*if ((input == 'y') || (input == 'Y')) {
-		cout << endl << "Save as: ";
-		cin >> file;*/
-
-	output.open(file);
-
-	for (int i = 0; i < SIZE; i++) {
-		output << endl;
-		for (int j = 0; j < SIZE; j++) {
-			passes++;
-			output << Level[i][j].display;
-		}
-	}
-
-	cout << endl << "... Complete!";
-	cout << "Maze has been saved to" << "\"" << file << "\"" << endl;
-	cout << passes << endl;
-	output.close();
-}
-
-void LoadMaze()
-{
-	char space;
-	ifstream myfile("MazeSeed");
-
-	if (myfile.is_open()) {
-		for (int row = 0; row < SIZE; row++) {
-			for (int col = 0; col < SIZE; col++) {
-				myfile >> space;
-				cout << space;
-				Level[row][col].display = space;
-				cout << space;
-			}
-			cout << endl;
-		}
-		cout << "Maze Loaded!" << endl;
-	} else { cout << "Unable to open file"; }
-}
 
 // Set up rendering context
 SDL_Window * setupRC(SDL_GLContext &context) {
@@ -481,7 +257,7 @@ GLuint loadBitmap(char *fname) {
 	return texID;	// return value of texture ID
 }
 
-glm::vec3 getEnemyPos()
+/*glm::vec3 getEnemyPos()
 {
 	glm::vec3 enemyPos = glm::vec3(0, 0, 0);
 	int x, z;
@@ -527,7 +303,7 @@ glm::vec2 moveEnemy()
 	return movePos;
 }
 
-
+*/
 
 
 void init(void) {
@@ -560,7 +336,7 @@ void init(void) {
 	meshObjects[3] = weapon.ReadMD2Model("Partical_sword.MD2");
 	md2VertCount3 = weapon.getVertDataCount();
 	
-	
+
 	/*skybox[0] = loadBitmap("red-sky/Town_ft.bmp");
 	skybox[1] = loadBitmap("red-sky/Town_bk.bmp");
 	skybox[2] = loadBitmap("red-sky/Town_lf.bmp");
@@ -592,19 +368,20 @@ void init(void) {
 
 
 
-	Initialize(Level);
-	GenerateMaze(Level, posX, posY, goalX, goalY);
+	//Initialize(Level);
+	//GenerateMaze(Level, posX, posY, goalX, goalY);
 
-	playerPos = glm::vec3(posX, 0.8, posY);
-	enemyPos = getEnemyPos();
+	//playerPos = glm::vec3(posX, 0.8, posY);
+	//enemyPos = getEnemyPos();
 
-	enemyMove = moveEnemy();
+	//enemyMove = moveEnemy();
 
 	character = new PlayableCharacter("Arnold", 10, 10);
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
 	skyboxTest.InitalStats(skyboxFiles);
 	weaponTest.InitalStats(shaderProgram);
+	houseTest = new Prefab(shaderProgram, "cube.obj" /*"Models/House_001.obj"*/, "hobgoblin2.bmp", glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
 	
 }
 
@@ -903,7 +680,7 @@ void draw(SDL_Window * window) {
 
 	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
 
-	for (int i = 0; i<SIZE; i++) {
+	/*for (int i = 0; i<SIZE; i++) {
 		for (int j = 0; j<SIZE; j++) {
 			glBindTexture(GL_TEXTURE_2D, textures[0]);
 			mvStack.push(mvStack.top());
@@ -923,8 +700,7 @@ void draw(SDL_Window * window) {
 			rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
 			mvStack.pop();
 		}
-	}
-
+	}*/
 
 	// Animate the md2 model, and update the mesh with new vertex data
 	arnould.Animate(currentAnim, 0.1);
@@ -984,6 +760,8 @@ void draw(SDL_Window * window) {
 	glCullFace(GL_BACK);
 
 	character->draw(mvStack.top());
+	rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
+	houseTest->draw(mvStack.top());
 	//weaponTest.draw(mvStack.top(), character.position, character.currentAnimation, character.rotation);
 
 	// remember to use at least one pop operation per push...

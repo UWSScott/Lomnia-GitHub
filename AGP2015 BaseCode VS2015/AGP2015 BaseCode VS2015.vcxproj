@@ -28,13 +28,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -160,6 +160,7 @@
     <ClCompile Include="ItemUse.cpp" />
     <ClCompile Include="Level_001.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MazeGenerator.cpp" />
     <ClCompile Include="md2model.cpp" />
     <ClCompile Include="PlayableCharacter.cpp" />
     <ClCompile Include="Prefab.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemUse.h" />
     <ClInclude Include="LightAttack.h" />
+    <ClInclude Include="MazeGenerator.h" />
     <ClInclude Include="md2model.h" />
     <ClInclude Include="PlayableCharacter.h" />
     <ClInclude Include="Poison.h" />
