@@ -31,6 +31,7 @@ public:
 	int totalCells = ((SIZE - 1) / 2)*((SIZE - 1) / 2);
 
 	Cell Level[SIZE][SIZE];
+	Prefab Maze_Tiles[SIZE][SIZE];
 	//vector<Prefab> Maze_Tiles;
 
 	MazeGenerator() {};

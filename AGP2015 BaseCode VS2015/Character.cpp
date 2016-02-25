@@ -126,6 +126,70 @@ void Character::Update()
 	}
 }
 
+//
+//void Character::Attack(Character& enemyCharacter)
+//{
+//	inCombat = true;
+//
+//	if (refreshTime <= 0)
+//	{
+//		if (queuedAttacks.size() > 0)
+//		{
+//			std::list<C_Attack>::iterator it = queuedAttacks.begin();
+//			std::advance(it, 0);
+//			enemyCharacter.BeingAttacked(*it);
+//			refreshTime += it->Refresh();
+//			manaPool -= it->GetManaCost();
+//			it = queuedAttacks.erase(it);
+//		}
+//		else {
+//			int attackOption = rand() % 5 + 1;
+//			//all classes created quickly for time, will be refined in full game...
+//			LightAttack defualtAttack_1 = LightAttack();
+//			HeavyAttack defualtAttack_2 = HeavyAttack();
+//			Poison defualtAttack_3 = Poison();
+//			Stun defualtAttack_4 = Stun();
+//
+//			switch (attackOption)
+//			{
+//			case 1:
+//				enemyCharacter.BeingAttacked(defualtAttack_1);
+//				refreshTime += defualtAttack_1.Refresh();
+//				manaPool -= defualtAttack_1.GetManaCost();
+//				break;
+//			case 2:
+//				enemyCharacter.BeingAttacked(defualtAttack_2);
+//				refreshTime += defualtAttack_2.Refresh();
+//				manaPool -= defualtAttack_2.GetManaCost();
+//				break;
+//			case 3:
+//				enemyCharacter.BeingAttacked(defualtAttack_3);
+//				refreshTime += defualtAttack_3.Refresh();
+//				manaPool -= defualtAttack_3.GetManaCost();
+//				break;
+//			case 4:
+//				enemyCharacter.BeingAttacked(defualtAttack_4);
+//				refreshTime += defualtAttack_4.Refresh();
+//				manaPool -= defualtAttack_4.GetManaCost();
+//				break;
+//			default:
+//				break;
+//			}
+//
+//		}
+//	}
+//}
+
+
+float Character::ResSelect(int resType)
+{
+	if (resType == 0) { return 0; }
+	if (resType == 1) { return resistance_Fire; }
+	if (resType == 2) { return resistance_Water; }
+	if (resType == 3) { return resistance_Air; }
+	return 0;
+}
+
 
 /*
 #include "rt3d.h"
@@ -167,57 +231,6 @@ Character::Character(string s_name, int s_health, int s_mana, int s_def,int s_st
 
 }
 
-void Character::Attack(Character& enemyCharacter)
-{
-	inCombat = true;
-
-	if (refreshTime <= 0)
-	{
-		if (queuedAttacks.size() > 0)
-		{
-			std::list<C_Attack>::iterator it = queuedAttacks.begin();
-			std::advance(it, 0);
-			enemyCharacter.BeingAttacked(*it);
-			refreshTime += it->Refresh();
-			manaPool -= it->GetManaCost();
-			it = queuedAttacks.erase(it);
-		} else {
-			int attackOption = rand() % 5 + 1;
-			//all classes created quickly for time, will be refined in full game...
-			LightAttack defualtAttack_1 = LightAttack();
-			HeavyAttack defualtAttack_2 = HeavyAttack();
-			Poison defualtAttack_3 = Poison();
-			Stun defualtAttack_4 = Stun();
-
-			switch (attackOption)
-			{
-			case 1:
-				enemyCharacter.BeingAttacked(defualtAttack_1);
-				refreshTime += defualtAttack_1.Refresh();
-				manaPool -= defualtAttack_1.GetManaCost();
-				break;
-			case 2:
-				enemyCharacter.BeingAttacked(defualtAttack_2);
-				refreshTime += defualtAttack_2.Refresh();
-				manaPool -= defualtAttack_2.GetManaCost();
-				break;
-			case 3:
-				enemyCharacter.BeingAttacked(defualtAttack_3);
-				refreshTime += defualtAttack_3.Refresh();
-				manaPool -= defualtAttack_3.GetManaCost();
-				break;
-			case 4:
-				enemyCharacter.BeingAttacked(defualtAttack_4);
-				refreshTime += defualtAttack_4.Refresh();
-				manaPool -= defualtAttack_4.GetManaCost();
-				break;
-			default:
-				break;
-			}
-	
-		}
-	}
-}
 
 void Character::BeingAttacked(C_Attack s_attack)
 {
@@ -305,13 +318,4 @@ void Character::Update(float time)
 
 	
 }
-
-float Character::ResSelect(int resType)
-	{
-		float res = 0;
-		if (resType == 0) { res = physRes; }
-		if (resType == 1) { res = fireRes; }
-		if (resType == 2) { res = waterRes; }
-		if (resType == 3) { res = windRes; }
-		return res;
-	}*/
+*/

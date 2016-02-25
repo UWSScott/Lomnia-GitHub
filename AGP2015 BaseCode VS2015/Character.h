@@ -9,8 +9,9 @@
 //#include <iostream>
 //#include <string>
 //using namespace std;
-//#include <list>
+#include <list>
 #include "Weapon.h"
+#include "Attack.h"
 
 class Character : public Gameobject
 {
@@ -27,9 +28,9 @@ public:
 	int defence = 5;
 	int max_Defence = 5;
 	Weapon* weapon = new Weapon();
-	//Weapon
 	//Armor
 	//Inventory List
+
 	float resistance_Fire = 0;
 	float resistance_Water = 0;
 	float resistance_Air = 0;
@@ -37,6 +38,14 @@ public:
 	int xp = 0;
 	bool canDie = true;
 	bool inCombat = false;
+	int currentAnimation = 0;
+	int characterState = 0;
+	float refreshTime = 0;
+	//AttackInstance attI = NULL;
+	list<C_Attack> queuedAttacks = list<C_Attack>();
+	C_Attack opponentAttack;
+
+
 	Character() {};
 	virtual void Update();
 	virtual void Animate();
@@ -44,9 +53,10 @@ public:
 	virtual void draw(glm::mat4 object);
 	virtual  glm::vec3 getModelEye();
 	virtual int getRotation();
-	int currentAnimation = 0;
-	int characterState = 0;
+	void Attack(Character& enemyCharacter);
+	float ResSelect(int resType);
 	
+
 protected:
 	glm::vec3 modelAt;
 	glm::vec3 modelUp;
@@ -72,8 +82,7 @@ public:
 	bool player; //Only for prototype
 	bool inCombat; //Only for prototype
 	string name = "DEFAULT";
-	list<C_Attack> queuedAttacks = list<C_Attack>();
-	C_Attack opponentAttack;
+
 	float ResSelect(int resType);
 	float physRes;
 	float fireRes;
@@ -82,7 +91,7 @@ public:
 
 	Character() {};
 	Character(string s_name, int s_health, int s_mana, int s_def, int s_str, float s_physRes, float s_fireRes, float s_waterRes, float s_windRes, bool s_player);
-	void Attack(Character& enemyCharacter);
+	
 	void BeingAttacked(C_Attack s_attack);
 	void Update(float time);
 	void Damage(int damageValue);
