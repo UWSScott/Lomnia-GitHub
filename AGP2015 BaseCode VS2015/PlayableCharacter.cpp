@@ -11,9 +11,30 @@ PlayableCharacter::PlayableCharacter(string setName, int setHealth, int setStren
 	cout << " name: " << weapon->collisionName;
 }
 
+void PlayableCharacter::Input()
+{
+	const Uint8 *keys = SDL_GetKeyboardState(NULL);
+	if (inCombat == false)
+	{
+		characterState = IDLE;
+		if (keys[SDL_SCANCODE_A]) { characterState = IDLE;  rotation += 1.0f; }
+		if (keys[SDL_SCANCODE_D]) { characterState = IDLE;  rotation -= 1.0f; }
+		if (keys[SDL_SCANCODE_W]) { characterState = WALKING;  position = MoveForward(position, rotation, 0.1f); }
+		if (keys[SDL_SCANCODE_S]) { characterState = WALKING;  position = MoveForward(position, rotation, -0.1f); }
+	}
+}
+
+void PlayableCharacter::Update()
+{
+	Input();
+
+}
+
+
 
 void PlayableCharacter::draw(glm::mat4 object)
 {
+	Animate();
 	glUseProgram(shaderProgram);
 	glCullFace(GL_FRONT);
 	glActiveTexture(GL_TEXTURE0);
@@ -39,3 +60,4 @@ void PlayableCharacter::draw(glm::mat4 object)
 	if (weapon->getEquiped())
 		weapon->draw(object, position, currentAnimation, rotation);
 }
+

@@ -3,6 +3,11 @@
 #define CHARACTER_H
 #include "Gameobject.h"
 
+#define IDLE 0
+#define WALKING 1
+#define IDLE 2
+#define IDLE 3
+
 //#include <iostream>
 //#include <string>
 //using namespace std;
@@ -33,14 +38,17 @@ public:
 	int coins = 0;
 	int xp = 0;
 	bool canDie = true;
-
+	bool inCombat = false;
 	Character() {};
 	virtual void Update();
+	virtual void Animate();
 	virtual void InitalStats(GLuint setShaderProgram);
 	virtual void draw(glm::mat4 object);
 	virtual  glm::vec3 getModelEye();
 	virtual int getRotation();
 	int currentAnimation = 0;
+	int characterState = 0;
+	
 protected:
 	glm::vec3 modelAt;
 	glm::vec3 modelUp;

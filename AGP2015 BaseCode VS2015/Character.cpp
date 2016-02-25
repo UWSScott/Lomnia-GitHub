@@ -84,6 +84,22 @@ void Character::InitalStats(GLuint setShaderProgram)
 	md2VertCount = tmpModel.getVertDataSize();
 }
 
+void Character::Animate()
+{
+	switch (characterState)
+	{
+	case IDLE:
+		currentAnimation = 0;
+		break;
+	case WALKING:
+		currentAnimation = 1;
+		break;
+	default:
+		currentAnimation = 0;
+		break;
+	}
+}
+
 void Character::Update()
 {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
