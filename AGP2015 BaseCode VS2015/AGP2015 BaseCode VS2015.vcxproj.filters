@@ -84,6 +84,9 @@
     <ClCompile Include="MazeGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CombatInstance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="anorms.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="Character.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CombatInstance.h">
+      <Filter>Header Files\Attacks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

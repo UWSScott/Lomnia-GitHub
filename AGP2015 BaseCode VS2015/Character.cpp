@@ -1,4 +1,5 @@
 #include "Character.h"
+#include <random>
 
 glm::vec3 Character::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d)
 {
@@ -126,59 +127,7 @@ void Character::Update()
 	}
 }
 
-//
-//void Character::Attack(Character& enemyCharacter)
-//{
-//	inCombat = true;
-//
-//	if (refreshTime <= 0)
-//	{
-//		if (queuedAttacks.size() > 0)
-//		{
-//			std::list<C_Attack>::iterator it = queuedAttacks.begin();
-//			std::advance(it, 0);
-//			enemyCharacter.BeingAttacked(*it);
-//			refreshTime += it->Refresh();
-//			manaPool -= it->GetManaCost();
-//			it = queuedAttacks.erase(it);
-//		}
-//		else {
-//			int attackOption = rand() % 5 + 1;
-//			//all classes created quickly for time, will be refined in full game...
-//			LightAttack defualtAttack_1 = LightAttack();
-//			HeavyAttack defualtAttack_2 = HeavyAttack();
-//			Poison defualtAttack_3 = Poison();
-//			Stun defualtAttack_4 = Stun();
-//
-//			switch (attackOption)
-//			{
-//			case 1:
-//				enemyCharacter.BeingAttacked(defualtAttack_1);
-//				refreshTime += defualtAttack_1.Refresh();
-//				manaPool -= defualtAttack_1.GetManaCost();
-//				break;
-//			case 2:
-//				enemyCharacter.BeingAttacked(defualtAttack_2);
-//				refreshTime += defualtAttack_2.Refresh();
-//				manaPool -= defualtAttack_2.GetManaCost();
-//				break;
-//			case 3:
-//				enemyCharacter.BeingAttacked(defualtAttack_3);
-//				refreshTime += defualtAttack_3.Refresh();
-//				manaPool -= defualtAttack_3.GetManaCost();
-//				break;
-//			case 4:
-//				enemyCharacter.BeingAttacked(defualtAttack_4);
-//				refreshTime += defualtAttack_4.Refresh();
-//				manaPool -= defualtAttack_4.GetManaCost();
-//				break;
-//			default:
-//				break;
-//			}
-//
-//		}
-//	}
-//}
+
 
 
 float Character::ResSelect(int resType)
@@ -190,6 +139,23 @@ float Character::ResSelect(int resType)
 	return 0;
 }
 
+void Character::BlockAttack()
+{
+	if (combatInstance->incomingAttack.attackCompleted == false)
+	{
+		int randomNumber = rand() % 15 + 1;
+		if (speed >= randomNumber)
+		{
+			//TODO use character stats to get an accurate value for blocking based on character stats.
+			float timeBlocked = randomNumber = rand() % (int)(combatInstance->incomingAttack.blockingTime);
+			combatInstance->incomingAttack.blockingTime = timeBlocked;
+			combatInstance->incomingAttack.BlockedAttack(*this, *this);
+		}
+		else {
+			combatInstance->incomingAttack.FailedBlockedAttack(*this, *this);
+		}
+	}
+}
 
 /*
 #include "rt3d.h"
@@ -232,25 +198,7 @@ Character::Character(string s_name, int s_health, int s_mana, int s_def,int s_st
 }
 
 
-void Character::BeingAttacked(C_Attack s_attack)
-{
-	s_attack.attackCompleted = false;
-	inCombat = true;
-	opponentAttack = s_attack;
-	if (player)
-	{
-		//cout << name << " Is being attacked!!! health: " << health << endl;
-		cout << "YOU ARE BEING ATTACKED! PRESS " << s_attack.blockingButton << " TO BLOCK ATTACK! (1.UP, 2.DOWN, 3.LEFT, 4.RIGHT)";
-	}
-}
 
-void Character::Damage(int damageValue)
-{
-	//cout << damageValue << " damage done to " << name <<   " current health of character: " << health << endl;
-	health = health - damageValue;
-	if (health <= 0)
-		cout << name << " is DEAD!";
-}
 
 void Character::Update(float time)
 {

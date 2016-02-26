@@ -121,8 +121,7 @@ TTF_Font * textFont;
 //Character enemy = Character("ENEMY"  , 25, 0, 14, 10, 1.0, 2.0, 0.5, 1.0, false);
 //Character player = new Character();
 bool inCombat = false;
-std::clock_t start;
-double duration;
+
 glm::vec3 oldPlayerPos;
 
 Camera Game_Camera = Camera();
@@ -307,7 +306,7 @@ glm::vec2 moveEnemy()
 
 
 void init(void) {
-	start = std::clock();
+
 
 
 	shaderProgram = rt3d::initShaders("phong-tex.vert","phong-tex.frag");

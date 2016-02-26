@@ -12,6 +12,9 @@
 #include <list>
 #include "Weapon.h"
 #include "Attack.h"
+#include "CombatInstance.h"
+
+class CombatInstance;
 
 class Character : public Gameobject
 {
@@ -27,6 +30,8 @@ public:
 	int max_Strength = 10;
 	int defence = 5;
 	int max_Defence = 5;
+	int speed = 5;
+	int max_Speed = 10;
 	Weapon* weapon = new Weapon();
 	//Armor
 	//Inventory List
@@ -41,10 +46,8 @@ public:
 	int currentAnimation = 0;
 	int characterState = 0;
 	float refreshTime = 0;
-	//AttackInstance attI = NULL;
-	list<C_Attack> queuedAttacks = list<C_Attack>();
-	C_Attack opponentAttack;
-
+	CombatInstance* combatInstance;
+	virtual void BlockAttack();
 
 	Character() {};
 	virtual void Update();
@@ -53,9 +56,9 @@ public:
 	virtual void draw(glm::mat4 object);
 	virtual  glm::vec3 getModelEye();
 	virtual int getRotation();
-	void Attack(Character& enemyCharacter);
+	//void Attack(Character& enemyCharacter);
 	float ResSelect(int resType);
-	
+	virtual bool isDead();
 
 protected:
 	glm::vec3 modelAt;
@@ -65,7 +68,7 @@ protected:
 	GLuint md2VertCount = 0;
 
 	virtual glm::vec3 MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d);
-	virtual bool isDead();
+
 };
 
 /*class Character : public Gameobject
