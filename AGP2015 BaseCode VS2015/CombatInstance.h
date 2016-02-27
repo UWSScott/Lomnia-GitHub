@@ -29,7 +29,10 @@ public:
 	list<C_Attack> queuedAttacks = list<C_Attack>();
 
 	void Update();
+	void EndCombat();
 	void Damage(int damageValue);
 	void Attack();
 	void BeingAttacked(C_Attack s_attack);
+
+	bool paused = false;
 };

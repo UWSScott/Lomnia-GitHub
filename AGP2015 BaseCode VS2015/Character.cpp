@@ -1,10 +1,21 @@
 #include "Character.h"
 
-struct Local {
-	Local(Character& character) { this->character = character; }
+struct MostDamageSort {
+	MostDamageSort(Character& character) { this->character = character; }
 	bool operator()(C_Attack attack_1, C_Attack attack_2) { return ((attack_1.damageCalc(character, *character.combatInstance->opponent) > attack_2.damageCalc(character, *character.combatInstance->opponent))); };
-
 	Character character;
+};
+
+struct EfficentSort {
+	EfficentSort(Character& character) { this->character = character; }
+	bool operator()(C_Attack& attack_1, C_Attack& attack_2) { return (attack_1.GetBalanceValue() > attack_2.GetBalanceValue()); };
+	Character character;
+};
+
+struct FastAttackSort {
+	FastAttackSort(Character* character) { this->character = character; }
+	bool operator()(C_Attack& attack_1, C_Attack& attack_2) { return (attack_1.AttackSpeed(character) > attack_2.AttackSpeed(character)); };
+	Character* character;
 };
 
 Character::Character(string s_characterName, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram)
@@ -32,6 +43,26 @@ Character::Character(string s_characterName, char *modelName, char *textureName,
 glm::vec3 Character::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d)
 {
 	return glm::vec3(cam.x + d*std::sin(angle*DEG_TO_RAD), cam.y, cam.z - d*std::cos(angle*DEG_TO_RAD));
+}
+
+void Character::CheckQuestGoal(Character *character)
+{
+	//This should only apply to AI. If this passes the AI has defeated the player OR the ai was spared meaning we need to 
+	//keep track of the current character as he will return at the end to help the player.
+	//The player class overrides this, so any quest checking should be done inside that.
+}
+
+void Character::Dead()
+{
+	characterState = DEAD;
+}
+
+void Character::LootEnemy(Character* character)
+{
+	coins += character->coins;
+	xp += character->killXP;
+	//Pass inventory of current character to new killer.
+	//All other transferable stats should go here.
 }
 
 bool Character::isDead()
@@ -85,7 +116,6 @@ void Character::GetAvailableAttacks(vector<C_Attack>& attackList)
 	attackList.push_back(HeavyAttack());
 	attackList.push_back(Poison());
 	attackList.push_back(Stun());
-	attackList.push_back(LightAttack());
 }
 
 
@@ -98,11 +128,11 @@ void Character::CombatAttacks()
 	vector<C_Attack> possibleAttacks = vector<C_Attack>();
 	GetAvailableAttacks(possibleAttacks);
 
-	sort(possibleAttacks.begin(), possibleAttacks.end(), Local(*this));
+	sort(possibleAttacks.begin(), possibleAttacks.end(), MostDamageSort(*this));
 	C_Attack max_damage = possibleAttacks[0];
-	sort(possibleAttacks.begin(), possibleAttacks.end(), Local(*this));
+	sort(possibleAttacks.begin(), possibleAttacks.end(), FastAttackSort(this));
 	C_Attack quickest_damage = possibleAttacks[0];
-	sort(possibleAttacks.begin(), possibleAttacks.end(), Local(*this));
+	sort(possibleAttacks.begin(), possibleAttacks.end(), EfficentSort(*this));
 	C_Attack efficent_Attack = possibleAttacks[0];
 
 
@@ -111,25 +141,27 @@ void Character::CombatAttacks()
 	if (max_damage.GetPossibleDamage() >= combatInstance->opponent->health){ combatInstance->queuedAttacks.push_back(max_damage); return; }
 	if (health <= rand() % 15 && max_damage.GetPossibleDamage() < combatInstance->opponent->health) { combatInstance->queuedAttacks.push_back(ItemUse(Item())); return; }
 	else if (health <= rand() % 15 && max_damage.GetPossibleDamage() < combatInstance->opponent->health) { combatInstance->queuedAttacks.push_back(Flee()); return; }
+	
+	int randomAttack = rand() % 3 + 1;
+	switch (randomAttack)
+	{
+	case 1:
+		combatInstance->queuedAttacks.push_back(max_damage); return;
+		break;
+	case 2:
+		combatInstance->queuedAttacks.push_back(quickest_damage); return;
+		break;
+	case 3:
+		combatInstance->queuedAttacks.push_back(efficent_Attack); return;
+	default:
+		int randomPossibleAttack = rand() % possibleAttacks.size();
+		combatInstance->queuedAttacks.push_back(possibleAttacks[randomPossibleAttack-1]); return;
+		break;
+	}
 
-
-	//if (keys[SDL_SCANCODE_1]) combatInstance->queuedAttacks.push_back(LightAttack());
-	//if (keys[SDL_SCANCODE_2]) combatInstance->queuedAttacks.push_back(HeavyAttack());
-	//if (keys[SDL_SCANCODE_3]) combatInstance->queuedAttacks.push_back(Poison());
-	//if (keys[SDL_SCANCODE_4]) combatInstance->queuedAttacks.push_back(Stun());
-	//if (keys[SDL_SCANCODE_5]) combatInstance->queuedAttacks.push_back(ItemUse(Item()));
-	//if (keys[SDL_SCANCODE_6]) combatInstance->queuedAttacks.push_back(Flee());
 }
 
-void Character::InitalStats(GLuint setShaderProgram)
-{
-	//LoadFromFile();
-
-
-
-
-
-}
+void Character::InitalStats(GLuint setShaderProgram){}
 
 void Character::Animate()
 {

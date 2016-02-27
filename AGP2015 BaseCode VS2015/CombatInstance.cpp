@@ -5,10 +5,21 @@ CombatInstance::CombatInstance(Character *s_current, Character *s_opponent)
 	currentCharacter = s_current;  opponent = s_opponent; start = std::clock(); currentCharacter->inCombat = true; 
 }
 
+
+void CombatInstance::EndCombat()
+{
+	if (currentCharacter->isDead() == true)
+		return;
+	if (opponent->isDead())
+		currentCharacter->LootEnemy(opponent);
+	currentCharacter->CheckQuestGoal(opponent);
+}
+
 void CombatInstance::Update()
 {
 	duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
 	currentCharacter->BlockAttack();
+	incomingAttack.DoEffect(duration);
 }
 
 void CombatInstance::BeingAttacked(C_Attack s_attack)
@@ -29,8 +40,8 @@ void CombatInstance::Damage(int damageValue)
 	if (currentCharacter->isDead() == true)
 	{
 		cout << currentCharacter->characterName << " is DEAD!";
+		delete opponent->combatInstance;
 	}
-
 }
 
 void CombatInstance::Attack()

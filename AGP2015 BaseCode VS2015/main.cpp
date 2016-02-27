@@ -392,7 +392,7 @@ void init(void) {
 	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(0), shaderProgram);
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
-	houseTest = new Prefab(shaderProgram, "cube.obj" /*"Models/alien_base.obj" /*"Models/House_001.obj"*/, "hobgoblin2.bmp",glm::vec3(1,1,1),glm::vec3(0,0,0));
+	houseTest = new Prefab(shaderProgram, "cube.obj" /*"Models/desert.obj"*/ /*"Models/House_001.obj"*/, "hobgoblin2.bmp",glm::vec3(1,1,1),glm::vec3(0,0,0));
 	
 }
 

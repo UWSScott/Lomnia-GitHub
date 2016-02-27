@@ -6,6 +6,7 @@
 #define IDLE 0
 #define WALKING 1
 #define ATTACKING 2
+#define DEAD 16
 
 //#include <iostream>
 //#include <string>
@@ -47,6 +48,7 @@ public:
 	float resistance_Air = 0;
 	int coins = 0;
 	int xp = 0;
+	int killXP = 0;
 	bool canDie = true;
 	bool inCombat = false;
 	int currentAnimation = 0;
@@ -68,6 +70,9 @@ public:
 	//void Attack(Character& enemyCharacter);
 	float ResSelect(int resType);
 	virtual bool isDead();
+	virtual void LootEnemy(Character* character);
+	virtual void CheckQuestGoal(Character* character);
+	virtual void Dead();
 
 protected:
 

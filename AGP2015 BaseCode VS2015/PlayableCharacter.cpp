@@ -37,6 +37,11 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 	cout << " name: " << weapon->collisionName;
 }*/
 
+void PlayableCharacter::Dead()
+{
+	characterState = DEAD;
+	//We need to add here what happens when the player dies. Ie reduce money and respawn himat the hub etc.
+}
 
 void PlayableCharacter::Input()
 {
@@ -85,6 +90,11 @@ void PlayableCharacter::draw(glm::mat4 object)
 
 	if (weapon->getEquiped())
 		weapon->draw(object, position, currentAnimation, rotation);
+}
+
+void PlayableCharacter::CheckQuestGoal(Character *character)
+{
+	//Ian do quest checking etc here - Scott.
 }
 
 void PlayableCharacter::CombatAttacks()

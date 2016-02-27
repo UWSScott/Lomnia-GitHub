@@ -14,6 +14,8 @@ public:
 	virtual void Update();
 	virtual void CombatAttacks();
 	virtual void BlockAttack();
+	virtual void CheckQuestGoal(Character *character);
+	virtual void Dead();
 	void Input();
 	//weapon = Weapon("Scott's Saber", "Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
 	/*string characterName = "";
