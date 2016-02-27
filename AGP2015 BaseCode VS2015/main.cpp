@@ -125,7 +125,7 @@ bool inCombat = false;
 glm::vec3 oldPlayerPos;
 
 Camera Game_Camera = Camera();
-//Character character = Character();
+Character* static_character[10];// = Character();
 PlayableCharacter* character = new PlayableCharacter();
 Weapon weaponTest = Weapon();// "Scott's Saber", "Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
 Skybox skyboxTest = Skybox();
@@ -375,7 +375,18 @@ void init(void) {
 
 	//enemyMove = moveEnemy();
 
-	character = new PlayableCharacter("Arnold", 10, 10);
+	static_character[0] = new Character("Arnold", "Models/walker.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1,0,0), shaderProgram);
+	static_character[1] = new Character("Arnold", "Models/ddz.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(3,0,0), shaderProgram);
+	static_character[2] = new Character("Arnold", "Models/blade.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(5,0,0), shaderProgram);
+	static_character[3] = new Character("Arnold", "Models/centaur.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(7,0,0), shaderProgram);
+	static_character[4] = new Character("Arnold", "Models/ripper.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(9,0,0), shaderProgram);
+	static_character[5] = new Character("Arnold", "Models/ogro.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(11, 0, 0), shaderProgram);
+	static_character[6] = new Character("Arnold", "Models/ogro_wepaon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(11, 0, 0), shaderProgram);
+	static_character[7] = new Character("Arnold", "Models/dragon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(13, 0, 0), shaderProgram);
+	static_character[8] = new Character("Arnold", "Models/zf19.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(15, 0, 0), shaderProgram);
+	static_character[9] = new Character("Arnold", "Models/faerie.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(17, 0, 0), shaderProgram);
+
+	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(0), shaderProgram);
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
 	skyboxTest.InitalStats(skyboxFiles);
@@ -701,67 +712,77 @@ void draw(SDL_Window * window) {
 		}
 	}*/
 
-	// Animate the md2 model, and update the mesh with new vertex data
-	arnould.Animate(currentAnim, 0.1);
-	rt3d::updateMesh(meshObjects[2], RT3D_VERTEX, arnould.getAnimVerts(), arnould.getVertDataSize());
+	//// Animate the md2 model, and update the mesh with new vertex data
+	//arnould.Animate(currentAnim, 0.1);
+	//rt3d::updateMesh(meshObjects[2], RT3D_VERTEX, arnould.getAnimVerts(), arnould.getVertDataSize());
 
-	//draw the arnould
-	glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
-	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	rt3d::materialStruct tmpMaterial = material1;
-	rt3d::setMaterial(shaderProgram, tmpMaterial);
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), playerPos);
-	mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
-	mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.03, scale*0.03, scale*0.03));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawMesh(meshObjects[2], md2VertCount2, GL_TRIANGLES);
-	mvStack.pop();
-	glCullFace(GL_BACK);
+	////draw the arnould
+	//glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
+	//glBindTexture(GL_TEXTURE_2D, textures[1]);
+	//rt3d::materialStruct tmpMaterial = material1;
+	//rt3d::setMaterial(shaderProgram, tmpMaterial);
+	//mvStack.push(mvStack.top());
+	//mvStack.top() = glm::translate(mvStack.top(), playerPos);
+	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
+	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.03, scale*0.03, scale*0.03));
+	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//rt3d::drawMesh(meshObjects[2], md2VertCount2, GL_TRIANGLES);
+	//mvStack.pop();
+	//glCullFace(GL_BACK);
 
 
-	// Animate the md2 model, and update the mesh with new vertex data
-	weapon.Animate(currentAnim, 0.1);
-	rt3d::updateMesh(meshObjects[3], RT3D_VERTEX, weapon.getAnimVerts(), weapon.getVertDataSize());
+	//// Animate the md2 model, and update the mesh with new vertex data
+	//weapon.Animate(currentAnim, 0.1);
+	//rt3d::updateMesh(meshObjects[3], RT3D_VERTEX, weapon.getAnimVerts(), weapon.getVertDataSize());
 
-	//draw the sword
-	glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
-	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	tmpMaterial = material1;
-	rt3d::setMaterial(shaderProgram, tmpMaterial);
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), playerPos);
-	mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
-	mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.03, scale*0.03, scale*0.03));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawMesh(meshObjects[3], md2VertCount3, GL_TRIANGLES);
-	mvStack.pop();
-	glCullFace(GL_BACK);
+	////draw the sword
+	//glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
+	//glBindTexture(GL_TEXTURE_2D, textures[1]);
+	//tmpMaterial = material1;
+	//rt3d::setMaterial(shaderProgram, tmpMaterial);
+	//mvStack.push(mvStack.top());
+	//mvStack.top() = glm::translate(mvStack.top(), playerPos);
+	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
+	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.03, scale*0.03, scale*0.03));
+	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//rt3d::drawMesh(meshObjects[3], md2VertCount3, GL_TRIANGLES);
+	//mvStack.pop();
+	//glCullFace(GL_BACK);
 
-	tmpModel.Animate(enemyAnim, 0.1);
-	rt3d::updateMesh(meshObjects[1], RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
+	//tmpModel.Animate(enemyAnim, 0.1);
+	//rt3d::updateMesh(meshObjects[1], RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
 
-	//draw the enemy
-	glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
-	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	tmpMaterial = material1;
-	rt3d::setMaterial(shaderProgram, tmpMaterial);
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), enemyPos);
-	mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
-	mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN + (180-playerRotation) / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.08, scale*0.08, scale*0.08));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawMesh(meshObjects[1], md2VertCount, GL_TRIANGLES);
-	mvStack.pop();
-	glCullFace(GL_BACK);
+	////draw the enemy
+	//glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
+	//glBindTexture(GL_TEXTURE_2D, textures[1]);
+	//tmpMaterial = material1;
+	//rt3d::setMaterial(shaderProgram, tmpMaterial);
+	//mvStack.push(mvStack.top());
+	//mvStack.top() = glm::translate(mvStack.top(), enemyPos);
+	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
+	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN + (180-playerRotation) / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.08, scale*0.08, scale*0.08));
+	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//rt3d::drawMesh(meshObjects[1], md2VertCount, GL_TRIANGLES);
+	//mvStack.pop();
+	//glCullFace(GL_BACK);
 
 	character->draw(mvStack.top());
-	rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
-	houseTest->draw(mvStack.top());
-	//weaponTest.draw(mvStack.top(), character.position, character.currentAnimation, character.rotation);
+	static_character[0]->draw(mvStack.top());
+	static_character[1]->draw(mvStack.top());
+	static_character[2]->draw(mvStack.top());
+	static_character[3]->draw(mvStack.top());
+	static_character[4]->draw(mvStack.top());
+	static_character[5]->draw(mvStack.top());
+	static_character[6]->draw(mvStack.top());
+	static_character[7]->draw(mvStack.top());
+	static_character[8]->draw(mvStack.top());
+	static_character[9]->draw(mvStack.top());
+
+	//rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
+	//houseTest->draw(mvStack.top());
 
 	// remember to use at least one pop operation per push...
 	mvStack.pop(); // initial matrix

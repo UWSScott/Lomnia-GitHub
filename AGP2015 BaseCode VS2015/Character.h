@@ -5,10 +5,11 @@
 
 #define IDLE 0
 #define WALKING 1
+#define ATTACKING 2
+
 
 //#include <iostream>
 //#include <string>
-//using namespace std;
 #include <list>
 #include "Weapon.h"
 #include "Attack.h"
@@ -50,6 +51,7 @@ public:
 	virtual void BlockAttack();
 
 	Character() {};
+	Character(string s_characterName, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram);
 	virtual void Update();
 	virtual void Animate();
 	virtual void InitalStats(GLuint setShaderProgram);

@@ -1,6 +1,28 @@
 #include "Character.h"
 #include <random>
 
+Character::Character(string s_characterName, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram)
+{
+	characterName = s_characterName;
+	shaderProgram = s_shaderprogram;
+	material =
+	{
+		{ 0.4f, 0.2f, 0.2f, 1.0f }, // ambient
+		{ 0.8f, 0.5f, 0.5f, 1.0f }, // diffuse
+		{ 1.0f, 0.8f, 0.8f, 1.0f }, // specular
+		2.0f  // shininess
+	};
+	meshObject = tmpModel.ReadMD2Model(modelName);
+	md2VertCount = tmpModel.getVertDataSize();
+
+	scale = s_scale;
+	position = s_position;
+
+	FileLoader* fileLoader = new FileLoader;
+	texture = fileLoader->loadBitmap(textureName);
+	delete fileLoader;
+}
+
 glm::vec3 Character::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d)
 {
 	return glm::vec3(cam.x + d*std::sin(angle*DEG_TO_RAD), cam.y, cam.z - d*std::cos(angle*DEG_TO_RAD));
@@ -54,51 +76,30 @@ void Character::draw(glm::mat4 object)
 void Character::InitalStats(GLuint setShaderProgram)
 {
 	//LoadFromFile();
-	shaderProgram = setShaderProgram;
-	material =
-	{
-		{ 0.4f, 0.2f, 0.2f, 1.0f }, // ambient
-		{ 0.8f, 0.5f, 0.5f, 1.0f }, // diffuse
-		{ 1.0f, 0.8f, 0.8f, 1.0f }, // specular
-		2.0f  // shininess
-	};
 
-	scale = glm::vec3(1, 1, 1);
-	position = glm::vec3(-3, 3, -3);
 
-	FileLoader* fileLoader = new FileLoader;
-	//texture = fileLoader->loadBitmap("hobgoblin2.bmp");
-	texture = fileLoader->loadBitmap("hobgoblin2.bmp");
 
-	/* Initialize default output device */
-	if (!BASS_Init(-1, 44100, 0, 0, NULL))
-		std::cout << "Can't initialize device";
 
-	/*samples = new HSAMPLE[4];
-	samples[0] = fileLoader->loadSample("Sound/Coin.wav");
-	samples[1] = fileLoader->loadSample("Sound/Hurt.wav");
-	samples[2] = fileLoader->loadSample("Sound/Dead.wav");
-	samples[3] = fileLoader->loadSample("Sound/Win.wav");*/
-	delete fileLoader;
 
-	meshObject = tmpModel.ReadMD2Model("arnould.MD2");
-	md2VertCount = tmpModel.getVertDataSize();
 }
 
 void Character::Animate()
 {
-	switch (characterState)
-	{
-	case IDLE:
-		currentAnimation = 0;
-		break;
-	case WALKING:
-		currentAnimation = 1;
-		break;
-	default:
-		currentAnimation = 0;
-		break;
-	}
+	currentAnimation = characterState;
+	//switch (characterState)
+	//{
+	//case IDLE:
+	//	currentAnimation = 0;
+	//	break;
+	//case WALKING:
+	//	currentAnimation = 1;
+	//	break;
+	//case ATTACKING:
+	//	currentAnimation = 
+	//default:
+	//	currentAnimation = 0;
+	//	break;
+	//}
 }
 
 void Character::Update()

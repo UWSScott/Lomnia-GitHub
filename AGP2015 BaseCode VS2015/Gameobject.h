@@ -19,7 +19,7 @@ class Gameobject
 public:
 	glm::vec3 position = glm::vec3(1,1,1);
 	glm::vec3 scale = glm::vec3(1,1,1);
-	float rotation;
+	float rotation = 0;
 	string collisionName = "DEFAULT";
 	rt3d::materialStruct material;
 	GLuint meshIndexCount;

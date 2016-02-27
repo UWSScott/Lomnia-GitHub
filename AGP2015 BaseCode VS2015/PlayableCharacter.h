@@ -9,7 +9,7 @@ private:
 public:
 	PlayableCharacter() {};
 	~PlayableCharacter() {};
-	PlayableCharacter(string setName, int setHealth, int setStrength);
+	PlayableCharacter(string s_characterName, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram);
 	virtual void draw(glm::mat4 object);
 	virtual void Update();
 	virtual void CombatAttacks();
