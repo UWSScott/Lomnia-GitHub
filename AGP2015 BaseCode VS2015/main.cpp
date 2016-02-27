@@ -125,7 +125,7 @@ bool inCombat = false;
 glm::vec3 oldPlayerPos;
 
 Camera Game_Camera = Camera();
-Character* static_character[10];// = Character();
+Character* static_character[15];// = Character();
 PlayableCharacter* character = new PlayableCharacter();
 Weapon weaponTest = Weapon();// "Scott's Saber", "Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
 Skybox skyboxTest = Skybox();
@@ -382,16 +382,19 @@ void init(void) {
 	static_character[4] = new Character("Arnold", "Models/ripper.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(9,0,0), shaderProgram);
 	static_character[5] = new Character("Arnold", "Models/ogro.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(11, 0, 0), shaderProgram);
 	static_character[6] = new Character("Arnold", "Models/ogro_wepaon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(11, 0, 0), shaderProgram);
-	static_character[7] = new Character("Arnold", "Models/dragon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(13, 0, 0), shaderProgram);
-	static_character[8] = new Character("Arnold", "Models/zf19.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(15, 0, 0), shaderProgram);
-	static_character[9] = new Character("Arnold", "Models/faerie.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(17, 0, 0), shaderProgram);
+	static_character[7] = new Character("Arnold", "Models/dragon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(15, 0, 0), shaderProgram);
+	static_character[8] = new Character("Arnold", "Models/zf19.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(20, 0, 0), shaderProgram);
+	static_character[9] = new Character("Arnold", "Models/faerie.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(22, 0, 0), shaderProgram);
+	static_character[10] = new Character("Arnold", "Models/frosty.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(24, 0, 0), shaderProgram);
+	static_character[11] = new Character("Arnold", "Models/pogo_buny.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(26, 0, 0), shaderProgram);
+	static_character[12] = new Character("Arnold", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(28, 0, 0), shaderProgram);
 
 	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(0), shaderProgram);
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
 	skyboxTest.InitalStats(skyboxFiles);
 	weaponTest.InitalStats(shaderProgram);
-	houseTest = new Prefab(shaderProgram, "cube.obj" /*"Models/House_001.obj"*/, "hobgoblin2.bmp", glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+	houseTest = new Prefab(shaderProgram, "cube.obj" /*"Models/alien_base.obj" /*"Models/House_001.obj"*/, "hobgoblin2.bmp",glm::vec3(1,1,1),glm::vec3(0,0,0));
 	
 }
 
@@ -780,9 +783,12 @@ void draw(SDL_Window * window) {
 	static_character[7]->draw(mvStack.top());
 	static_character[8]->draw(mvStack.top());
 	static_character[9]->draw(mvStack.top());
+	static_character[10]->draw(mvStack.top());
+	static_character[11]->draw(mvStack.top());
+	static_character[12]->draw(mvStack.top());
 
-	//rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
-	//houseTest->draw(mvStack.top());
+	rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
+	houseTest->draw(mvStack.top());
 
 	// remember to use at least one pop operation per push...
 	mvStack.pop(); // initial matrix

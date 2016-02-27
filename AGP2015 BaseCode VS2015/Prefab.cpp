@@ -1,6 +1,6 @@
 #include "Prefab.h"
 
-Prefab::Prefab(GLuint s_shaderProgram, char *modelName, char *textureName, glm::vec3 s_position, glm::vec3 s_scale)
+Prefab::Prefab(GLuint s_shaderProgram, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position)
 {
 	collisionName = "STATIC_PREFAB";
 	shaderProgram = s_shaderProgram;
@@ -35,7 +35,7 @@ void Prefab::draw(glm::mat4 object)
 	//rt3d::setLightPos(shaderProgram, glm::value_ptr(tmp));
 	
 	object = glm::translate(object, glm::vec3(2.0, 4.0, 2.0));
-	object = glm::scale(object, glm::vec3(3.0f, 3.0f, 3.0f));
+	object = glm::scale(object,scale);
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
 	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
 }
