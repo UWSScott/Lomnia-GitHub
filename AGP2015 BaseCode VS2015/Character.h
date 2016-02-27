@@ -7,10 +7,11 @@
 #define WALKING 1
 #define ATTACKING 2
 
-
 //#include <iostream>
 //#include <string>
 #include <list>
+#include <random>
+#include <algorithm> 
 #include "Weapon.h"
 #include "Attack.h"
 #include "CombatInstance.h"
@@ -21,10 +22,11 @@ class Character : public Gameobject
 {
 private:
 	float peviousTime = 0;
-	float getHighestDamage(C_Attack attack_1, C_Attack attack_2) { return attack_1.damageCalc(*this, *combatInstance->opponent) > attack_2.damageCalc(*this, *combatInstance->opponent); };
-	float getFastestAttack(C_Attack attack_1, C_Attack attack_2) { return attack_1.AttackSpeed(this) > attack_2.AttackSpeed(this); };
+
 
 public:
+	int DoIt(float a, char b, char c) { cout << "TMyClass::DoIt" << endl; return 1; };
+
 	string characterName = "";
 	int health = 10;
 	int max_Health = 10;
@@ -60,6 +62,7 @@ public:
 	virtual void Animate();
 	virtual void InitalStats(GLuint setShaderProgram);
 	virtual void draw(glm::mat4 object);
+	virtual void GetAvailableAttacks(vector<C_Attack>& attackList);
 	virtual  glm::vec3 getModelEye();
 	virtual int getRotation();
 	//void Attack(Character& enemyCharacter);
@@ -67,6 +70,10 @@ public:
 	virtual bool isDead();
 
 protected:
+
+	//bool getHighestDamage(C_Attack attack_1, C_Attack attack_2);
+	//bool getFastestAttack(C_Attack& attack_1, C_Attack& attack_2);
+	//bool getBalancedAttack(C_Attack& attack_1, C_Attack& attack_2);
 	glm::vec3 modelAt;
 	glm::vec3 modelUp;
 
@@ -76,6 +83,11 @@ protected:
 	virtual glm::vec3 MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d);
 
 };
+
+
+//bool (Character::*ptgetHighestDamage)(C_Attack, C_Attack) const = NULL;
+//bool (Character::*getFastestAttack)(C_Attack, C_Attack) const = NULL;
+//bool (Character::*getBalancedAttack)(C_Attack, C_Attack) const = NULL;
 
 /*class Character : public Gameobject
 {

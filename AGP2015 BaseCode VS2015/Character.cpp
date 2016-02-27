@@ -1,6 +1,11 @@
 #include "Character.h"
-#include <random>
-#include <algorithm>  
+
+struct Local {
+	Local(Character& character) { this->character = character; }
+	bool operator()(C_Attack attack_1, C_Attack attack_2) { return ((attack_1.damageCalc(character, *character.combatInstance->opponent) > attack_2.damageCalc(character, *character.combatInstance->opponent))); };
+
+	Character character;
+};
 
 Character::Character(string s_characterName, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram)
 {
@@ -74,23 +79,31 @@ void Character::draw(glm::mat4 object)
 		weapon->draw(object, position, currentAnimation, rotation);
 }
 
+void Character::GetAvailableAttacks(vector<C_Attack>& attackList)
+{
+	attackList.push_back(LightAttack());
+	attackList.push_back(HeavyAttack());
+	attackList.push_back(Poison());
+	attackList.push_back(Stun());
+	attackList.push_back(LightAttack());
+}
+
+
 void Character::CombatAttacks()
 {
 	if (isDead() == true)
 		return;
 
+	//All possible attacks!
 	vector<C_Attack> possibleAttacks = vector<C_Attack>();
-	possibleAttacks.push_back(LightAttack());
-	possibleAttacks.push_back(HeavyAttack());
-	possibleAttacks.push_back(Poison());
-	possibleAttacks.push_back(Stun());
-	possibleAttacks.push_back(LightAttack());
-	sort(possibleAttacks.begin(), possibleAttacks.end(), getHighestDamage);
-	C_Attack max_damage = possibleAttacks[0];
-	sort(possibleAttacks.begin(), possibleAttacks.end(), getFastestAttack);
-	C_Attack quickest_damage = possibleAttacks[0];
+	GetAvailableAttacks(possibleAttacks);
 
-	float killableChance = 0;
+	sort(possibleAttacks.begin(), possibleAttacks.end(), Local(*this));
+	C_Attack max_damage = possibleAttacks[0];
+	sort(possibleAttacks.begin(), possibleAttacks.end(), Local(*this));
+	C_Attack quickest_damage = possibleAttacks[0];
+	sort(possibleAttacks.begin(), possibleAttacks.end(), Local(*this));
+	C_Attack efficent_Attack = possibleAttacks[0];
 
 
 	//Close to death, final gamble!
@@ -192,6 +205,12 @@ void Character::BlockAttack()
 		}
 	}
 }
+
+
+
+//bool Character::getHighestDamage(C_Attack attack_1, C_Attack attack_2) { return true; }// (attack_1.damageCalc(*this, *combatInstance->opponent) > attack_2.damageCalc(*this, *combatInstance->opponent)); };
+//bool Character::getFastestAttack(C_Attack& attack_1, C_Attack& attack_2) { return (attack_1.AttackSpeed(this) > attack_2.AttackSpeed(this)); };
+//bool Character::getBalancedAttack(C_Attack& attack_1, C_Attack& attack_2) { return (attack_1.GetBalanceValue() > attack_2.GetBalanceValue()); };
 
 /*
 #include "rt3d.h"

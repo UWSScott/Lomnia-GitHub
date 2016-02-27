@@ -19,6 +19,7 @@ class C_Attack
 private:
 	float possibleDamage = 0;
 	float possibleRefresh = 0;
+	Character* characterReference;
 public:
 	float refreshTime = 5;
 	int manaCost = 1;
@@ -36,6 +37,7 @@ public:
 	//Character combat_Opponent; //Only for prototype - a better system is needed, but for quickness this works atm.
 
 	C_Attack() {};
+	C_Attack(Character* characterRef);
 	virtual void Attack(Character& attacker, Character &opponent, int block);
 	//void Attack(NPC attacker);
 	virtual void Animation() {};
@@ -49,6 +51,7 @@ public:
 	virtual float GetBleed() { return bleedTime; }
 	virtual float GetPossibleDamage() { return possibleDamage; }
 	virtual float GetPossibleSpeed() { return possibleRefresh; }
+	virtual float GetBalanceValue() { return (possibleDamage / possibleRefresh); }
 	virtual string GetAttackName() { return attackText; }
 	float damageCalc(Character& a, Character& b); //A is attacker, B is victim
 };

@@ -130,7 +130,7 @@ glm::vec3 oldPlayerPos;
 Camera Game_Camera = Camera();
 Character* static_character[15];// = Character();
 PlayableCharacter* character = new PlayableCharacter();
-Skybox* skyboxTest = new Skybox(skyboxFiles);
+Skybox* skyboxTest;// = new Skybox(skyboxFiles);
 Prefab* houseTest = new Prefab();
 
 
@@ -388,6 +388,7 @@ void init(void) {
 	static_character[11] = new Character("Arnold", "Models/pogo_buny.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(26, 0, 0), shaderProgram);
 	static_character[12] = new Character("Arnold", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(28, 0, 0), shaderProgram);
 
+	skyboxTest = new Skybox(skyboxFiles);
 	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(0), shaderProgram);
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);

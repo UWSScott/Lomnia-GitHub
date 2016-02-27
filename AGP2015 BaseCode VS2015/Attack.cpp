@@ -1,6 +1,10 @@
 #include "Attack.h"
 #include "Character.h"
 
+C_Attack::C_Attack(Character* characterRef)
+{
+	characterReference = characterRef;
+}
 
 float C_Attack::AttackSpeed(Character* character)
 {
