@@ -21,6 +21,9 @@ class Character : public Gameobject
 {
 private:
 	float peviousTime = 0;
+	float getHighestDamage(C_Attack attack_1, C_Attack attack_2) { return attack_1.damageCalc(*this, *combatInstance->opponent) > attack_2.damageCalc(*this, *combatInstance->opponent); };
+	float getFastestAttack(C_Attack attack_1, C_Attack attack_2) { return attack_1.AttackSpeed(this) > attack_2.AttackSpeed(this); };
+
 public:
 	string characterName = "";
 	int health = 10;
@@ -48,6 +51,7 @@ public:
 	int characterState = 0;
 	float refreshTime = 0;
 	CombatInstance* combatInstance;
+	virtual void CombatAttacks();
 	virtual void BlockAttack();
 
 	Character() {};

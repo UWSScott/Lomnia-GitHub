@@ -11,6 +11,7 @@ class Skybox : public Gameobject
 
 public:
 	Skybox() {};
+	Skybox(const char *skyboxmap[6]) {};
 	~Skybox() {};
 	void InitalStats(const char *skyboxmap[6]);
 	void draw(glm::mat4 object);

@@ -15,11 +15,12 @@ public:
 	void draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimation, int playerRotation);
 	bool getEquiped() { return equiped; }
 	void setEquiped(bool setting) { equiped = setting; }
-protected:
-	bool equiped = false;
 	int cost = 0;
 	float damage = 0;
 	float speed = 0;
+protected:
+	bool equiped = false;
+
 	string type = "DEFAULT";
 	int rarity = 0;
 	md2model tmpModel;

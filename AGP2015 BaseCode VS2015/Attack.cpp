@@ -2,6 +2,13 @@
 #include "Character.h"
 
 
+float C_Attack::AttackSpeed(Character* character)
+{
+	possibleRefresh = refreshTime - ((character->speed / 100) * character->weapon->speed);
+	return possibleRefresh;
+}
+
+
 float C_Attack::damageCalc(Character& a, Character& b) //A is attacker, B is victim
 {
 	float res = b.ResSelect(resType); //Sets the resistance value according to the element of the attack being used (eg. fireRes for fire attacks)
@@ -11,6 +18,7 @@ float C_Attack::damageCalc(Character& a, Character& b) //A is attacker, B is vic
 	if (damage < 1)
 		damage = 1;
 	cout << attackText << " deals " << damage << " points of damage to " << b.characterName << "! " << endl << endl;
+	possibleDamage = damage;
 	return damage;
 }
 

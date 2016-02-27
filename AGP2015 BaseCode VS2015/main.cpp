@@ -114,6 +114,9 @@ float heightOfCam = 0;
 
 TTF_Font * textFont;
 
+const char *skyboxFiles[6] = {
+	"red-sky/red_sky_front.bmp", "red-sky/red_sky_back.bmp", "red-sky/red_sky_right.bmp", "red-sky/red_sky_left.bmp", "red-sky/red_sky_top.bmp", "red-sky/red_sky_top.bmp"
+};
 
 
 //Combat variables
@@ -127,13 +130,9 @@ glm::vec3 oldPlayerPos;
 Camera Game_Camera = Camera();
 Character* static_character[15];// = Character();
 PlayableCharacter* character = new PlayableCharacter();
-Weapon weaponTest = Weapon();// "Scott's Saber", "Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
-Skybox skyboxTest = Skybox();
+Skybox* skyboxTest = new Skybox(skyboxFiles);
 Prefab* houseTest = new Prefab();
 
-const char *skyboxFiles[6] = {
-	"red-sky/red_sky_front.bmp", "red-sky/red_sky_back.bmp", "red-sky/red_sky_right.bmp", "red-sky/red_sky_left.bmp", "red-sky/red_sky_top.bmp", "red-sky/red_sky_top.bmp"
-};
 
 // textToTexture
 GLuint textToTexture(const char * str, GLuint textID/*, TTF_Font *font, SDL_Color colour, GLuint &w,GLuint &h */) {
@@ -392,8 +391,6 @@ void init(void) {
 	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(0), shaderProgram);
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
-	skyboxTest.InitalStats(skyboxFiles);
-	weaponTest.InitalStats(shaderProgram);
 	houseTest = new Prefab(shaderProgram, "cube.obj" /*"Models/alien_base.obj" /*"Models/House_001.obj"*/, "hobgoblin2.bmp",glm::vec3(1,1,1),glm::vec3(0,0,0));
 	
 }
@@ -630,8 +627,8 @@ void draw(SDL_Window * window) {
 
 	// draw a skybox
 //	glUseProgram(skyboxProgram);
-	rt3d::setUniformMatrix4fv(skyboxTest.shaderProgram, "projection", glm::value_ptr(projection));
-	skyboxTest.draw(mvStack.top());
+	rt3d::setUniformMatrix4fv(skyboxTest->shaderProgram, "projection", glm::value_ptr(projection));
+	skyboxTest->draw(mvStack.top());
 	//glDepthMask(GL_FALSE); // make sure depth test is off
 	//glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
 	//mvStack.push(glm::mat4(mvRotOnlyMat3));

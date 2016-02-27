@@ -1,5 +1,6 @@
 #include "Character.h"
 #include <random>
+#include <algorithm>  
 
 Character::Character(string s_characterName, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram)
 {
@@ -71,6 +72,40 @@ void Character::draw(glm::mat4 object)
 
 	if (weapon->getEquiped())
 		weapon->draw(object, position, currentAnimation, rotation);
+}
+
+void Character::CombatAttacks()
+{
+	if (isDead() == true)
+		return;
+
+	vector<C_Attack> possibleAttacks = vector<C_Attack>();
+	possibleAttacks.push_back(LightAttack());
+	possibleAttacks.push_back(HeavyAttack());
+	possibleAttacks.push_back(Poison());
+	possibleAttacks.push_back(Stun());
+	possibleAttacks.push_back(LightAttack());
+	sort(possibleAttacks.begin(), possibleAttacks.end(), getHighestDamage);
+	C_Attack max_damage = possibleAttacks[0];
+	sort(possibleAttacks.begin(), possibleAttacks.end(), getFastestAttack);
+	C_Attack quickest_damage = possibleAttacks[0];
+
+	float killableChance = 0;
+
+
+	//Close to death, final gamble!
+	//TODO check if character has health potion first!
+	if (max_damage.GetPossibleDamage() >= combatInstance->opponent->health){ combatInstance->queuedAttacks.push_back(max_damage); return; }
+	if (health <= rand() % 15 && max_damage.GetPossibleDamage() < combatInstance->opponent->health) { combatInstance->queuedAttacks.push_back(ItemUse(Item())); return; }
+	else if (health <= rand() % 15 && max_damage.GetPossibleDamage() < combatInstance->opponent->health) { combatInstance->queuedAttacks.push_back(Flee()); return; }
+
+
+	//if (keys[SDL_SCANCODE_1]) combatInstance->queuedAttacks.push_back(LightAttack());
+	//if (keys[SDL_SCANCODE_2]) combatInstance->queuedAttacks.push_back(HeavyAttack());
+	//if (keys[SDL_SCANCODE_3]) combatInstance->queuedAttacks.push_back(Poison());
+	//if (keys[SDL_SCANCODE_4]) combatInstance->queuedAttacks.push_back(Stun());
+	//if (keys[SDL_SCANCODE_5]) combatInstance->queuedAttacks.push_back(ItemUse(Item()));
+	//if (keys[SDL_SCANCODE_6]) combatInstance->queuedAttacks.push_back(Flee());
 }
 
 void Character::InitalStats(GLuint setShaderProgram)

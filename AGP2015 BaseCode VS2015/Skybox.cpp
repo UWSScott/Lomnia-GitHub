@@ -42,6 +42,21 @@ GLuint loadCubeMapTex(const char *fname[6], GLuint *texID)
 	return *texID;	// return value of texure ID, redundant really
 }
 
+Skybox::Skybox(const char *skyboxmap[6])
+{
+	shaderProgram = rt3d::initShaders("cubeMap.vert", "cubeMap.frag");
+
+	vector<GLfloat> verts;
+	vector<GLfloat> norms;
+	vector<GLfloat> tex_coords;
+	vector<GLuint> indices;
+	rt3d::loadObj("cube.obj", verts, norms, tex_coords, indices);
+	GLuint size = indices.size();
+	meshIndexCount = size;
+	meshObject = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
+	loadCubeMapTex(skyboxmap, &textures[0]);
+}
+
 
 /* Sets inital stats for the skybox. Shaderprogram is passed in from light class.
 Textures are loaded into array of textures - (skybox taken from lab tutorial).*/
