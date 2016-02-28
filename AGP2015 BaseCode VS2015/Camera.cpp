@@ -40,6 +40,14 @@ void Camera::InitalStats()
 
 }*/
 
+void Camera::TranslateTo(float &currentPosition, float &newPosition)
+{
+	if (newPosition < currentPosition)
+		currentPosition -= -0.01f;
+	else if (newPosition > currentPosition)
+		currentPosition += 0.01f;
+}
+
 /* Handles draw method for camera. Camera is always looking directly behind the player. */
 void Camera::draw(glm::mat4 &object, glm::vec3 modelEye)
 {
@@ -49,6 +57,10 @@ void Camera::draw(glm::mat4 &object, glm::vec3 modelEye)
 		at = MoveForward(modelEye, 0, 1.0f);
 		break;
 	case 2:
+
+		TranslateTo(position.x, Cinematic_X);
+		TranslateTo(position.y, Cinematic_Y);
+		TranslateTo(position.z, Cinematic_Z);
 		at = modelEye; // MoveForward(position, 0, 1.0f);
 		break;
 	case 3:
