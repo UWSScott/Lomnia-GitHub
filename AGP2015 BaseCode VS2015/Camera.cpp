@@ -7,6 +7,11 @@ glm::vec3 Camera::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d) {
 		cam.y, cam.z - d*std::cos(angle*DEG_TO_RAD));
 }
 
+glm::vec3 Camera::MoveRight(glm::vec3 pos, GLfloat angle, GLfloat d)
+{
+	return glm::vec3(pos.x + d*std::cos(angle*DEG_TO_RAD), pos.y, pos.z + d*std::sin(angle*DEG_TO_RAD));
+}
+
 /*The camera information is not loaded from a file, instead hardcoded.*/
 void Camera::InitalStats()
 {
@@ -44,7 +49,7 @@ void Camera::draw(glm::mat4 &object, glm::vec3 modelEye)
 		at = MoveForward(modelEye, 0, 1.0f);
 		break;
 	case 2:
-		at = MoveForward(position, 0, 1.0f);
+		at = modelEye; // MoveForward(position, 0, 1.0f);
 		break;
 	case 3:
 		at = MoveForward(position, 0, 1.0f);
@@ -67,10 +72,86 @@ void Camera::draw(glm::mat4 &object, glm::vec3 modelEye)
 	//object = glm::translate(object, -modelEye);
 }
 
+void Camera::CinematicValues(glm::vec3 characterPosition, float playerRotation)
+{
+	int xMovement = rand() % 5 + 2;
+	int yMovement = rand() % 4 + 1;
+	int zMovement = rand() % 5 + 2;
+	int xEnding = 0;
+	int yEnding = 0;
+	int zEnding = 0;
+	int x_small_Modifier = 1;
+	int y_small_Modifier = 3;
+	int z_small_Modifier = 1;
+	if (rand() % 2 == 0)
+	{
+		xMovement = -xMovement;
+		x_small_Modifier = -1;
+	}
+	if (rand() % 2 == 0)
+	{
+		zMovement = -zMovement;
+		z_small_Modifier = -1;
+	}
+	if (yMovement >= 4)
+		y_small_Modifier = 0;
+
+	//X - Position Movement
+	if (rand() % 4 != 0)
+	{
+		if (rand() % 2 == 0)
+			xEnding = rand() % xMovement + x_small_Modifier;
+		else
+			xEnding = rand() % 3 + xMovement;
+	} else {
+		xEnding = xMovement;
+	}
+
+	//Y - Position Movement
+	if (rand() % 4 != 0)
+	{
+		if (rand() % 2 == 0)
+			yEnding = rand() % yMovement + y_small_Modifier;
+		else
+			yEnding = rand() % 3 + yMovement;
+	}
+	else {
+		yEnding = yMovement;
+	}
+
+	//Z - Position Movement
+	if (rand() % 4 != 0)
+	{
+		if (rand() % 2 == 0)
+			zMovement = rand() % zMovement + z_small_Modifier;
+		else
+			zMovement = rand() % 3 + zMovement;
+	} else {
+		zEnding = zMovement;
+	}
+
+	position = glm::vec3(xMovement, yMovement, zMovement);
+	Cinematic_X = xEnding;
+	Cinematic_Y = yEnding;
+	Cinematic_Z = zEnding;
+	start = duration;
+	Cinematic_Timer = rand() % 7 + 1;
+}
+
+void Camera::CombatCinematic(glm::mat4 &object, glm::vec3 modelEye)
+{
+	object = glm::lookAt(position, at, up);
+	object = glm::translate(object, modelEye);
+	object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
+	object = glm::translate(object, -modelEye);
+}
 
 /* Update the camera position to make it stay behind the player model at all times. */
 void Camera::update(glm::vec3 modelEye, float playerRotation)
 {
+	duration = (((std::clock() - start) / (double)CLOCKS_PER_SEC));
+	timeDifference = duration - start;
+	cout << duration << " cinematic timer: " << Cinematic_Timer << " start: " << start << " y timeDifference: " << timeDifference << endl;
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	if (keys[SDL_SCANCODE_F12])
 	{
@@ -90,7 +171,8 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 		rotation = playerRotation;
 		break;
 	case 2:
-
+		if (timeDifference >= Cinematic_Timer || position.y < 0)
+			CinematicValues(modelEye, playerRotation);
 		break;
 	case 3:
 		if (keys[SDL_SCANCODE_W]) position = MoveForward(position, rotation, 0.1f);

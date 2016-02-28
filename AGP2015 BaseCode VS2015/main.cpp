@@ -771,19 +771,19 @@ void draw(SDL_Window * window) {
 	//glCullFace(GL_BACK);
 
 	character->draw(mvStack.top());
-	static_character[0]->draw(mvStack.top());
-	static_character[1]->draw(mvStack.top());
-	static_character[2]->draw(mvStack.top());
-	static_character[3]->draw(mvStack.top());
-	static_character[4]->draw(mvStack.top());
-	static_character[5]->draw(mvStack.top());
-	static_character[6]->draw(mvStack.top());
-	static_character[7]->draw(mvStack.top());
-	static_character[8]->draw(mvStack.top());
-	static_character[9]->draw(mvStack.top());
-	static_character[10]->draw(mvStack.top());
-	static_character[11]->draw(mvStack.top());
-	static_character[12]->draw(mvStack.top());
+	//static_character[0]->draw(mvStack.top());
+	//static_character[1]->draw(mvStack.top());
+	//static_character[2]->draw(mvStack.top());
+	//static_character[3]->draw(mvStack.top());
+	//static_character[4]->draw(mvStack.top());
+	//static_character[5]->draw(mvStack.top());
+	//static_character[6]->draw(mvStack.top());
+	//static_character[7]->draw(mvStack.top());
+	//static_character[8]->draw(mvStack.top());
+	//static_character[9]->draw(mvStack.top());
+	//static_character[10]->draw(mvStack.top());
+	//static_character[11]->draw(mvStack.top());
+	//static_character[12]->draw(mvStack.top());
 
 	rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
 	houseTest->draw(mvStack.top());
