@@ -162,6 +162,7 @@
     <ClCompile Include="Level_001.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MazeGenerator.cpp" />
+    <ClCompile Include="MazePrefab.cpp" />
     <ClCompile Include="md2model.cpp" />
     <ClCompile Include="PlayableCharacter.cpp" />
     <ClCompile Include="Prefab.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="ItemUse.h" />
     <ClInclude Include="LightAttack.h" />
     <ClInclude Include="MazeGenerator.h" />
+    <ClInclude Include="MazePrefab.h" />
     <ClInclude Include="md2model.h" />
     <ClInclude Include="PlayableCharacter.h" />
     <ClInclude Include="Poison.h" />

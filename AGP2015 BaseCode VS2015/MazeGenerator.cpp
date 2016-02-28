@@ -1,20 +1,54 @@
 #include "MazeGenerator.h"
 
-
-// INITIALIZE MAZE
-void MazeGenerator::Initialize(Cell Level[][SIZE]) 
+void MazeGenerator::draw(glm::mat4 object)
 {
+	//glm::mat4 modelview(1.0);
+
 	for (int i = 0; i<SIZE; i++) {
 		for (int j = 0; j<SIZE; j++) {
-			Level[i][j].display = '*';
-			Level[i][j].visited = false;
-			Level[i][j].top_wall = true;
-			Level[i][j].bot_wall = true;
-			Level[i][j].left_wall = true;
-			Level[i][j].right_wall = true;
-			//Maze_Tiles[i][j] = Prefab(shaderProgram, "cube.obj" /*"Models/House_001.obj"*/, "hobgoblin2.bmp", glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+			//cout << " position: " << Maze_Tiles[i][j]->position.x << " y: " << Maze_Tiles[i][j]->position.y << " z: " << Maze_Tiles[i][j]->position.z << endl;
+			Maze_Tiles[i][j]->position.x = i;
+			Maze_Tiles[i][j]->shaderProgram = baseShaderProgram;
+			Maze_Tiles[i][j]->draw(object);
+
+			//glBindTexture(GL_TEXTURE_2D, textures[0]);
+			//mvStack.push(mvStack.top());
+			//if (Level[i][j].display == '*')
+			//{
+			//	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(i * 3, 1.0f, j * 3));
+			//	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(3.0f, 2.0f, 3.0f));
+			//}
+			//else {
+
+			//	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(i * 3, 0.0f, j * 3));
+			//	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(3.0f, 0.1f, 3.0f));
+			//}
+			//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.5f, 0.5f, 0.5f));
+			//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+			//rt3d::setMaterial(shaderProgram, material0);
+			//rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+			//mvStack.pop();
 		}
 	}
+}
+
+// INITIALIZE MAZE
+void MazeGenerator::Initialize(Cell Level[][SIZE], GLuint shaderProgram) 
+{
+	Prefab prefab = Prefab(shaderProgram, "cube.obj", "hobgoblin2.bmp", glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+
+	for (int i = 1; i<=SIZE; i++) {
+		for (int j = 1; j<=SIZE; j++) {
+			Level[i-1][j-1].display = '*';
+			Level[i-1][j-1].visited = false;
+			Level[i-1][j-1].top_wall = true;
+			Level[i-1][j-1].bot_wall = true;
+			Level[i-1][j-1].left_wall = true;
+			Level[i-1][j-1].right_wall = true;
+			Maze_Tiles[i-1][j-1] = new MazePrefab(shaderProgram, prefab.getObject(), prefab.meshIndexCount, prefab.texture, glm::vec3(2, 1, 2), glm::vec3(i*4, 0.5, j*4));
+		}
+	}
+
 	for (int i = 1; i<SIZE - 1; i++) {
 		for (int j = 1; j<SIZE - 1; j++) {
 			// Border Cells have fewer accessible walls
@@ -24,6 +58,7 @@ void MazeGenerator::Initialize(Cell Level[][SIZE])
 			Level[i][SIZE - 2].right_wall = false;
 		}
 	}
+	GenerateMaze(Level, posX, posY, goalX, goalY);
 }
 
 
@@ -56,7 +91,7 @@ void MazeGenerator::GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &
 			if ((random == 1) && (randomY > 1)) {
 				if (Level[randomY - 2][randomX].visited == false) {        // If not visited
 					Level[randomY - 1][randomX].display = '_';        // Delete display
-					Maze_Tiles[randomY - 1][randomX].position.y = 0;
+					Maze_Tiles[randomY - 1][randomX]->testPosition.y = -2;
 					Level[randomY - 1][randomX].visited = true;       // Mark cell as visited
 					Level[randomY][randomX].top_wall = false;       // Knock down wall
 
@@ -66,7 +101,7 @@ void MazeGenerator::GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &
 					randomY -= 2;                                   // Move to next cell
 					Level[randomY][randomX].visited = true;         // Mark cell moved to as visited
 					Level[randomY][randomX].display = '_';          // Update path
-					Maze_Tiles[randomY][randomX].position.y = 0;
+					Maze_Tiles[randomY][randomX]->testPosition.y = -2;
 					Level[randomY][randomX].bot_wall = false;       // Knock down wall
 					visitedCells++;                                 // Increase visitedCells counter
 				}
@@ -78,7 +113,7 @@ void MazeGenerator::GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &
 			else if ((random == 2) && (randomY < SIZE - 2)) {
 				if (Level[randomY + 2][randomX].visited == false) {        // If not visited
 					Level[randomY + 1][randomX].display = '_';        // Delete display
-					Maze_Tiles[randomY+1][randomX].position.y = 0;
+					Maze_Tiles[randomY+1][randomX]->testPosition.y = -2;
 					Level[randomY + 1][randomX].visited = true;       // Mark cell as visited
 					Level[randomY][randomX].bot_wall = false;       // Knock down wall
 
@@ -88,7 +123,7 @@ void MazeGenerator::GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &
 					randomY += 2;                                   // Move to next cell
 					Level[randomY][randomX].visited = true;         // Mark cell moved to as visited
 					Level[randomY][randomX].display = '_';          // Update path
-					Maze_Tiles[randomY][randomX].position.y = 0;
+					Maze_Tiles[randomY][randomX]->testPosition.y = -2;
 					Level[randomY][randomX].top_wall = false;       // Knock down wall
 					visitedCells++;                                 // Increase visitedCells counter
 				}
@@ -100,7 +135,7 @@ void MazeGenerator::GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &
 			else if ((random == 3) && (randomX > 1)) {
 				if (Level[randomY][randomX - 2].visited == false) {        // If not visited
 					Level[randomY][randomX - 1].display = '_';        // Delete display
-					Maze_Tiles[randomY][randomX-1].position.y = 0;
+					Maze_Tiles[randomY][randomX-1]->testPosition.y = -2;
 					Level[randomY][randomX - 1].visited = true;       // Mark cell as visited
 					Level[randomY][randomX].left_wall = false;      // Knock down wall
 
@@ -110,7 +145,7 @@ void MazeGenerator::GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &
 					randomX -= 2;                                   // Move to next cell
 					Level[randomY][randomX].visited = true;         // Mark cell moved to as visited
 					Level[randomY][randomX].display = '_';          // Update path
-					Maze_Tiles[randomY][randomX].position.y = 0;
+					Maze_Tiles[randomY][randomX]->testPosition.y = -2;
 					Level[randomY][randomX].right_wall = false;     // Knock down wall
 					visitedCells++;                                 // Increase visitedCells counter
 				}
@@ -122,7 +157,7 @@ void MazeGenerator::GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &
 			else if ((random == 4) && (randomX < SIZE - 2)) {
 				if (Level[randomY][randomX + 2].visited == false) {        // If not visited
 					Level[randomY][randomX + 1].display = '_';        // Delete display
-					Maze_Tiles[randomY][randomX + 1].position.y = 0;
+					Maze_Tiles[randomY][randomX + 1]->testPosition.y = -2;
 					Level[randomY][randomX + 1].visited = true;       // Mark cell as visited
 					Level[randomY][randomX].right_wall = false;     // Knock down wall
 
@@ -132,7 +167,7 @@ void MazeGenerator::GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &
 					randomX += 2;                                   // Move to next cell
 					Level[randomY][randomX].visited = true;         // Mark cell moved to as visited
 					Level[randomY][randomX].display = '_';          // Update path
-					Maze_Tiles[randomY][randomX].position.y = 0;
+					Maze_Tiles[randomY][randomX]->testPosition.y = -2;
 					Level[randomY][randomX].left_wall = false;      // Knock down wall
 					visitedCells++;                                 // Increase visitedCells counter
 				}

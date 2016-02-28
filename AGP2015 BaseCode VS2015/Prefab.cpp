@@ -34,8 +34,8 @@ void Prefab::draw(glm::mat4 object)
 
 	//rt3d::setLightPos(shaderProgram, glm::value_ptr(tmp));
 	
-	object = glm::translate(object, glm::vec3(2.0, 4.0, 2.0));
-	object = glm::scale(object,scale);
+	object = glm::translate(object, position);
+	object = glm::scale(object, scale);
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
 	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
 }

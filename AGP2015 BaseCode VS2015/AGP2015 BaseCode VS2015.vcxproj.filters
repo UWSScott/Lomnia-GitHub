@@ -87,6 +87,9 @@
     <ClCompile Include="CombatInstance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MazePrefab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="anorms.h">
@@ -163,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="CombatInstance.h">
       <Filter>Header Files\Attacks</Filter>
+    </ClInclude>
+    <ClInclude Include="MazePrefab.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

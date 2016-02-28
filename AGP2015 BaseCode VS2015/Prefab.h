@@ -9,7 +9,7 @@ public:
 	Prefab() {};
 	Prefab(GLuint s_shaderProgram, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position);
 	virtual void draw(glm::mat4 object);
-
+	GLuint getObject() { return meshObject; }
 protected:
 	GLuint meshObject;
 };

@@ -53,6 +53,7 @@ void PlayableCharacter::Input()
 		if (keys[SDL_SCANCODE_D]) { characterState = IDLE;  rotation += 1.0f; }
 		if (keys[SDL_SCANCODE_W]) { characterState = WALKING;  position = MoveForward(position, rotation, 0.1f); }
 		if (keys[SDL_SCANCODE_S]) { characterState = WALKING;  position = MoveForward(position, rotation, -0.1f); }
+		if (keys[SDL_SCANCODE_X]) { characterState = ATTACKING; }
 	} else if(inCombat == true && combatInstance != NULL){
 		CombatAttacks();
 	}

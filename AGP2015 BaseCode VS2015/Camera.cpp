@@ -1,4 +1,6 @@
 #include "Camera.h"
+#include "PlayableCharacter.h"
+
 #define DEG_TO_RAD 0.017453293
 
 /* Updates camera position. Same function used in character class. */
@@ -19,17 +21,17 @@ void Camera::InitalStats()
 	at = { 0.0f, 1.0f, -6.0 };
 	up = { 0.0f, 1.0f, 0.0f };
 
-/*	FileLoader* fileLoader = new FileLoader;
+	FileLoader* fileLoader = new FileLoader;
 	 //Initialize default output device 
 	if (!BASS_Init(-1, 44100, 0, 0, NULL))
 		std::cout << "Can't initialize device";
 
 	songs = new HSAMPLE[4];
-	songs[0] = fileLoader->loadSample("Sound/TOM.wav");
-	delete fileLoader;*/
+	songs[0] = fileLoader->loadSample("Sound/Music/Battle_of_the_Titans.wav");
+	delete fileLoader;
 }
 
-/*void Camera::Sound(int soundFile)
+void Camera::Sound(int soundFile)
 {
 	HCHANNEL ch = BASS_SampleGetChannel(songs[soundFile], FALSE);
 	BASS_ChannelSetAttribute(ch, BASS_ATTRIB_FREQ, 0);
@@ -38,7 +40,7 @@ void Camera::InitalStats()
 	if (!BASS_ChannelPlay(ch, FALSE))
 		std::cout << "Can't play sample" << std::endl;
 
-}*/
+}
 
 void Camera::TranslateTo(float &currentPosition, float &newPosition)
 {
@@ -95,6 +97,7 @@ void Camera::CinematicValues(glm::vec3 characterPosition, float playerRotation)
 	int x_small_Modifier = 1;
 	int y_small_Modifier = 3;
 	int z_small_Modifier = 1;
+	bool hasEffect = false;
 	if (rand() % 2 == 0)
 	{
 		xMovement = -xMovement;
@@ -111,6 +114,7 @@ void Camera::CinematicValues(glm::vec3 characterPosition, float playerRotation)
 	//X - Position Movement
 	if (rand() % 4 != 0)
 	{
+		hasEffect = true;
 		if (rand() % 2 == 0)
 			xEnding = rand() % xMovement + x_small_Modifier;
 		else
@@ -122,6 +126,7 @@ void Camera::CinematicValues(glm::vec3 characterPosition, float playerRotation)
 	//Y - Position Movement
 	if (rand() % 4 != 0)
 	{
+		hasEffect = true;
 		if (rand() % 2 == 0)
 			yEnding = rand() % yMovement + y_small_Modifier;
 		else
@@ -132,7 +137,7 @@ void Camera::CinematicValues(glm::vec3 characterPosition, float playerRotation)
 	}
 
 	//Z - Position Movement
-	if (rand() % 4 != 0)
+	if (rand() % 4 != 0 || hasEffect == false)
 	{
 		if (rand() % 2 == 0)
 			zMovement = rand() % zMovement + z_small_Modifier;
@@ -171,6 +176,7 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 		if (camera_Type > 3)
 			camera_Type = 1;
 
+		SwitchState(camera_Type, NULL);
 		cout << endl << endl << camera_Type << endl << endl << endl;
 	}
 
@@ -198,4 +204,21 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 		break;
 	}
 
+}
+
+void Camera::SwitchState(int state, PlayableCharacter* character)
+{
+	switch (state)
+	{
+	case THIRD_PERSON:
+
+		break;
+	case COMBAT_CINEMATIC:
+		//Sound(0);// character->characterState);
+		break;
+	default:
+		return;
+		break;
+	}
+	camera_Type = state;
 }

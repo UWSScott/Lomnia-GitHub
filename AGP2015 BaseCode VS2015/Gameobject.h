@@ -5,6 +5,7 @@
 using namespace std;
 
 #include "FileLoader.h"
+#include "Collisions.h"
 //#include "rt3d.h"
 //#include "rt3dObjLoader.h"
 //#include <glm/glm.hpp>
@@ -21,6 +22,7 @@ public:
 	glm::vec3 scale = glm::vec3(1,1,1);
 	float rotation = 0;
 	string collisionName = "DEFAULT";
+	Collisions* Collider;
 	rt3d::materialStruct material;
 	GLuint meshIndexCount;
 	GLuint meshObject;

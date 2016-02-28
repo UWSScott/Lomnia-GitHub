@@ -36,6 +36,7 @@
 #include "Camera.h"
 #include "Skybox.h"
 #include "Prefab.h"
+#include "MazeGenerator.h"
 
 /*#include "Stun.h"
 #include "Poison.h"
@@ -131,6 +132,7 @@ Camera Game_Camera = Camera();
 Character* static_character[15];// = Character();
 PlayableCharacter* character = new PlayableCharacter();
 Skybox* skyboxTest;// = new Skybox(skyboxFiles);
+MazeGenerator* maze;// = new Skybox(skyboxFiles);
 Prefab* houseTest = new Prefab();
 
 
@@ -389,6 +391,7 @@ void init(void) {
 	static_character[12] = new Character("Arnold", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(28, 0, 0), shaderProgram);
 
 	skyboxTest = new Skybox(skyboxFiles);
+	maze = new MazeGenerator(shaderProgram);
 	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(0), shaderProgram);
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
@@ -770,6 +773,12 @@ void draw(SDL_Window * window) {
 	//mvStack.pop();
 	//glCullFace(GL_BACK);
 
+
+	//rt3d::setUniformMatrix4fv(maze->shaderProgram, "projection", glm::value_ptr(projection));
+	rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
+	maze->baseShaderProgram = houseTest->shaderProgram;
+	maze->draw(mvStack.top());
+	//maze->Maze_Tiles[0][0].draw(mvStack.top());
 	character->draw(mvStack.top());
 	//static_character[0]->draw(mvStack.top());
 	//static_character[1]->draw(mvStack.top());
@@ -785,8 +794,7 @@ void draw(SDL_Window * window) {
 	//static_character[11]->draw(mvStack.top());
 	//static_character[12]->draw(mvStack.top());
 
-	rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
-	houseTest->draw(mvStack.top());
+	//houseTest->draw(mvStack.top());
 
 	// remember to use at least one pop operation per push...
 	mvStack.pop(); // initial matrix

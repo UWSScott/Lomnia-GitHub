@@ -3,7 +3,7 @@
 #define MAZEGENERATOR_H
 #define DEG_TO_RAD 0.017453293
 using namespace std;
-#include "Prefab.h"
+#include "MazePrefab.h"
 #include "FileLoader.h"
 #include <ctime>
 #include <vector>
@@ -31,16 +31,18 @@ public:
 	int totalCells = ((SIZE - 1) / 2)*((SIZE - 1) / 2);
 
 	Cell Level[SIZE][SIZE];
-	Prefab Maze_Tiles[SIZE][SIZE];
+	MazePrefab* Maze_Tiles[SIZE][SIZE];
 	//vector<Prefab> Maze_Tiles;
 
 	MazeGenerator() {};
+	MazeGenerator(GLuint shaderProgram) { Initialize(Level, shaderProgram); }
 	~MazeGenerator() {};
-	void Initialize(Cell Level[][SIZE]);
+	void Initialize(Cell Level[][SIZE], GLuint shaderProgram);
 	void GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &goalX, int &goalY);
 	void SaveMaze();
 	void LoadMaze();
 	virtual void draw(glm::mat4 object);
+	GLuint baseShaderProgram; 
 };
 
 #endif

@@ -12,9 +12,12 @@ Weapon::Weapon(string s_objectName, char *modelName, char *textureName, int s_co
 		2.0f  // shininess
 	};
 
+	scale = glm::vec3(1, 1, 1);
+	//position = glm::vec3(3, 3, 3);
+
 	FileLoader* fileLoader = new FileLoader;
 	//texture = fileLoader->loadBitmap("hobgoblin2.bmp");//textureName);
-	//texture = fileLoader->loadBitmap("lava_cube.bmp");
+	texture = fileLoader->loadBitmap("lava_cube.bmp");
 
 
 	/*samples = new HSAMPLE[4];
@@ -26,7 +29,7 @@ Weapon::Weapon(string s_objectName, char *modelName, char *textureName, int s_co
 
 	//meshObject = tmpModel.ReadMD2Model("arnould.MD2");
 	//md2VertCount = tmpModel.getVertDataSize();
-	meshObject = tmpModel.ReadMD2Model("Partical_sword.MD2");
+	meshObject = tmpModel.ReadMD2Model("Partical_sword.md2");
 	md2VertCount = tmpModel.getVertDataCount();
 }
 
@@ -57,6 +60,7 @@ void Weapon::InitalStats(GLuint s_shaderprogram)
 }
 
 
+//Weapon isn't drawing correctly now?... TODO: fix.
 void Weapon::draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimation, int playerRotation)
 {
 
@@ -87,10 +91,15 @@ void Weapon::draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimati
 	glBindTexture(GL_TEXTURE_2D, texture);
 	//rt3d::setMaterial(shaderProgram, material);
 
-	object = glm::translate(object, glm::vec3(playerPosition.x, playerPosition.y, playerPosition.z-1));
+	object = glm::translate(object, playerPosition);// glm::vec3(playerPosition.x, playerPosition.y, playerPosition.z - 1));
+
+	object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, -1.0f, 0.0f));
+	object = glm::scale(object, scale);// glm::vec3(scale.x*0.05, scale.y*0.05, scale.z*0.05));
 	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
-	object = glm::rotate(object, float(90.0f*DEG_TO_RAD - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
-	object = glm::scale(object, glm::vec3(scale.x*0.05, scale.y*0.05, scale.z*0.05));
+	////object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
+	////object = glm::rotate(object, float(90.0f*DEG_TO_RAD - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
+	//object = glm::scale(object, glm::vec3(scale.x*0.05, scale.y*0.05, scale.z*0.05));
+	object = glm::scale(object, scale);
 
 	//object = glm::translate(object, playerPosition);
 	//object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
