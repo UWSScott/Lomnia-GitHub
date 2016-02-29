@@ -37,6 +37,8 @@
 #include "Skybox.h"
 #include "Prefab.h"
 #include "MazeGenerator.h"
+#include "HeightMap.h"
+
 
 /*#include "Stun.h"
 #include "Poison.h"
@@ -395,7 +397,7 @@ void init(void) {
 	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(0), shaderProgram);
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
-	houseTest = new Prefab(shaderProgram, "cube.obj" /*"Models/desert.obj"*/ /*"Models/House_001.obj"*/, "hobgoblin2.bmp",glm::vec3(1,1,1),glm::vec3(0,0,0));
+	houseTest = new Prefab(shaderProgram, "Models/House_001.obj" /*"Models/desert.obj"*/ /*"Models/House_001.obj"*/, "hobgoblin2.bmp",glm::vec3(0.01,0.01,0.01),glm::vec3(0,0,0));
 	
 }
 
@@ -780,6 +782,7 @@ void draw(SDL_Window * window) {
 	maze->draw(mvStack.top());
 	//maze->Maze_Tiles[0][0].draw(mvStack.top());
 	character->draw(mvStack.top());
+
 	//static_character[0]->draw(mvStack.top());
 	//static_character[1]->draw(mvStack.top());
 	//static_character[2]->draw(mvStack.top());
@@ -794,7 +797,7 @@ void draw(SDL_Window * window) {
 	//static_character[11]->draw(mvStack.top());
 	//static_character[12]->draw(mvStack.top());
 
-	//houseTest->draw(mvStack.top());
+	houseTest->draw(mvStack.top());
 
 	// remember to use at least one pop operation per push...
 	mvStack.pop(); // initial matrix

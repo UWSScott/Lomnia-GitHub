@@ -1,6 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#define FIRST_PERSON 0
 #define THIRD_PERSON 1
 #define COMBAT_CINEMATIC 2
 #define FREE_VIEW 3
@@ -32,6 +33,8 @@ public:
 	glm::vec3 MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d);
 	glm::vec3 MoveRight(glm::vec3 pos, GLfloat angle, GLfloat d);
 	float rotation;
+
+	glm::vec3 cinematicLookAt;
 
 	glm::vec3 eye;
 	glm::vec3 at;

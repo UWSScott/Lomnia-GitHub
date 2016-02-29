@@ -157,6 +157,7 @@
     <ClCompile Include="CombatInstance.cpp" />
     <ClCompile Include="FileLoader.cpp" />
     <ClCompile Include="Gameobject.cpp" />
+    <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemUse.cpp" />
     <ClCompile Include="Level_001.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Flee.h" />
     <ClInclude Include="Gameobject.h" />
     <ClInclude Include="HeavyAttack.h" />
+    <ClInclude Include="HeightMap.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemUse.h" />
     <ClInclude Include="LightAttack.h" />
