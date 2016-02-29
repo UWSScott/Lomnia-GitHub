@@ -1,8 +1,68 @@
 #include "Character.h"
 
+struct MostDamageSort {
+	MostDamageSort(Character& character) { this->character = character; }
+	bool operator()(C_Attack attack_1, C_Attack attack_2) { return ((attack_1.damageCalc(character, *character.combatInstance->opponent) > attack_2.damageCalc(character, *character.combatInstance->opponent))); };
+	Character character;
+};
+
+struct EfficentSort {
+	EfficentSort(Character& character) { this->character = character; }
+	bool operator()(C_Attack& attack_1, C_Attack& attack_2) { return (attack_1.GetBalanceValue() > attack_2.GetBalanceValue()); };
+	Character character;
+};
+
+struct FastAttackSort {
+	FastAttackSort(Character* character) { this->character = character; }
+	bool operator()(C_Attack& attack_1, C_Attack& attack_2) { return (attack_1.AttackSpeed(character) > attack_2.AttackSpeed(character)); };
+	Character* character;
+};
+
+Character::Character(string s_characterName, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram)
+{
+	characterName = s_characterName;
+	shaderProgram = s_shaderprogram;
+	material =
+	{
+		{ 0.4f, 0.2f, 0.2f, 1.0f }, // ambient
+		{ 0.8f, 0.5f, 0.5f, 1.0f }, // diffuse
+		{ 1.0f, 0.8f, 0.8f, 1.0f }, // specular
+		2.0f  // shininess
+	};
+	meshObject = tmpModel.ReadMD2Model(modelName);
+	md2VertCount = tmpModel.getVertDataSize();
+
+	scale = s_scale;
+	position = s_position;
+
+	FileLoader* fileLoader = new FileLoader;
+	texture = fileLoader->loadBitmap(textureName);
+	delete fileLoader;
+}
+
 glm::vec3 Character::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d)
 {
 	return glm::vec3(cam.x + d*std::sin(angle*DEG_TO_RAD), cam.y, cam.z - d*std::cos(angle*DEG_TO_RAD));
+}
+
+void Character::CheckQuestGoal(Character *character)
+{
+	//This should only apply to AI. If this passes the AI has defeated the player OR the ai was spared meaning we need to 
+	//keep track of the current character as he will return at the end to help the player.
+	//The player class overrides this, so any quest checking should be done inside that.
+}
+
+void Character::Dead()
+{
+	characterState = DEAD;
+}
+
+void Character::LootEnemy(Character* character)
+{
+	coins += character->coins;
+	xp += character->killXP;
+	//Pass inventory of current character to new killer.
+	//All other transferable stats should go here.
 }
 
 bool Character::isDead()
@@ -50,54 +110,76 @@ void Character::draw(glm::mat4 object)
 		weapon->draw(object, position, currentAnimation, rotation);
 }
 
-void Character::InitalStats(GLuint setShaderProgram)
+void Character::GetAvailableAttacks(vector<C_Attack>& attackList)
 {
-	//LoadFromFile();
-	shaderProgram = setShaderProgram;
-	material =
-	{
-		{ 0.4f, 0.2f, 0.2f, 1.0f }, // ambient
-		{ 0.8f, 0.5f, 0.5f, 1.0f }, // diffuse
-		{ 1.0f, 0.8f, 0.8f, 1.0f }, // specular
-		2.0f  // shininess
-	};
-
-	scale = glm::vec3(1, 1, 1);
-	position = glm::vec3(-3, 3, -3);
-
-	FileLoader* fileLoader = new FileLoader;
-	//texture = fileLoader->loadBitmap("hobgoblin2.bmp");
-	texture = fileLoader->loadBitmap("hobgoblin2.bmp");
-
-	/* Initialize default output device */
-	if (!BASS_Init(-1, 44100, 0, 0, NULL))
-		std::cout << "Can't initialize device";
-
-	/*samples = new HSAMPLE[4];
-	samples[0] = fileLoader->loadSample("Sound/Coin.wav");
-	samples[1] = fileLoader->loadSample("Sound/Hurt.wav");
-	samples[2] = fileLoader->loadSample("Sound/Dead.wav");
-	samples[3] = fileLoader->loadSample("Sound/Win.wav");*/
-	delete fileLoader;
-
-	meshObject = tmpModel.ReadMD2Model("arnould.MD2");
-	md2VertCount = tmpModel.getVertDataSize();
+	attackList.push_back(LightAttack());
+	attackList.push_back(HeavyAttack());
+	attackList.push_back(Poison());
+	attackList.push_back(Stun());
 }
+
+
+void Character::CombatAttacks()
+{
+	if (isDead() == true)
+		return;
+
+	//All possible attacks!
+	vector<C_Attack> possibleAttacks = vector<C_Attack>();
+	GetAvailableAttacks(possibleAttacks);
+
+	sort(possibleAttacks.begin(), possibleAttacks.end(), MostDamageSort(*this));
+	C_Attack max_damage = possibleAttacks[0];
+	sort(possibleAttacks.begin(), possibleAttacks.end(), FastAttackSort(this));
+	C_Attack quickest_damage = possibleAttacks[0];
+	sort(possibleAttacks.begin(), possibleAttacks.end(), EfficentSort(*this));
+	C_Attack efficent_Attack = possibleAttacks[0];
+
+
+	//Close to death, final gamble!
+	//TODO check if character has health potion first!
+	if (max_damage.GetPossibleDamage() >= combatInstance->opponent->health){ combatInstance->queuedAttacks.push_back(max_damage); return; }
+	if (health <= rand() % 15 && max_damage.GetPossibleDamage() < combatInstance->opponent->health) { combatInstance->queuedAttacks.push_back(ItemUse(Item())); return; }
+	else if (health <= rand() % 15 && max_damage.GetPossibleDamage() < combatInstance->opponent->health) { combatInstance->queuedAttacks.push_back(Flee()); return; }
+	
+	int randomAttack = rand() % 3 + 1;
+	switch (randomAttack)
+	{
+	case 1:
+		combatInstance->queuedAttacks.push_back(max_damage); return;
+		break;
+	case 2:
+		combatInstance->queuedAttacks.push_back(quickest_damage); return;
+		break;
+	case 3:
+		combatInstance->queuedAttacks.push_back(efficent_Attack); return;
+	default:
+		int randomPossibleAttack = rand() % possibleAttacks.size();
+		combatInstance->queuedAttacks.push_back(possibleAttacks[randomPossibleAttack-1]); return;
+		break;
+	}
+
+}
+
+void Character::InitalStats(GLuint setShaderProgram){}
 
 void Character::Animate()
 {
-	switch (characterState)
-	{
-	case IDLE:
-		currentAnimation = 0;
-		break;
-	case WALKING:
-		currentAnimation = 1;
-		break;
-	default:
-		currentAnimation = 0;
-		break;
-	}
+	currentAnimation = characterState;
+	//switch (characterState)
+	//{
+	//case IDLE:
+	//	currentAnimation = 0;
+	//	break;
+	//case WALKING:
+	//	currentAnimation = 1;
+	//	break;
+	//case ATTACKING:
+	//	currentAnimation = 
+	//default:
+	//	currentAnimation = 0;
+	//	break;
+	//}
 }
 
 void Character::Update()
@@ -126,6 +208,41 @@ void Character::Update()
 	}
 }
 
+
+
+
+float Character::ResSelect(int resType)
+{
+	if (resType == 0) { return 0; }
+	if (resType == 1) { return resistance_Fire; }
+	if (resType == 2) { return resistance_Water; }
+	if (resType == 3) { return resistance_Air; }
+	return 0;
+}
+
+void Character::BlockAttack()
+{
+	if (combatInstance->incomingAttack.attackCompleted == false)
+	{
+		int randomNumber = rand() % 15 + 1;
+		if (speed >= randomNumber)
+		{
+			//TODO use character stats to get an accurate value for blocking based on character stats.
+			float timeBlocked = randomNumber = rand() % (int)(combatInstance->incomingAttack.blockingTime);
+			combatInstance->incomingAttack.blockingTime = timeBlocked;
+			combatInstance->incomingAttack.BlockedAttack(*this, *this);
+		}
+		else {
+			combatInstance->incomingAttack.FailedBlockedAttack(*this, *this);
+		}
+	}
+}
+
+
+
+//bool Character::getHighestDamage(C_Attack attack_1, C_Attack attack_2) { return true; }// (attack_1.damageCalc(*this, *combatInstance->opponent) > attack_2.damageCalc(*this, *combatInstance->opponent)); };
+//bool Character::getFastestAttack(C_Attack& attack_1, C_Attack& attack_2) { return (attack_1.AttackSpeed(this) > attack_2.AttackSpeed(this)); };
+//bool Character::getBalancedAttack(C_Attack& attack_1, C_Attack& attack_2) { return (attack_1.GetBalanceValue() > attack_2.GetBalanceValue()); };
 
 /*
 #include "rt3d.h"
@@ -167,77 +284,8 @@ Character::Character(string s_name, int s_health, int s_mana, int s_def,int s_st
 
 }
 
-void Character::Attack(Character& enemyCharacter)
-{
-	inCombat = true;
 
-	if (refreshTime <= 0)
-	{
-		if (queuedAttacks.size() > 0)
-		{
-			std::list<C_Attack>::iterator it = queuedAttacks.begin();
-			std::advance(it, 0);
-			enemyCharacter.BeingAttacked(*it);
-			refreshTime += it->Refresh();
-			manaPool -= it->GetManaCost();
-			it = queuedAttacks.erase(it);
-		} else {
-			int attackOption = rand() % 5 + 1;
-			//all classes created quickly for time, will be refined in full game...
-			LightAttack defualtAttack_1 = LightAttack();
-			HeavyAttack defualtAttack_2 = HeavyAttack();
-			Poison defualtAttack_3 = Poison();
-			Stun defualtAttack_4 = Stun();
 
-			switch (attackOption)
-			{
-			case 1:
-				enemyCharacter.BeingAttacked(defualtAttack_1);
-				refreshTime += defualtAttack_1.Refresh();
-				manaPool -= defualtAttack_1.GetManaCost();
-				break;
-			case 2:
-				enemyCharacter.BeingAttacked(defualtAttack_2);
-				refreshTime += defualtAttack_2.Refresh();
-				manaPool -= defualtAttack_2.GetManaCost();
-				break;
-			case 3:
-				enemyCharacter.BeingAttacked(defualtAttack_3);
-				refreshTime += defualtAttack_3.Refresh();
-				manaPool -= defualtAttack_3.GetManaCost();
-				break;
-			case 4:
-				enemyCharacter.BeingAttacked(defualtAttack_4);
-				refreshTime += defualtAttack_4.Refresh();
-				manaPool -= defualtAttack_4.GetManaCost();
-				break;
-			default:
-				break;
-			}
-	
-		}
-	}
-}
-
-void Character::BeingAttacked(C_Attack s_attack)
-{
-	s_attack.attackCompleted = false;
-	inCombat = true;
-	opponentAttack = s_attack;
-	if (player)
-	{
-		//cout << name << " Is being attacked!!! health: " << health << endl;
-		cout << "YOU ARE BEING ATTACKED! PRESS " << s_attack.blockingButton << " TO BLOCK ATTACK! (1.UP, 2.DOWN, 3.LEFT, 4.RIGHT)";
-	}
-}
-
-void Character::Damage(int damageValue)
-{
-	//cout << damageValue << " damage done to " << name <<   " current health of character: " << health << endl;
-	health = health - damageValue;
-	if (health <= 0)
-		cout << name << " is DEAD!";
-}
 
 void Character::Update(float time)
 {
@@ -305,13 +353,4 @@ void Character::Update(float time)
 
 	
 }
-
-float Character::ResSelect(int resType)
-	{
-		float res = 0;
-		if (resType == 0) { res = physRes; }
-		if (resType == 1) { res = fireRes; }
-		if (resType == 2) { res = waterRes; }
-		if (resType == 3) { res = windRes; }
-		return res;
-	}*/
+*/

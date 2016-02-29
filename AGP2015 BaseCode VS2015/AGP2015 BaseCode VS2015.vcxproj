@@ -34,7 +34,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -154,12 +154,15 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Collisions.cpp" />
+    <ClCompile Include="CombatInstance.cpp" />
     <ClCompile Include="FileLoader.cpp" />
     <ClCompile Include="Gameobject.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemUse.cpp" />
     <ClCompile Include="Level_001.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MazeGenerator.cpp" />
+    <ClCompile Include="MazePrefab.cpp" />
     <ClCompile Include="md2model.cpp" />
     <ClCompile Include="PlayableCharacter.cpp" />
     <ClCompile Include="Prefab.cpp" />
@@ -174,6 +177,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Collisions.h" />
+    <ClInclude Include="CombatInstance.h" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="FileLoader.h" />
     <ClInclude Include="Flee.h" />
@@ -182,6 +186,8 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemUse.h" />
     <ClInclude Include="LightAttack.h" />
+    <ClInclude Include="MazeGenerator.h" />
+    <ClInclude Include="MazePrefab.h" />
     <ClInclude Include="md2model.h" />
     <ClInclude Include="PlayableCharacter.h" />
     <ClInclude Include="Poison.h" />
