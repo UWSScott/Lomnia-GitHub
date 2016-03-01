@@ -4,6 +4,8 @@
 // utility library, to make creation and display of mesh objects as simple as possible
 
 //Edited by the IAN
+//test for hayley
+// Hello Chris
 
 // Windows specific: Uncomment the following line to open a console window for debug output
 #if _DEBUG
@@ -20,9 +22,9 @@
 #include "md2model.h"
 #include <SDL_ttf.h>
 
+#include <vector>
 #include <ctime>
 #include <iostream>
-#include <ctime>
 #include <windows.h>
 #include <conio.h>
 #include <fstream>
@@ -34,6 +36,11 @@
 #include "PlayableCharacter.h"
 #include "Camera.h"
 #include "Skybox.h"
+#include "Prefab.h"
+#include "MazeGenerator.h"
+#include "HeightMap.h"
+#include "Terrain.h"
+
 
 /*#include "Stun.h"
 #include "Poison.h"
@@ -112,52 +119,31 @@ float heightOfCam = 0;
 
 TTF_Font * textFont;
 
-#define SIZE 17
-// CELL STRUCTURE
-struct Cell
-{
-	bool visited;
-	bool top_wall;
-	bool bot_wall;
-	bool left_wall;
-	bool right_wall;
-	char display;
-};
-
-// FUNCTION DECLARATIONS
-void Initialize(Cell Level[][SIZE]);
-//void ClearScreen();
-//void Redraw(Cell Level[][SIZE]);
-void GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &goalX, int &goalY);
-void SaveMaze();
-void LoadMaze();
-
-
-
-
-Cell Level[SIZE][SIZE];
-int posX = 0;
-int posY = 0;
-int goalX = 0;
-int goalY = 0;
-int totalCells = ((SIZE - 1) / 2)*((SIZE - 1) / 2);
-
-//Combat variables
-
-bool inCombat = false;
-std::clock_t start;
-double duration;
-glm::vec3 oldPlayerPos;
-
-Camera Game_Camera = Camera();
-//Character character = Character();
-PlayableCharacter* character = new PlayableCharacter();
-Weapon weaponTest = Weapon();// "Scott's Saber", "Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
-Skybox skyboxTest = Skybox();
-
 const char *skyboxFiles[6] = {
 	"red-sky/red_sky_front.bmp", "red-sky/red_sky_back.bmp", "red-sky/red_sky_right.bmp", "red-sky/red_sky_left.bmp", "red-sky/red_sky_top.bmp", "red-sky/red_sky_top.bmp"
 };
+//
+//const char *skyboxFiles[6] = {
+//	"Lomnia_End_Skybox/front.bmp", "Lomnia_End_Skybox/back.bmp", "Lomnia_End_Skybox/right.bmp", "Lomnia_End_Skybox/left.bmp", "Lomnia_End_Skybox/down.bmp", "Lomnia_End_Skybox/up.bmp"
+//};
+
+
+//Combat variables
+bool inCombat = false;
+
+glm::vec3 oldPlayerPos;
+
+vector<Prefab> Game_Hub_Prefabs;
+vector<Character> Game_Hub_Characters;
+vector<Character> Game_Hub_Characters_Shop;
+
+Camera Game_Camera = Camera();
+Character* static_character[15];
+PlayableCharacter* character = new PlayableCharacter();
+Skybox* skyboxTest;
+MazeGenerator* maze;
+Prefab* houseTest = new Prefab();
+Terrain* terrain = new Terrain();
 
 // textToTexture
 GLuint textToTexture(const char * str, GLuint textID/*, TTF_Font *font, SDL_Color colour, GLuint &w,GLuint &h */) {
@@ -209,205 +195,8 @@ GLuint textToTexture(const char * str, GLuint textID/*, TTF_Font *font, SDL_Colo
 	return texture;
 }
 
-// INITIALIZE MAZE
-void Initialize(Cell Level[][SIZE]) {
-	for (int i = 0; i<SIZE; i++) {
-		for (int j = 0; j<SIZE; j++) {
-			Level[i][j].display = '*';
-			Level[i][j].visited = false;
-			Level[i][j].top_wall = true;
-			Level[i][j].bot_wall = true;
-			Level[i][j].left_wall = true;
-			Level[i][j].right_wall = true;
-		}
-	}
-	for (int i = 1; i<SIZE - 1; i++) {
-		for (int j = 1; j<SIZE - 1; j++) {
-			// Border Cells have fewer accessible walls
-			Level[1][j].top_wall = false;
-			Level[SIZE - 2][j].bot_wall = false;
-			Level[i][1].left_wall = false;
-			Level[i][SIZE - 2].right_wall = false;
-		}
-	}
-}
-
-// GENERATE MAZE
-void GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &goalX, int &goalY) {
-	srand((unsigned)time(NULL));                                                                            // Pick random start cell
-	int random = 0;
-	int randomX = ((2 * rand()) + 1) % (SIZE - 1);                                          // Generate a random odd number between 1 and SIZE
-	int randomY = ((2 * rand()) + 1) % (SIZE - 1);                                          // Generate a random odd number between 1 and SIZE
-	posX = randomX *3;                                                                 // Save player's initial X position
-	posY = randomY * 3;                                                                 // Save player's initial Y position
-	int visitedCells = 1;
-	//int totalCells = ((SIZE - 1) / 2)*((SIZE - 1) / 2);
-	int percent = 0;
-	stack<int> back_trackX, back_trackY;                                            // Stack is used to trace the reverse path
-
-	Level[randomY][randomX].display = '_';                                          // Set S as the start cell
-	Level[randomY][randomX].visited = true;                                         // Set start cell as visited;
-
-	while (visitedCells < totalCells)
-	{
-		if (((Level[randomY - 2][randomX].visited == false) && (Level[randomY][randomX].top_wall == true && Level[randomY - 2][randomX].bot_wall == true)) ||
-			((Level[randomY + 2][randomX].visited == false) && (Level[randomY][randomX].bot_wall == true && Level[randomY + 2][randomX].top_wall == true)) ||
-			((Level[randomY][randomX - 2].visited == false) && (Level[randomY][randomX].left_wall == true && Level[randomY][randomX - 2].right_wall == true)) ||
-			((Level[randomY][randomX + 2].visited == false) && (Level[randomY][randomX].right_wall == true && Level[randomY][randomX + 2].left_wall == true)))
-		{
-			random = (rand() % 4) + 1;              // Pick a random wall 1-4 to knock down
-
-													// GO UP
-			if ((random == 1) && (randomY > 1)) {
-				if (Level[randomY - 2][randomX].visited == false) {        // If not visited
-					Level[randomY - 1][randomX].display = '_';        // Delete display
-					Level[randomY - 1][randomX].visited = true;       // Mark cell as visited
-					Level[randomY][randomX].top_wall = false;       // Knock down wall
-
-					back_trackX.push(randomX);                      // Push X for back track
-					back_trackY.push(randomY);                      // Push Y for back track
-
-					randomY -= 2;                                   // Move to next cell
-					Level[randomY][randomX].visited = true;         // Mark cell moved to as visited
-					Level[randomY][randomX].display = '_';          // Update path
-					Level[randomY][randomX].bot_wall = false;       // Knock down wall
-					visitedCells++;                                 // Increase visitedCells counter
-				}
-				else
-					continue;
-			}
-
-			// GO DOWN
-			else if ((random == 2) && (randomY < SIZE - 2)) {
-				if (Level[randomY + 2][randomX].visited == false) {        // If not visited
-					Level[randomY + 1][randomX].display = '_';        // Delete display
-					Level[randomY + 1][randomX].visited = true;       // Mark cell as visited
-					Level[randomY][randomX].bot_wall = false;       // Knock down wall
-
-					back_trackX.push(randomX);                      // Push X for back track
-					back_trackY.push(randomY);                      // Push Y for back track
-
-					randomY += 2;                                   // Move to next cell
-					Level[randomY][randomX].visited = true;         // Mark cell moved to as visited
-					Level[randomY][randomX].display = '_';          // Update path
-					Level[randomY][randomX].top_wall = false;       // Knock down wall
-					visitedCells++;                                 // Increase visitedCells counter
-				}
-				else
-					continue;
-			}
-
-			// GO LEFT
-			else if ((random == 3) && (randomX > 1)) {
-				if (Level[randomY][randomX - 2].visited == false) {        // If not visited
-					Level[randomY][randomX - 1].display = '_';        // Delete display
-					Level[randomY][randomX - 1].visited = true;       // Mark cell as visited
-					Level[randomY][randomX].left_wall = false;      // Knock down wall
-
-					back_trackX.push(randomX);                      // Push X for back track
-					back_trackY.push(randomY);                      // Push Y for back track
-
-					randomX -= 2;                                   // Move to next cell
-					Level[randomY][randomX].visited = true;         // Mark cell moved to as visited
-					Level[randomY][randomX].display = '_';          // Update path
-					Level[randomY][randomX].right_wall = false;     // Knock down wall
-					visitedCells++;                                 // Increase visitedCells counter
-				}
-				else
-					continue;
-			}
-
-			// GO RIGHT
-			else if ((random == 4) && (randomX < SIZE - 2)) {
-				if (Level[randomY][randomX + 2].visited == false) {        // If not visited
-					Level[randomY][randomX + 1].display = '_';        // Delete display
-					Level[randomY][randomX + 1].visited = true;       // Mark cell as visited
-					Level[randomY][randomX].right_wall = false;     // Knock down wall
-
-					back_trackX.push(randomX);                      // Push X for back track
-					back_trackY.push(randomY);                      // Push Y for back track
-
-					randomX += 2;                                   // Move to next cell
-					Level[randomY][randomX].visited = true;         // Mark cell moved to as visited
-					Level[randomY][randomX].display = '_';          // Update path
-					Level[randomY][randomX].left_wall = false;      // Knock down wall
-					visitedCells++;                                 // Increase visitedCells counter
-				}
-				else
-					continue;
-			}
-
-			percent = (visitedCells * 100 / totalCells * 100) / 100;                // Progress in percentage
-			cout << endl << "       Generating a Random Maze... " << percent << "%" << endl;
-		}
-		else {
-			randomX = back_trackX.top();
-			back_trackX.pop();
-
-			randomY = back_trackY.top();
-			back_trackY.pop();
-		}
-
-		//ClearScreen();
-		//Redraw(Level);
-	}
-
-	goalX = randomX;
-	goalY = randomY;
-	Level[goalY][goalX].display = '.';
-	//system("cls");
-	//ClearScreen();
-	//Redraw(Level);
-	//cout << endl << "\a\t   Complete!" << endl;
-}
-
 // SAVE MAZE -- Cell Level[][SIZE]
-void SaveMaze() {
-	ofstream output;
-	char file[20] = "MazeSeed";
-	char input;
-	int passes = 0;
-	cout << endl << "Saving Maze....";
-	//cin >> input;
 
-	/*if ((input == 'y') || (input == 'Y')) {
-		cout << endl << "Save as: ";
-		cin >> file;*/
-
-	output.open(file);
-
-	for (int i = 0; i < SIZE; i++) {
-		output << endl;
-		for (int j = 0; j < SIZE; j++) {
-			passes++;
-			output << Level[i][j].display;
-		}
-	}
-
-	cout << endl << "... Complete!";
-	cout << "Maze has been saved to" << "\"" << file << "\"" << endl;
-	cout << passes << endl;
-	output.close();
-}
-
-void LoadMaze()
-{
-	char space;
-	ifstream myfile("MazeSeed");
-
-	if (myfile.is_open()) {
-		for (int row = 0; row < SIZE; row++) {
-			for (int col = 0; col < SIZE; col++) {
-				myfile >> space;
-				cout << space;
-				Level[row][col].display = space;
-				cout << space;
-			}
-			cout << endl;
-		}
-		cout << "Maze Loaded!" << endl;
-	} else { cout << "Unable to open file"; }
-}
 
 // Set up rendering context
 SDL_Window * setupRC(SDL_GLContext &context) {
@@ -477,7 +266,7 @@ GLuint loadBitmap(char *fname) {
 	return texID;	// return value of texture ID
 }
 
-glm::vec3 getEnemyPos()
+/*glm::vec3 getEnemyPos()
 {
 	glm::vec3 enemyPos = glm::vec3(0, 0, 0);
 	int x, z;
@@ -523,12 +312,13 @@ glm::vec2 moveEnemy()
 	return movePos;
 }
 
-
+*/
 
 
 void init(void) {
-	start = std::clock();
 
+	
+	
 
 	shaderProgram = rt3d::initShaders("phong-tex.vert","phong-tex.frag");
 	rt3d::setLight(shaderProgram, light0);
@@ -556,7 +346,7 @@ void init(void) {
 	meshObjects[3] = weapon.ReadMD2Model("Partical_sword.MD2");
 	md2VertCount3 = weapon.getVertDataCount();
 	
-	
+
 	/*skybox[0] = loadBitmap("red-sky/Town_ft.bmp");
 	skybox[1] = loadBitmap("red-sky/Town_bk.bmp");
 	skybox[2] = loadBitmap("red-sky/Town_lf.bmp");
@@ -588,20 +378,54 @@ void init(void) {
 
 
 
-	Initialize(Level);
-	GenerateMaze(Level, posX, posY, goalX, goalY);
+	//Initialize(Level);
+	//GenerateMaze(Level, posX, posY, goalX, goalY);
 
-	playerPos = glm::vec3(posX, 0.8, posY);
-	enemyPos = getEnemyPos();
+	//playerPos = glm::vec3(posX, 0.8, posY);
+	//enemyPos = getEnemyPos();
 
-	enemyMove = moveEnemy();
+	//enemyMove = moveEnemy();
 
-	character = new PlayableCharacter("Arnold", 10, 10);
+	static_character[0] = new Character("Arnold", "Models/walker.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1,0,0), shaderProgram);
+	static_character[1] = new Character("Arnold", "Models/ddz.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(3,0,0), shaderProgram);
+	static_character[2] = new Character("Arnold", "Models/blade.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(5,0,0), shaderProgram);
+	static_character[3] = new Character("Arnold", "Models/centaur.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(7,0,0), shaderProgram);
+	static_character[4] = new Character("Arnold", "Models/ripper.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(9,0,0), shaderProgram);
+	static_character[5] = new Character("Arnold", "Models/ogro.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(11, 0, 0), shaderProgram);
+	static_character[6] = new Character("Arnold", "Models/ogro_wepaon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(11, 0, 0), shaderProgram);
+	static_character[7] = new Character("Arnold", "Models/dragon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(15, 0, 0), shaderProgram);
+	static_character[8] = new Character("Arnold", "Models/zf19.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(20, 0, 0), shaderProgram);
+	static_character[9] = new Character("Arnold", "Models/faerie.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(22, 0, 0), shaderProgram);
+	static_character[10] = new Character("Arnold", "Models/frosty.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(24, 0, 0), shaderProgram);
+	static_character[11] = new Character("Arnold", "Models/pogo_buny.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(26, 0, 0), shaderProgram);
+	static_character[12] = new Character("Arnold", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(28, 0, 0), shaderProgram);
+
+	skyboxTest = new Skybox(skyboxFiles);
+	maze = new MazeGenerator(shaderProgram);
+	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(0), shaderProgram);
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
-	skyboxTest.InitalStats(skyboxFiles);
-	weaponTest.InitalStats(shaderProgram);
-	
+
+	//houseTest = new Prefab(shaderProgram, "Models/Shop_002.obj" /*"Models/desert.obj"*/ /*"Models/House_001.obj"*/, "Models/Textures/House_001.bmp",glm::vec3(1.3,1.3,1.3),glm::vec3(-10,-0.5,-10));
+	//houseTest = new Prefab(shaderProgram, "Models/Shop_001.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Shop_001.bmp", glm::vec3(1.0, 1.0, 1.0), glm::vec3(0, -1, 0));
+	//houseTest = new Prefab(shaderProgram, "Models/House_002.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/House_002.bmp", glm::vec3(60.0, 60.0, 60.0), glm::vec3(0, -1, 0));
+	//houseTest = new Prefab(shaderProgram, "Models/Shop_002.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Shop_002.bmp", glm::vec3(1.5, 1.5, 1.5), glm::vec3(0, -1, 0));
+	//houseTest = new Prefab(shaderProgram, "Models/House_003.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/House_003.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
+	//houseTest = new Prefab(shaderProgram, "Models/Well.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Well.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
+	//houseTest = new Prefab(shaderProgram, "Models/Teleporter_Stand.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Well.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
+	houseTest = new Prefab(shaderProgram, "Models/House_003.obj", "Models/Textures/House_002.bmp", glm::vec3(2.5, 2.0, 2.5), glm::vec3(-20, 1, -20));
+	terrain = new Terrain(shaderProgram, "Models/Desert_Terrain_Low.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(1, 1, 1), glm::vec3(300, -1.5, -300));
+
+	//Buildings etc.. non useful or usable items
+	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, "Models/House_003.obj", "Models/Textures/House_002.bmp", glm::vec3(2.5, 2.0, 2.5), glm::vec3(-20, 1, -20)));
+
+	//NPCs in the hub area
+	Game_Hub_Characters.push_back(Character("Arnold", "Models/walker.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram));
+
+	//NPCS that serve a purpose (shop owners/traders)
+	Game_Hub_Characters_Shop.push_back(Character("Arnold", "Models/walker.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram));
+
+
 }
 
 /*bool Collision(Collisions circle, Collisions circle2) {
@@ -812,7 +636,7 @@ void draw(SDL_Window * window) {
 
 
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 1920.0f / 1080.0f, 1.0f, 150.0f);
+	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 1920.0f / 1080.0f, 1.0f, 300.0f);
 	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
 
 
@@ -834,10 +658,11 @@ void draw(SDL_Window * window) {
 	//mvStack.top() = glm::lookAt(Game_Camera.eye, Game_Camera.at, Game_Camera.up);
 	Game_Camera.draw(mvStack.top(), character->getModelEye());
 
+
 	// draw a skybox
 //	glUseProgram(skyboxProgram);
-	rt3d::setUniformMatrix4fv(skyboxTest.shaderProgram, "projection", glm::value_ptr(projection));
-	skyboxTest.draw(mvStack.top());
+	rt3d::setUniformMatrix4fv(skyboxTest->shaderProgram, "projection", glm::value_ptr(projection));
+	skyboxTest->draw(mvStack.top());
 	//glDepthMask(GL_FALSE); // make sure depth test is off
 	//glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
 	//mvStack.push(glm::mat4(mvRotOnlyMat3));
@@ -899,7 +724,7 @@ void draw(SDL_Window * window) {
 
 	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
 
-	for (int i = 0; i<SIZE; i++) {
+	/*for (int i = 0; i<SIZE; i++) {
 		for (int j = 0; j<SIZE; j++) {
 			glBindTexture(GL_TEXTURE_2D, textures[0]);
 			mvStack.push(mvStack.top());
@@ -919,68 +744,89 @@ void draw(SDL_Window * window) {
 			rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
 			mvStack.pop();
 		}
-	}
+	}*/
+
+	//// Animate the md2 model, and update the mesh with new vertex data
+	//arnould.Animate(currentAnim, 0.1);
+	//rt3d::updateMesh(meshObjects[2], RT3D_VERTEX, arnould.getAnimVerts(), arnould.getVertDataSize());
+
+	////draw the arnould
+	//glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
+	//glBindTexture(GL_TEXTURE_2D, textures[1]);
+	//rt3d::materialStruct tmpMaterial = material1;
+	//rt3d::setMaterial(shaderProgram, tmpMaterial);
+	//mvStack.push(mvStack.top());
+	//mvStack.top() = glm::translate(mvStack.top(), playerPos);
+	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
+	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.03, scale*0.03, scale*0.03));
+	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//rt3d::drawMesh(meshObjects[2], md2VertCount2, GL_TRIANGLES);
+	//mvStack.pop();
+	//glCullFace(GL_BACK);
 
 
-	// Animate the md2 model, and update the mesh with new vertex data
-	arnould.Animate(currentAnim, 0.1);
-	rt3d::updateMesh(meshObjects[2], RT3D_VERTEX, arnould.getAnimVerts(), arnould.getVertDataSize());
+	//// Animate the md2 model, and update the mesh with new vertex data
+	//weapon.Animate(currentAnim, 0.1);
+	//rt3d::updateMesh(meshObjects[3], RT3D_VERTEX, weapon.getAnimVerts(), weapon.getVertDataSize());
 
-	//draw the arnould
-	glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
-	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	rt3d::materialStruct tmpMaterial = material1;
-	rt3d::setMaterial(shaderProgram, tmpMaterial);
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), playerPos);
-	mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
-	mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.03, scale*0.03, scale*0.03));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawMesh(meshObjects[2], md2VertCount2, GL_TRIANGLES);
-	mvStack.pop();
-	glCullFace(GL_BACK);
+	////draw the sword
+	//glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
+	//glBindTexture(GL_TEXTURE_2D, textures[1]);
+	//tmpMaterial = material1;
+	//rt3d::setMaterial(shaderProgram, tmpMaterial);
+	//mvStack.push(mvStack.top());
+	//mvStack.top() = glm::translate(mvStack.top(), playerPos);
+	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
+	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.03, scale*0.03, scale*0.03));
+	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//rt3d::drawMesh(meshObjects[3], md2VertCount3, GL_TRIANGLES);
+	//mvStack.pop();
+	//glCullFace(GL_BACK);
+
+	//tmpModel.Animate(enemyAnim, 0.1);
+	//rt3d::updateMesh(meshObjects[1], RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
+
+	////draw the enemy
+	//glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
+	//glBindTexture(GL_TEXTURE_2D, textures[1]);
+	//tmpMaterial = material1;
+	//rt3d::setMaterial(shaderProgram, tmpMaterial);
+	//mvStack.push(mvStack.top());
+	//mvStack.top() = glm::translate(mvStack.top(), enemyPos);
+	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
+	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN + (180-playerRotation) / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.08, scale*0.08, scale*0.08));
+	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+	//rt3d::drawMesh(meshObjects[1], md2VertCount, GL_TRIANGLES);
+	//mvStack.pop();
+	//glCullFace(GL_BACK);
 
 
-	// Animate the md2 model, and update the mesh with new vertex data
-	weapon.Animate(currentAnim, 0.1);
-	rt3d::updateMesh(meshObjects[3], RT3D_VERTEX, weapon.getAnimVerts(), weapon.getVertDataSize());
-
-	//draw the sword
-	glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
-	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	tmpMaterial = material1;
-	rt3d::setMaterial(shaderProgram, tmpMaterial);
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), playerPos);
-	mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
-	mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.03, scale*0.03, scale*0.03));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawMesh(meshObjects[3], md2VertCount3, GL_TRIANGLES);
-	mvStack.pop();
-	glCullFace(GL_BACK);
-
-	tmpModel.Animate(enemyAnim, 0.1);
-	rt3d::updateMesh(meshObjects[1], RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
-
-	//draw the enemy
-	glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
-	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	tmpMaterial = material1;
-	rt3d::setMaterial(shaderProgram, tmpMaterial);
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), enemyPos);
-	mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
-	mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN + (180-playerRotation) / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.08, scale*0.08, scale*0.08));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawMesh(meshObjects[1], md2VertCount, GL_TRIANGLES);
-	mvStack.pop();
-	glCullFace(GL_BACK);
-
+	//rt3d::setUniformMatrix4fv(maze->shaderProgram, "projection", glm::value_ptr(projection));
+	terrain->draw(mvStack.top());
+	rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
+	maze->baseShaderProgram = houseTest->shaderProgram;
+	maze->draw(mvStack.top());
+	//maze->Maze_Tiles[0][0].draw(mvStack.top());
 	character->draw(mvStack.top());
-	//weaponTest.draw(mvStack.top(), character.position, character.currentAnimation, character.rotation);
+
+	//static_character[0]->draw(mvStack.top());
+	//static_character[1]->draw(mvStack.top());
+	//static_character[2]->draw(mvStack.top());
+	//static_character[3]->draw(mvStack.top());
+	//static_character[4]->draw(mvStack.top());
+	//static_character[5]->draw(mvStack.top());
+	//static_character[6]->draw(mvStack.top());
+	//static_character[7]->draw(mvStack.top());
+	//static_character[8]->draw(mvStack.top());
+	//static_character[9]->draw(mvStack.top());
+	////static_character[10]->draw(mvStack.top());
+	////static_character[11]->draw(mvStack.top());
+	////static_character[12]->draw(mvStack.top());
+
+	houseTest->draw(mvStack.top());
 
 	// remember to use at least one pop operation per push...
 	mvStack.pop(); // initial matrix
