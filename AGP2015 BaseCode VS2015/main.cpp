@@ -22,6 +22,7 @@
 #include "md2model.h"
 #include <SDL_ttf.h>
 
+#include <vector>
 #include <ctime>
 #include <iostream>
 #include <windows.h>
@@ -132,11 +133,15 @@ bool inCombat = false;
 
 glm::vec3 oldPlayerPos;
 
+vector<Prefab> Game_Hub_Prefabs;
+vector<Character> Game_Hub_Characters;
+vector<Character> Game_Hub_Characters_Shop;
+
 Camera Game_Camera = Camera();
-Character* static_character[15];// = Character();
+Character* static_character[15];
 PlayableCharacter* character = new PlayableCharacter();
-Skybox* skyboxTest;// = new Skybox(skyboxFiles);
-MazeGenerator* maze;// = new Skybox(skyboxFiles);
+Skybox* skyboxTest;
+MazeGenerator* maze;
 Prefab* houseTest = new Prefab();
 Terrain* terrain = new Terrain();
 
@@ -407,8 +412,20 @@ void init(void) {
 	//houseTest = new Prefab(shaderProgram, "Models/Shop_002.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Shop_002.bmp", glm::vec3(1.5, 1.5, 1.5), glm::vec3(0, -1, 0));
 	//houseTest = new Prefab(shaderProgram, "Models/House_003.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/House_003.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
 	//houseTest = new Prefab(shaderProgram, "Models/Well.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Well.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
-	houseTest = new Prefab(shaderProgram, "Models/Teleporter_Stand.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Well.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
+	//houseTest = new Prefab(shaderProgram, "Models/Teleporter_Stand.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Well.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
+	houseTest = new Prefab(shaderProgram, "Models/House_003.obj", "Models/Textures/House_002.bmp", glm::vec3(2.5, 2.0, 2.5), glm::vec3(-20, 1, -20));
 	terrain = new Terrain(shaderProgram, "Models/Desert_Terrain_Low.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(1, 1, 1), glm::vec3(300, -1.5, -300));
+
+	//Buildings etc.. non useful or usable items
+	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, "Models/House_003.obj", "Models/Textures/House_002.bmp", glm::vec3(2.5, 2.0, 2.5), glm::vec3(-20, 1, -20)));
+
+	//NPCs in the hub area
+	Game_Hub_Characters.push_back(Character("Arnold", "Models/walker.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram));
+
+	//NPCS that serve a purpose (shop owners/traders) 
+	Game_Hub_Characters_Shop.push_back(Character("Arnold", "Models/walker.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram));
+
+
 }
 
 /*bool Collision(Collisions circle, Collisions circle2) {
@@ -646,7 +663,6 @@ void draw(SDL_Window * window) {
 //	glUseProgram(skyboxProgram);
 	rt3d::setUniformMatrix4fv(skyboxTest->shaderProgram, "projection", glm::value_ptr(projection));
 	skyboxTest->draw(mvStack.top());
-	terrain->draw(mvStack.top());
 	//glDepthMask(GL_FALSE); // make sure depth test is off
 	//glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
 	//mvStack.push(glm::mat4(mvRotOnlyMat3));
@@ -789,6 +805,7 @@ void draw(SDL_Window * window) {
 
 
 	//rt3d::setUniformMatrix4fv(maze->shaderProgram, "projection", glm::value_ptr(projection));
+	terrain->draw(mvStack.top());
 	rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
 	maze->baseShaderProgram = houseTest->shaderProgram;
 	maze->draw(mvStack.top());

@@ -70,17 +70,13 @@ void Camera::draw(glm::mat4 &object, glm::vec3 modelEye)
 		TranslateTo(position.x, Cinematic_X);
 		TranslateTo(position.y, Cinematic_Y);
 		TranslateTo(position.z, Cinematic_Z);
-
-
 		object = glm::lookAt(position, cinematicLookAt, up);
 		object = glm::translate(object, cinematicLookAt);
 		object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
 		object = glm::translate(object, -cinematicLookAt);
-		//at = modelEye;
 		return;
 		break;
 	case 3:
-		//at = MoveForward(position, 0, 1.0f);
 		at = Filming_Look(position, 0, 1.0f, camera_Pitch);
 		object = glm::lookAt(position, at, up);
 		object = glm::translate(object, position);
@@ -96,12 +92,6 @@ void Camera::draw(glm::mat4 &object, glm::vec3 modelEye)
 	object = glm::translate(object, modelEye);
 	object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
 	object = glm::translate(object, -modelEye);
-
-	//object = glm::lookAt(position, at, up);
-
-	//object = glm::translate(object, modelEye);
-	//object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
-	//object = glm::translate(object, -modelEye);
 }
 
 void Camera::CinematicValues(glm::vec3 characterPosition, float playerRotation)
