@@ -123,9 +123,6 @@ const char *skyboxFiles[6] = {
 
 
 //Combat variables
-//Character player = Character("PLAYER", 100, 100, 10, 10, 1.0, 1.0, 1.0, 1.0, true);
-//Character enemy = Character("ENEMY"  , 25, 0, 14, 10, 1.0, 2.0, 0.5, 1.0, false);
-//Character player = new Character();
 bool inCombat = false;
 
 glm::vec3 oldPlayerPos;
@@ -397,11 +394,12 @@ void init(void) {
 	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(0), shaderProgram);
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
-	houseTest = new Prefab(shaderProgram, "Models/Shop_002.obj" /*"Models/desert.obj"*/ /*"Models/House_001.obj"*/, "hobgoblin2.bmp",glm::vec3(0.01,0.01,0.01),glm::vec3(0,0,0));
-	houseTest = new Prefab(shaderProgram, "Models/Shop_001.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Shop_001.bmp", glm::vec3(1.0, 1.0, 1.0), glm::vec3(0, -1, 0));
-	houseTest = new Prefab(shaderProgram, "Models/Shop_001.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Shop_001.bmp", glm::vec3(1.0, 1.0, 1.0), glm::vec3(0, -1, 0));
-	houseTest = new Prefab(shaderProgram, "Models/House_002.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/House_002.bmp", glm::vec3(60.0, 60.0, 60.0), glm::vec3(0, -1, 0));
-	houseTest = new Prefab(shaderProgram, "Models/Shop_002.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Shop_002.bmp", glm::vec3(1.5, 1.5, 1.5), glm::vec3(0, -1, 0));
+
+	//houseTest = new Prefab(shaderProgram, "Models/Shop_002.obj" /*"Models/desert.obj"*/ /*"Models/House_001.obj"*/, "Models/Textures/House_001.bmp",glm::vec3(1.3,1.3,1.3),glm::vec3(-10,-0.5,-10));
+	//houseTest = new Prefab(shaderProgram, "Models/Shop_001.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Shop_001.bmp", glm::vec3(1.0, 1.0, 1.0), glm::vec3(0, -1, 0));
+	//houseTest = new Prefab(shaderProgram, "Models/House_002.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/House_002.bmp", glm::vec3(60.0, 60.0, 60.0), glm::vec3(0, -1, 0));
+	//houseTest = new Prefab(shaderProgram, "Models/Shop_002.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Shop_002.bmp", glm::vec3(1.5, 1.5, 1.5), glm::vec3(0, -1, 0));
+	houseTest = new Prefab(shaderProgram, "Models/House_003.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/House_003.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
 	
 }
 
@@ -797,9 +795,9 @@ void draw(SDL_Window * window) {
 	//static_character[7]->draw(mvStack.top());
 	//static_character[8]->draw(mvStack.top());
 	//static_character[9]->draw(mvStack.top());
-	//static_character[10]->draw(mvStack.top());
-	//static_character[11]->draw(mvStack.top());
-	//static_character[12]->draw(mvStack.top());
+	////static_character[10]->draw(mvStack.top());
+	////static_character[11]->draw(mvStack.top());
+	////static_character[12]->draw(mvStack.top());
 
 	houseTest->draw(mvStack.top());
 

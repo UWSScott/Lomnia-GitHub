@@ -18,6 +18,7 @@ using namespace std;
 class Gameobject
 {
 public:
+	string objectName = "";
 	glm::vec3 position = glm::vec3(1,1,1);
 	glm::vec3 scale = glm::vec3(1,1,1);
 	float rotation = 0;
@@ -35,5 +36,4 @@ public:
 	virtual void LoadTexture();
 	virtual void SetMaterial();
 };
-
 #endif

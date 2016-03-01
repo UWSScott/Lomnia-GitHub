@@ -166,20 +166,6 @@ void Character::InitalStats(GLuint setShaderProgram){}
 void Character::Animate()
 {
 	currentAnimation = characterState;
-	//switch (characterState)
-	//{
-	//case IDLE:
-	//	currentAnimation = 0;
-	//	break;
-	//case WALKING:
-	//	currentAnimation = 1;
-	//	break;
-	//case ATTACKING:
-	//	currentAnimation = 
-	//default:
-	//	currentAnimation = 0;
-	//	break;
-	//}
 }
 
 void Character::Update()
@@ -207,8 +193,6 @@ void Character::Update()
 		if (keys[SDL_SCANCODE_D]) rotation += 5.0f;
 	}
 }
-
-
 
 
 float Character::ResSelect(int resType)

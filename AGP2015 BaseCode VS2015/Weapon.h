@@ -16,7 +16,7 @@ public:
 	bool getEquiped() { return equiped; }
 	void setEquiped(bool setting) { equiped = setting; }
 	int cost = 0;
-	float damage = 0;
+	float attackPower = 0;
 	float speed = 0;
 protected:
 	bool equiped = false;

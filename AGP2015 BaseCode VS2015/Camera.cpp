@@ -101,7 +101,7 @@ void Camera::CinematicValues(glm::vec3 characterPosition, float playerRotation)
 	//rotation = playerRotation;
 	cinematicLookAt = MoveForward(characterPosition, playerRotation, 4.0f);
 	glm::vec3 combatPosition = characterPosition;// MoveForward(characterPosition, 0, 10.0f);
-	cout << "character position: X " << combatPosition.x << " Y " << combatPosition.y << " Z " << combatPosition.z << endl;
+	//cout << "character position: X " << combatPosition.x << " Y " << combatPosition.y << " Z " << combatPosition.z << endl;
 	int xMovement = rand() % 5 + 2;// +characterPosition.x;
 	int yMovement = rand() % 4 + 1;// +characterPosition.y;
 	int zMovement = rand() % 5 + 2;// +characterPosition.z;
@@ -200,8 +200,8 @@ void Camera::CinematicValues(glm::vec3 characterPosition, float playerRotation)
 	Cinematic_Z = zEnding;
 	start = duration;
 	Cinematic_Timer = rand() % 7 + 1;
-	cout << "new position: " << position.x << " Y " << position.y << " Z " << position.z << endl;
-	cout << "cinematic end position: " << Cinematic_X << " Y " << Cinematic_Y << " Z " << Cinematic_Z << endl << endl;
+	//cout << "new position: " << position.x << " Y " << position.y << " Z " << position.z << endl;
+	//cout << "cinematic end position: " << Cinematic_X << " Y " << Cinematic_Y << " Z " << Cinematic_Z << endl << endl;
 }
 
 
@@ -238,17 +238,17 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 		position.z = modelEye.z + -1.0f;
 		rotation = playerRotation;
 		break;
-	case 1:
+	case THIRD_PERSON:
 		position.x = modelEye.x;
 		position.y = modelEye.y + 1.5f;
 		position.z = modelEye.z + 4.0f;
 		rotation = playerRotation;
 		break;
-	case 2:
+	case COMBAT_CINEMATIC:
 		if (timeDifference >= Cinematic_Timer || position.y < 0)
 			CinematicValues(modelEye, playerRotation);
 		break;
-	case 3:
+	case FREE_VIEW:
 		if (keys[SDL_SCANCODE_W]) position = MoveForward(position, rotation, 0.1f);
 		if (keys[SDL_SCANCODE_S]) position = MoveForward(position, rotation, -0.1f);
 		if (keys[SDL_SCANCODE_A]) rotation -= 1.0f;
