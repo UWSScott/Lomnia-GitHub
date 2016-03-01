@@ -13,7 +13,7 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 		2.0f  // shininess
 	};
 	meshObject = tmpModel.ReadMD2Model(modelName);
-	md2VertCount = tmpModel.getVertDataSize();
+	md2VertCount = tmpModel.getVertDataSize()/3;
 
 	weapon = new Weapon("Scott's Saber", "Models/Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
 	weapon->setEquiped(true);
