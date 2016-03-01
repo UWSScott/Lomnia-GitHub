@@ -38,6 +38,7 @@
 #include "Prefab.h"
 #include "MazeGenerator.h"
 #include "HeightMap.h"
+#include "Terrain.h"
 
 
 /*#include "Stun.h"
@@ -120,6 +121,10 @@ TTF_Font * textFont;
 const char *skyboxFiles[6] = {
 	"red-sky/red_sky_front.bmp", "red-sky/red_sky_back.bmp", "red-sky/red_sky_right.bmp", "red-sky/red_sky_left.bmp", "red-sky/red_sky_top.bmp", "red-sky/red_sky_top.bmp"
 };
+//
+//const char *skyboxFiles[6] = {
+//	"Lomnia_End_Skybox/front.bmp", "Lomnia_End_Skybox/back.bmp", "Lomnia_End_Skybox/right.bmp", "Lomnia_End_Skybox/left.bmp", "Lomnia_End_Skybox/down.bmp", "Lomnia_End_Skybox/up.bmp"
+//};
 
 
 //Combat variables
@@ -133,7 +138,7 @@ PlayableCharacter* character = new PlayableCharacter();
 Skybox* skyboxTest;// = new Skybox(skyboxFiles);
 MazeGenerator* maze;// = new Skybox(skyboxFiles);
 Prefab* houseTest = new Prefab();
-
+Terrain* terrain = new Terrain();
 
 // textToTexture
 GLuint textToTexture(const char * str, GLuint textID/*, TTF_Font *font, SDL_Color colour, GLuint &w,GLuint &h */) {
@@ -307,7 +312,8 @@ glm::vec2 moveEnemy()
 
 void init(void) {
 
-
+	
+	
 
 	shaderProgram = rt3d::initShaders("phong-tex.vert","phong-tex.frag");
 	rt3d::setLight(shaderProgram, light0);
@@ -399,8 +405,10 @@ void init(void) {
 	//houseTest = new Prefab(shaderProgram, "Models/Shop_001.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Shop_001.bmp", glm::vec3(1.0, 1.0, 1.0), glm::vec3(0, -1, 0));
 	//houseTest = new Prefab(shaderProgram, "Models/House_002.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/House_002.bmp", glm::vec3(60.0, 60.0, 60.0), glm::vec3(0, -1, 0));
 	//houseTest = new Prefab(shaderProgram, "Models/Shop_002.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Shop_002.bmp", glm::vec3(1.5, 1.5, 1.5), glm::vec3(0, -1, 0));
-	houseTest = new Prefab(shaderProgram, "Models/House_003.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/House_003.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
-	
+	//houseTest = new Prefab(shaderProgram, "Models/House_003.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/House_003.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
+	//houseTest = new Prefab(shaderProgram, "Models/Well.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Well.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
+	houseTest = new Prefab(shaderProgram, "Models/Teleporter_Stand.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Well.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
+	terrain = new Terrain(shaderProgram, "Models/Desert_Terrain_Low.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(1, 1, 1), glm::vec3(300, -1.5, -300));
 }
 
 /*bool Collision(Collisions circle, Collisions circle2) {
@@ -611,7 +619,7 @@ void draw(SDL_Window * window) {
 
 
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 1920.0f / 1080.0f, 1.0f, 150.0f);
+	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 1920.0f / 1080.0f, 1.0f, 300.0f);
 	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
 
 
@@ -633,10 +641,12 @@ void draw(SDL_Window * window) {
 	//mvStack.top() = glm::lookAt(Game_Camera.eye, Game_Camera.at, Game_Camera.up);
 	Game_Camera.draw(mvStack.top(), character->getModelEye());
 
+
 	// draw a skybox
 //	glUseProgram(skyboxProgram);
 	rt3d::setUniformMatrix4fv(skyboxTest->shaderProgram, "projection", glm::value_ptr(projection));
 	skyboxTest->draw(mvStack.top());
+	terrain->draw(mvStack.top());
 	//glDepthMask(GL_FALSE); // make sure depth test is off
 	//glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
 	//mvStack.push(glm::mat4(mvRotOnlyMat3));

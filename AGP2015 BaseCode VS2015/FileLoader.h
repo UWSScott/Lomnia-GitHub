@@ -17,7 +17,7 @@ class FileLoader
 public:
 	FileLoader();
 	~FileLoader(){};
-	GLuint loadBitmap(char *fname);
+	GLuint loadBitmap(char *fname, bool repeatTexture = false);
 	HSAMPLE loadSample(char * filename);
 	//HSAMPLE *samples = NULL;
 };

@@ -4,7 +4,7 @@ FileLoader::FileLoader(){}
 
 /* Loads bitmap for textures. 
 	-Taken from lab tutorials-*/
-GLuint FileLoader::loadBitmap(char *fname)
+GLuint FileLoader::loadBitmap(char *fname, bool repeatTexture)
 {
 	GLuint texID;
 	glGenTextures(1, &texID); // generate texture ID
@@ -37,6 +37,7 @@ GLuint FileLoader::loadBitmap(char *fname)
 
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, tmpSurface->w, tmpSurface->h, 0,
 		externalFormat, GL_UNSIGNED_BYTE, tmpSurface->pixels);
+
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SDL_FreeSurface(tmpSurface); // texture loaded, free the temporary buffer
 	return texID;	// return value of texture ID

@@ -41,6 +41,9 @@ public:
 	glm::vec3 up;
 private:
 	std::clock_t start = 0;
+	float y_mouse_Smoothing = 1.0f;
+	float x_mouse_Smoothing = 2.0f;
+	float camera_Pitch = 0.0f;
 	double duration = 0;
 	double timeDifference = 0;
 	int camera_Type = 1; //1-Normal(locked), 2-Cinematic Camera, 3-Free camera

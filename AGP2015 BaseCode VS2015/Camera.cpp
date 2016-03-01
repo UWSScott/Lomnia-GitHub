@@ -5,9 +5,13 @@
 
 /* Updates camera position. Same function used in character class. */
 glm::vec3 Camera::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d) {
-	return glm::vec3(cam.x + d*std::sin(angle*DEG_TO_RAD),
-		cam.y, cam.z - d*std::cos(angle*DEG_TO_RAD));
+	return glm::vec3(cam.x + d*std::sin(angle*DEG_TO_RAD), cam.y, cam.z - d*std::cos(angle*DEG_TO_RAD));
 }
+
+glm::vec3 Filming_Look(glm::vec3 cam, GLfloat angle, GLfloat d, float camera_Pitch) {
+	return glm::vec3(cam.x + d*std::sin(angle*DEG_TO_RAD), cam.y - (d*std::sin(camera_Pitch*DEG_TO_RAD)), cam.z - d*std::cos(angle*DEG_TO_RAD));
+}
+
 
 glm::vec3 Camera::MoveRight(glm::vec3 pos, GLfloat angle, GLfloat d)
 {
@@ -76,8 +80,12 @@ void Camera::draw(glm::mat4 &object, glm::vec3 modelEye)
 		return;
 		break;
 	case 3:
-		at = MoveForward(position, 0, 1.0f);
+		//at = MoveForward(position, 0, 1.0f);
+		at = Filming_Look(position, 0, 1.0f, camera_Pitch);
 		object = glm::lookAt(position, at, up);
+		object = glm::translate(object, position);
+		object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
+		object = glm::translate(object, -position);
 		return;
 		break;
 	default:
@@ -229,7 +237,7 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 		SwitchState(camera_Type, NULL);
 		cout << endl << endl << camera_Type << endl << endl << endl;
 	}
-
+	int xPos, yPos = 0;
 	switch (camera_Type)
 	{
 	case FIRST_PERSON:
@@ -249,12 +257,24 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 			CinematicValues(modelEye, playerRotation);
 		break;
 	case FREE_VIEW:
-		if (keys[SDL_SCANCODE_W]) position = MoveForward(position, rotation, 0.1f);
-		if (keys[SDL_SCANCODE_S]) position = MoveForward(position, rotation, -0.1f);
-		if (keys[SDL_SCANCODE_A]) rotation -= 1.0f;
-		if (keys[SDL_SCANCODE_D]) rotation += 1.0f;
-		if (keys[SDL_SCANCODE_R]) position.y += 0.1f;
-		if (keys[SDL_SCANCODE_F]) position.y -= 0.1f;
+		SDL_GetMouseState(&xPos, &yPos);
+		if (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT] || keys[SDL_SCANCODE_UP] || keys[SDL_SCANCODE_DOWN])
+		{
+			if (keys[SDL_SCANCODE_LEFT]) x_mouse_Smoothing -= 0.01f;
+			if (keys[SDL_SCANCODE_RIGHT]) x_mouse_Smoothing += 0.01f;
+			if (keys[SDL_SCANCODE_UP]) y_mouse_Smoothing += 0.01f;
+			if (keys[SDL_SCANCODE_DOWN]) y_mouse_Smoothing -= 0.01f;
+		} else {
+			rotation = xPos * x_mouse_Smoothing;
+			camera_Pitch = yPos * y_mouse_Smoothing;
+			if (keys[SDL_SCANCODE_W]) position = MoveForward(position, rotation, 0.1f);
+			if (keys[SDL_SCANCODE_S]) position = MoveForward(position, rotation, -0.1f);
+			if (keys[SDL_SCANCODE_A]) position = MoveRight(position, rotation, -0.1f);
+			if (keys[SDL_SCANCODE_D]) position = MoveRight(position, rotation, 0.1f);
+			if (keys[SDL_SCANCODE_R]) position.y += 0.1f;
+			if (keys[SDL_SCANCODE_F]) position.y -= 0.1f;
+		}
+
 		break;
 	default:
 		break;

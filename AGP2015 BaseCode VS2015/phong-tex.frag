@@ -22,6 +22,7 @@ struct materialStruct
 uniform lightStruct light;
 uniform materialStruct material;
 uniform sampler2D textureUnit0;
+uniform int textureScaleModifier = 1;
 
 in vec3 ex_N;
 in vec3 ex_V;
@@ -46,6 +47,6 @@ void main(void) {
 	specularI = specularI * pow(max(dot(R,ex_V),0), material.shininess);
 
 	// Fragment colour
-	out_Color = (ambientI + diffuseI + specularI) * texture(textureUnit0, ex_TexCoord);
+	out_Color = (ambientI + diffuseI + specularI) * texture(textureUnit0, ex_TexCoord*textureScaleModifier);
 	//out_Color = texture2D(textureUnit0, ex_TexCoord);
 }

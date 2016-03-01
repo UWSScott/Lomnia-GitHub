@@ -35,7 +35,7 @@ void MazeGenerator::draw(glm::mat4 object)
 // INITIALIZE MAZE
 void MazeGenerator::Initialize(Cell Level[][SIZE], GLuint shaderProgram) 
 {
-	Prefab prefab = Prefab(shaderProgram, "cube.obj", "hobgoblin2.bmp", glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+	Prefab prefab = Prefab(shaderProgram, "cube.obj", "lava_cube.bmp", glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
 
 	for (int i = 1; i<=SIZE; i++) {
 		for (int j = 1; j<=SIZE; j++) {
