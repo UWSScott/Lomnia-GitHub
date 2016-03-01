@@ -406,6 +406,7 @@ void init(void) {
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
 
+	//Update
 	//houseTest = new Prefab(shaderProgram, "Models/Shop_002.obj" /*"Models/desert.obj"*/ /*"Models/House_001.obj"*/, "Models/Textures/House_001.bmp",glm::vec3(1.3,1.3,1.3),glm::vec3(-10,-0.5,-10));
 	//houseTest = new Prefab(shaderProgram, "Models/Shop_001.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Shop_001.bmp", glm::vec3(1.0, 1.0, 1.0), glm::vec3(0, -1, 0));
 	//houseTest = new Prefab(shaderProgram, "Models/House_002.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/House_002.bmp", glm::vec3(60.0, 60.0, 60.0), glm::vec3(0, -1, 0));
