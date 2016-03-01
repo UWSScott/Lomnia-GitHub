@@ -67,7 +67,7 @@ public:
 	virtual void GetAvailableAttacks(vector<C_Attack>& attackList);
 	virtual  glm::vec3 getModelEye();
 	virtual int getRotation();
-
+	//void Attack(Character& enemyCharacter);
 	float ResSelect(int resType);
 	virtual bool isDead();
 	virtual void LootEnemy(Character* character);
