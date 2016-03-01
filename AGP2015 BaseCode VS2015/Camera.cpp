@@ -31,7 +31,7 @@ void Camera::InitalStats()
 		std::cout << "Can't initialize device";
 
 	songs = new HSAMPLE[4];
-	songs[0] = fileLoader->loadSample("Sound/Music/Battle_of_the_Titans.wav");
+	//songs[0] = fileLoader->loadSample("Sound/Music/Battle_of_the_Titans.wav");
 	delete fileLoader;
 }
 

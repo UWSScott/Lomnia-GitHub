@@ -422,7 +422,7 @@ void init(void) {
 	//NPCs in the hub area
 	Game_Hub_Characters.push_back(Character("Arnold", "Models/walker.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram));
 
-	//NPCS that serve a purpose (shop owners/traders)
+	//NPCS that serve a purpose (shop owners/traders) 
 	Game_Hub_Characters_Shop.push_back(Character("Arnold", "Models/walker.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram));
 
 
