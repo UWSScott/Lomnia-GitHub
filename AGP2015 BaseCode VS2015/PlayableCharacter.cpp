@@ -53,6 +53,8 @@ void PlayableCharacter::Input()
 		if (keys[SDL_SCANCODE_D]) { characterState = IDLE;  rotation += 1.0f; }
 		if (keys[SDL_SCANCODE_W]) { characterState = WALKING;  position = MoveForward(position, rotation, 0.1f); }
 		if (keys[SDL_SCANCODE_S]) { characterState = WALKING;  position = MoveForward(position, rotation, -0.1f); }
+		if (keys[SDL_SCANCODE_R]) { position.y+= 0.1; } // for debugging
+		if (keys[SDL_SCANCODE_F]) { position.y-=0.1; } //think we should keep these in for just now?????
 		if (keys[SDL_SCANCODE_X]) { characterState = ATTACKING; }
 	} else if(inCombat == true && combatInstance != NULL){
 		CombatAttacks();
@@ -74,9 +76,13 @@ void PlayableCharacter::draw(glm::mat4 object)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
+	glm::mat4 tmpObj = object;
+
 	//Animation
 	tmpModel.Animate(currentAnimation, 0.1);
 	rt3d::updateMesh(meshObject, RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
+	
+	
 
 	//glBindTexture(GL_TEXTURE_2D, texture);
 	modelAt = MoveForward(position, rotation, 1.0f);
@@ -90,7 +96,7 @@ void PlayableCharacter::draw(glm::mat4 object)
 	glCullFace(GL_BACK);
 
 	if (weapon->getEquiped())
-		weapon->draw(object, position, currentAnimation, rotation);
+		weapon->draw(tmpObj, position, currentAnimation, rotation);
 }
 
 void PlayableCharacter::CheckQuestGoal(Character *character)

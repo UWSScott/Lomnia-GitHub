@@ -94,19 +94,19 @@ void Weapon::draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimati
 	object = glm::translate(object, playerPosition);// glm::vec3(playerPosition.x, playerPosition.y, playerPosition.z - 1));
 
 	object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, -1.0f, 0.0f));
-	object = glm::scale(object, scale);// glm::vec3(scale.x*0.05, scale.y*0.05, scale.z*0.05));
+	object = glm::scale(object, scale*glm::vec3(0.04));// glm::vec3(scale.x*0.05, scale.y*0.05, scale.z*0.05));
 	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
 	////object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
 	////object = glm::rotate(object, float(90.0f*DEG_TO_RAD - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
 	//object = glm::scale(object, glm::vec3(scale.x*0.05, scale.y*0.05, scale.z*0.05));
-	object = glm::scale(object, scale);
+	//object = glm::scale(object, scale);
 
 	//object = glm::translate(object, playerPosition);
 	//object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
 	//object = glm::rotate(object, float(90.0f*DEG_TO_RAD - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
 	//object = glm::scale(object, glm::vec3(scale.x*0.05, scale.y*0.05, scale.z*0.05));
 
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
+	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
 	rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 }

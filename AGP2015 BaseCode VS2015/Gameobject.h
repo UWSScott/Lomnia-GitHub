@@ -22,7 +22,7 @@ public:
 	glm::vec3 scale = glm::vec3(1,1,1);
 	float rotation = 0;
 	string collisionName = "DEFAULT";
-	Collisions* Collider;
+	Collisions* Collider; 
 	rt3d::materialStruct material;
 	GLuint meshIndexCount;
 	GLuint meshObject;

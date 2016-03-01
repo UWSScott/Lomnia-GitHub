@@ -39,3 +39,4 @@ void Prefab::draw(glm::mat4 object)
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
 	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
 }
+

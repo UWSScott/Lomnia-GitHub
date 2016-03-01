@@ -13,6 +13,7 @@ public:
 	GLfloat getZ();
 
 	Collisions CollisionCircles(GLfloat x, GLfloat z, GLfloat radius);
+	bool checkCollision(Collisions circle, Collisions circle2);
 
 	~Collisions();
 };

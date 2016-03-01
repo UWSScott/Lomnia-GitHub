@@ -115,6 +115,7 @@ float heightOfCam = 0;
 
 TTF_Font * textFont;
 
+
 const char *skyboxFiles[6] = {
 	"red-sky/red_sky_front.bmp", "red-sky/red_sky_back.bmp", "red-sky/red_sky_right.bmp", "red-sky/red_sky_left.bmp", "red-sky/red_sky_top.bmp", "red-sky/red_sky_top.bmp"
 };
@@ -134,6 +135,7 @@ PlayableCharacter* character = new PlayableCharacter();
 Skybox* skyboxTest;// = new Skybox(skyboxFiles);
 MazeGenerator* maze;// = new Skybox(skyboxFiles);
 Prefab* houseTest = new Prefab();
+
 
 
 // textToTexture
@@ -396,7 +398,9 @@ void init(void) {
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
 	houseTest = new Prefab(shaderProgram, "cube.obj" /*"Models/desert.obj"*/ /*"Models/House_001.obj"*/, "hobgoblin2.bmp",glm::vec3(1,1,1),glm::vec3(0,0,0));
-	
+
+
+
 }
 
 /*bool Collision(Collisions circle, Collisions circle2) {
@@ -432,6 +436,7 @@ void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	Game_Camera.update(character->getModelEye(), character->getRotation());
 	character->Update();
+
 
 	/*if (inCombat == false)
 	{

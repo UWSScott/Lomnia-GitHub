@@ -27,7 +27,7 @@ void Camera::InitalStats()
 		std::cout << "Can't initialize device";
 
 	songs = new HSAMPLE[4];
-	songs[0] = fileLoader->loadSample("Sound/Music/Battle_of_the_Titans.wav");
+	//songs[0] = fileLoader->loadSample("Sound/Music/Battle_of_the_Titans.wav");
 	delete fileLoader;
 }
 
@@ -168,7 +168,7 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 {
 	duration = (((std::clock() - start) / (double)CLOCKS_PER_SEC));
 	timeDifference = duration - start;
-	cout << duration << " cinematic timer: " << Cinematic_Timer << " start: " << start << " y timeDifference: " << timeDifference << endl;
+//	cout << duration << " cinematic timer: " << Cinematic_Timer << " start: " << start << " y timeDifference: " << timeDifference << endl;
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	if (keys[SDL_SCANCODE_F12])
 	{
@@ -179,6 +179,7 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 		SwitchState(camera_Type, NULL);
 		cout << endl << endl << camera_Type << endl << endl << endl;
 	}
+	
 
 	switch (camera_Type)
 	{

@@ -38,6 +38,30 @@ Collisions Collisions::CollisionCircles(GLfloat ix, GLfloat iz, GLfloat r) {
 }
 
 
+bool Collisions::checkCollision(Collisions circle, Collisions circle2) 
+{
+	GLfloat radius = circle.getRadius();
+	GLfloat x = circle.getX();
+	GLfloat z = circle.getZ();
+
+	GLfloat radius2 = circle2.getRadius();
+	GLfloat x2 = circle2.getX();
+	GLfloat z2 = circle2.getZ();
+
+	int minDist = radius + radius2;
+	int distance = sqrt(((x - x2) * (x - x2)) + ((z - z2) *(z - z2)));
+	if (minDist >= distance) {
+		return true;
+	}
+	else if ((minDist < distance))
+	{
+		return false;
+	}
+
+}
+
+
+
 
 
 Collisions::~Collisions()
