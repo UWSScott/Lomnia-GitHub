@@ -139,7 +139,7 @@ vector<Character> Game_Hub_Characters_Shop;
 
 Camera Game_Camera = Camera();
 Character* static_character[15];
-PlayableCharacter* character = new PlayableCharacter();
+PlayableCharacter* player_character = new PlayableCharacter();
 Skybox* skyboxTest;
 MazeGenerator* maze;
 Prefab* houseTest = new Prefab();
@@ -402,9 +402,9 @@ void init(void) {
 
 	skyboxTest = new Skybox(skyboxFiles);
 	maze = new MazeGenerator(shaderProgram);
-	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(0), shaderProgram);
+	player_character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(0), shaderProgram);
 	Game_Camera.InitalStats();
-	character->InitalStats(shaderProgram);
+	player_character->InitalStats(shaderProgram);
 
 	//houseTest = new Prefab(shaderProgram, "Models/Shop_002.obj" /*"Models/desert.obj"*/ /*"Models/House_001.obj"*/, "Models/Textures/House_001.bmp",glm::vec3(1.3,1.3,1.3),glm::vec3(-10,-0.5,-10));
 	//houseTest = new Prefab(shaderProgram, "Models/Shop_001.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Shop_001.bmp", glm::vec3(1.0, 1.0, 1.0), glm::vec3(0, -1, 0));
@@ -417,7 +417,7 @@ void init(void) {
 	terrain = new Terrain(shaderProgram, "Models/Desert_Terrain_Low.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(1, 1, 1), glm::vec3(300, -1.5, -300));
 
 	//Buildings etc.. non useful or usable items
-	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, "Models/House_003.obj", "Models/Textures/House_002.bmp", glm::vec3(2.5, 2.0, 2.5), glm::vec3(-20, 1, -20)));
+	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, "Models/Shop_002.obj", "Models/Textures/House_002.bmp", glm::vec3(2.5, 2.0, 2.5), glm::vec3(-20, 1, -20)));
 
 	//NPCs in the hub area
 	Game_Hub_Characters.push_back(Character("Arnold", "Models/walker.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram));
@@ -459,170 +459,8 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	Game_Camera.update(character->getModelEye(), character->getRotation());
-	character->Update();
-
-	/*if (inCombat == false)
-	{
-		enemyAnim = 1;
-		if (keys[SDL_SCANCODE_W])
-		{
-			
-			currentAnim = 1;
-
-		}
-		else if (keys[SDL_SCANCODE_S]) {
-		
-			currentAnim = 13;
-
-		}
-		else if (keys[SDL_SCANCODE_A]) {
-			r -= 1.3f;
-			currentAnim = 0;
-
-
-		}
-		else if (keys[SDL_SCANCODE_D]) {
-			r += 1.3f;
-			currentAnim = 0;
-
-		}
-
-		else if (keys[SDL_SCANCODE_SPACE])
-		{
-			currentAnim = 6;
-		}
-		else currentAnim = 0;
-	} else {
-		currentAnim = 14;
-		enemyAnim = 10;
-	}*/
-
-	/*if (player.health > 0)
-	{
-		if (keys[SDL_SCANCODE_W]) { if(inCombat == false) playerPos = moveForward(playerPos, r, 0.1f);  eye = moveForward(eye, r, 0.1f); }
-		if (keys[SDL_SCANCODE_S]) { if(inCombat == false) playerPos = moveForward(playerPos, -r - 180, -0.1f); eye = moveForward(eye, r, -0.1f); }
-		if (keys[SDL_SCANCODE_A]) eye = moveRight(eye, r, -0.1f);
-		if (keys[SDL_SCANCODE_D]) eye = moveRight(eye, r, 0.1f);
-		if (keys[SDL_SCANCODE_R]) eye.y += 0.1;
-		if (keys[SDL_SCANCODE_F]) eye.y -= 0.1;
-
-		if (keys[SDL_SCANCODE_C] || inCombat == true) {
-			camera = 1;
-			heightOfCam = 1;
-		}
-		if (keys[SDL_SCANCODE_X]) {
-			camera = 2;
-			heightOfCam+=0.1f;
-		}
-		if (keys[SDL_SCANCODE_COMMA]) r -= 1.0f;
-		if (keys[SDL_SCANCODE_PERIOD]) r += 1.0f;
-		if (inCombat == false)
-			playerRotation = r;
-		if (keys[SDL_SCANCODE_B]) { Initialize(Level); GenerateMaze(Level, posX, posY, goalX, goalY); }
-		if (keys[SDL_SCANCODE_M]) SaveMaze();
-		if (keys[SDL_SCANCODE_N]) LoadMaze();
-
-		duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
-
-		/*NOTE - Move combat to within the player class in final version. - Scott*/
-
-		/*I need someone to block the input so it's not spammed when a button is pressed.
-		Someone said they had this working for something else? */
-	/*	if (keys[SDL_SCANCODE_0]) { if (inCombat == false) { cout << "COMBAT BEGINS!" << endl; inCombat = true; } }
-		if (pressedButton == false)
-		{
-			if (keys[SDL_SCANCODE_1]) player.queuedAttacks.push_back(LightAttack());
-			if (keys[SDL_SCANCODE_2]) player.queuedAttacks.push_back(HeavyAttack());
-			if (keys[SDL_SCANCODE_3]) player.queuedAttacks.push_back(Poison());
-			if (keys[SDL_SCANCODE_4]) player.queuedAttacks.push_back(Stun());
-			if (keys[SDL_SCANCODE_5]) player.queuedAttacks.push_back(ItemUse(Item()));
-			if (keys[SDL_SCANCODE_6]) player.queuedAttacks.push_back(Flee());
-			pressedButton = true;
-		} else {
-			pressedButton = false;
-		}
-
-		if (keys[SDL_SCANCODE_Q])
-		{
-			for each (C_Attack var in player.queuedAttacks)
-			{
-				cout << var.GetAttackName() << " " << var.GetManaCost() << endl;
-			}
-			cout << "END " << player.queuedAttacks.size() << endl;
-		}
-
-		if (inCombat)
-		{
-			player.inCombat = true;
-			enemy.inCombat = true;
-			player.Attack(enemy);
-			enemy.Attack(player);
-			if (player.health <= 0 || enemy.health <= 0)
-			{
-				inCombat = false;
-				player.inCombat = false;
-				enemy.inCombat = false;
-			}
-		}
-	} else {
-		currentAnim = 5;
-		enemyAnim = 7;
-	}*/
-
-	//player.Update((float)duration);
-	//enemy.Update((float)duration);
-
-	/*Collisions playerCircle = playerCircle.CollisionCircles(playerPos.x, playerPos.z, 1.0f);
-	for (int i = 0; i < SIZE; i++) {
-		for (int j = 0; j < SIZE; j++) {
-			
-			if (Level[i][j].display == '*')
-			{
-				Collisions Circle = Circle.CollisionCircles(i * 3, j * 3, 0.9f);
-				if (Collision(Circle, playerCircle) == true) {
-					playerPos = oldPlayerPos;
-				}
-			}
-		}
-	}*/
-
-	//oldPlayerPos = playerPos;
-
-	/*Movement should be handled inside the enemy class for the full game.
-	Create checks before moving to ensure the enemy isn't dead/incombat or idle etc.
-	-Scott */
-
-	/*For collision detection we want to pass in the object.id or name which we assign in the 'GameObject' class.
-	Not sure if we've created it for the prototype, but for the finished product having the id means we can work 
-	out what we need to do for that instance of collison. (ie, pickup weapon, start combat, stop movement etc.)
-	-Scott */
-
-	//if(inCombat == false && enemy.health > 0)
-		//enemyPos = glm::vec3(enemyPos.x + enemyMove.x, enemyPos.y, enemyPos.z + enemyMove.y);
-
-	/*Collisions enemyCircle = enemyCircle.CollisionCircles(enemyPos.x, enemyPos.z,1.0f);
-	if (inCombat == false && Collision(playerCircle, enemyCircle) == true && player.health > 0 && enemy.health > 0) {
-		cout << "PLAYER SPOTTED! -- BEGINING COMBAT!" << endl;
-		inCombat = true;
-		return;
-	}*/
-
-	/*for (int i = 0; i < SIZE; i++) {
-		for (int j = 0; j < SIZE; j++) {
-
-			if (Level[i][j].display == '*')
-			{
-				Collisions Circle = Circle.CollisionCircles(i * 3, j * 3, 0.9f);
-				if (Collision(Circle, enemyCircle) == true)
-				{
-					//cout << "boom" << endl;
-					//enemyMove = moveEnemy();
-					enemyMove = -enemyMove;
-				}
-			}
-		}
-	}*/
+	Game_Camera.update(player_character->getModelEye(), player_character->getRotation());
+	player_character->Update();
 }
 
 
@@ -644,74 +482,10 @@ void draw(SDL_Window * window) {
 
 	glm::mat4 modelview(1.0); // set base position for scene
 	mvStack.push(modelview);
+	Game_Camera.draw(mvStack.top(), player_character->getModelEye());
 
-	/*if (camera == 1) {
-		at = moveForward(eye, r, 1.0f);
-		mvStack.top() = glm::lookAt(eye, at, up);
-	}
-	
-	if (camera == 2){
-	at = glm::vec3(playerPos.x, playerPos.y + heightOfCam, playerPos.z);
-		eye = moveForward(at, r, -5.0f);
-		mvStack.top() = glm::lookAt(eye, at, up);
-	}*/
-	//mvStack.top() = glm::lookAt(Game_Camera.eye, Game_Camera.at, Game_Camera.up);
-	Game_Camera.draw(mvStack.top(), character->getModelEye());
-
-
-	// draw a skybox
-//	glUseProgram(skyboxProgram);
 	rt3d::setUniformMatrix4fv(skyboxTest->shaderProgram, "projection", glm::value_ptr(projection));
 	skyboxTest->draw(mvStack.top());
-	//glDepthMask(GL_FALSE); // make sure depth test is off
-	//glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
-	//mvStack.push(glm::mat4(mvRotOnlyMat3));
-
-	
-
-
-	/*
-	// front
-	mvStack.push(mvStack.top());
-	glBindTexture(GL_TEXTURE_2D, skybox[0]);
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, -2.0f));
-	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
-
-	// back
-	mvStack.push(mvStack.top());
-	glBindTexture(GL_TEXTURE_2D, skybox[1]);
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, 2.0f));
-	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
-
-	// left
-	mvStack.push(mvStack.top());
-	glBindTexture(GL_TEXTURE_2D, skybox[2]);
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-2.0f, 0.0f, 0.0f));
-	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
-
-	// right
-	mvStack.push(mvStack.top());
-	glBindTexture(GL_TEXTURE_2D, skybox[3]);
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(2.0f, 0.0f, 0.0f));
-	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
-
-	mvStack.pop();
-
-	// back to remainder of rendering
-	glDepthMask(GL_TRUE); // make sure depth test is on
-	*/
 
 	glUseProgram(shaderProgram);
 
@@ -723,94 +497,26 @@ void draw(SDL_Window * window) {
 
 
 	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
-
-	/*for (int i = 0; i<SIZE; i++) {
-		for (int j = 0; j<SIZE; j++) {
-			glBindTexture(GL_TEXTURE_2D, textures[0]);
-			mvStack.push(mvStack.top());
-			if (Level[i][j].display == '*')
-			{
-				mvStack.top() = glm::translate(mvStack.top(), glm::vec3(i * 3, 1.0f, j * 3));
-				mvStack.top() = glm::scale(mvStack.top(), glm::vec3(3.0f, 2.0f, 3.0f));
-			}
-			else {
-
-				mvStack.top() = glm::translate(mvStack.top(), glm::vec3(i  * 3, 0.0f, j  * 3));
-				mvStack.top() = glm::scale(mvStack.top(), glm::vec3(3.0f, 0.1f, 3.0f));
-			}
-			mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.5f, 0.5f, 0.5f));
-			rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-			rt3d::setMaterial(shaderProgram, material0);
-			rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
-			mvStack.pop();
-		}
-	}*/
-
-	//// Animate the md2 model, and update the mesh with new vertex data
-	//arnould.Animate(currentAnim, 0.1);
-	//rt3d::updateMesh(meshObjects[2], RT3D_VERTEX, arnould.getAnimVerts(), arnould.getVertDataSize());
-
-	////draw the arnould
-	//glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
-	//glBindTexture(GL_TEXTURE_2D, textures[1]);
-	//rt3d::materialStruct tmpMaterial = material1;
-	//rt3d::setMaterial(shaderProgram, tmpMaterial);
-	//mvStack.push(mvStack.top());
-	//mvStack.top() = glm::translate(mvStack.top(), playerPos);
-	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
-	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
-	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.03, scale*0.03, scale*0.03));
-	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	//rt3d::drawMesh(meshObjects[2], md2VertCount2, GL_TRIANGLES);
-	//mvStack.pop();
-	//glCullFace(GL_BACK);
-
-
-	//// Animate the md2 model, and update the mesh with new vertex data
-	//weapon.Animate(currentAnim, 0.1);
-	//rt3d::updateMesh(meshObjects[3], RT3D_VERTEX, weapon.getAnimVerts(), weapon.getVertDataSize());
-
-	////draw the sword
-	//glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
-	//glBindTexture(GL_TEXTURE_2D, textures[1]);
-	//tmpMaterial = material1;
-	//rt3d::setMaterial(shaderProgram, tmpMaterial);
-	//mvStack.push(mvStack.top());
-	//mvStack.top() = glm::translate(mvStack.top(), playerPos);
-	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
-	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
-	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.03, scale*0.03, scale*0.03));
-	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	//rt3d::drawMesh(meshObjects[3], md2VertCount3, GL_TRIANGLES);
-	//mvStack.pop();
-	//glCullFace(GL_BACK);
-
-	//tmpModel.Animate(enemyAnim, 0.1);
-	//rt3d::updateMesh(meshObjects[1], RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
-
-	////draw the enemy
-	//glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
-	//glBindTexture(GL_TEXTURE_2D, textures[1]);
-	//tmpMaterial = material1;
-	//rt3d::setMaterial(shaderProgram, tmpMaterial);
-	//mvStack.push(mvStack.top());
-	//mvStack.top() = glm::translate(mvStack.top(), enemyPos);
-	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
-	//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN + (180-playerRotation) / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
-	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.08, scale*0.08, scale*0.08));
-	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	//rt3d::drawMesh(meshObjects[1], md2VertCount, GL_TRIANGLES);
-	//mvStack.pop();
-	//glCullFace(GL_BACK);
-
-
-	//rt3d::setUniformMatrix4fv(maze->shaderProgram, "projection", glm::value_ptr(projection));
 	terrain->draw(mvStack.top());
 	rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
 	maze->baseShaderProgram = houseTest->shaderProgram;
 	maze->draw(mvStack.top());
-	//maze->Maze_Tiles[0][0].draw(mvStack.top());
-	character->draw(mvStack.top());
+	player_character->draw(mvStack.top());
+
+	for (int i = 0; i < Game_Hub_Characters.size(); i++)
+	{
+		Game_Hub_Characters[i].draw(mvStack.top());
+	}
+
+	for (int i = 0; i < Game_Hub_Characters_Shop.size(); i++)
+	{
+		Game_Hub_Characters_Shop[i].draw(mvStack.top());
+	}
+
+	for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
+	{
+		Game_Hub_Prefabs[i].draw(mvStack.top());
+	}
 
 	//static_character[0]->draw(mvStack.top());
 	//static_character[1]->draw(mvStack.top());
@@ -826,7 +532,7 @@ void draw(SDL_Window * window) {
 	////static_character[11]->draw(mvStack.top());
 	////static_character[12]->draw(mvStack.top());
 
-	houseTest->draw(mvStack.top());
+	//houseTest->draw(mvStack.top());
 
 	// remember to use at least one pop operation per push...
 	mvStack.pop(); // initial matrix
@@ -869,3 +575,313 @@ int main(int argc, char *argv[]) {
     SDL_Quit();
     return 0;
 }
+
+
+/*if (inCombat == false)
+{
+enemyAnim = 1;
+if (keys[SDL_SCANCODE_W])
+{
+
+currentAnim = 1;
+
+}
+else if (keys[SDL_SCANCODE_S]) {
+
+currentAnim = 13;
+
+}
+else if (keys[SDL_SCANCODE_A]) {
+r -= 1.3f;
+currentAnim = 0;
+
+
+}
+else if (keys[SDL_SCANCODE_D]) {
+r += 1.3f;
+currentAnim = 0;
+
+}
+
+else if (keys[SDL_SCANCODE_SPACE])
+{
+currentAnim = 6;
+}
+else currentAnim = 0;
+} else {
+currentAnim = 14;
+enemyAnim = 10;
+}*/
+
+/*if (player.health > 0)
+{
+if (keys[SDL_SCANCODE_W]) { if(inCombat == false) playerPos = moveForward(playerPos, r, 0.1f);  eye = moveForward(eye, r, 0.1f); }
+if (keys[SDL_SCANCODE_S]) { if(inCombat == false) playerPos = moveForward(playerPos, -r - 180, -0.1f); eye = moveForward(eye, r, -0.1f); }
+if (keys[SDL_SCANCODE_A]) eye = moveRight(eye, r, -0.1f);
+if (keys[SDL_SCANCODE_D]) eye = moveRight(eye, r, 0.1f);
+if (keys[SDL_SCANCODE_R]) eye.y += 0.1;
+if (keys[SDL_SCANCODE_F]) eye.y -= 0.1;
+
+if (keys[SDL_SCANCODE_C] || inCombat == true) {
+camera = 1;
+heightOfCam = 1;
+}
+if (keys[SDL_SCANCODE_X]) {
+camera = 2;
+heightOfCam+=0.1f;
+}
+if (keys[SDL_SCANCODE_COMMA]) r -= 1.0f;
+if (keys[SDL_SCANCODE_PERIOD]) r += 1.0f;
+if (inCombat == false)
+playerRotation = r;
+if (keys[SDL_SCANCODE_B]) { Initialize(Level); GenerateMaze(Level, posX, posY, goalX, goalY); }
+if (keys[SDL_SCANCODE_M]) SaveMaze();
+if (keys[SDL_SCANCODE_N]) LoadMaze();
+
+duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+
+/*NOTE - Move combat to within the player class in final version. - Scott*/
+
+/*I need someone to block the input so it's not spammed when a button is pressed.
+Someone said they had this working for something else? */
+/*	if (keys[SDL_SCANCODE_0]) { if (inCombat == false) { cout << "COMBAT BEGINS!" << endl; inCombat = true; } }
+if (pressedButton == false)
+{
+if (keys[SDL_SCANCODE_1]) player.queuedAttacks.push_back(LightAttack());
+if (keys[SDL_SCANCODE_2]) player.queuedAttacks.push_back(HeavyAttack());
+if (keys[SDL_SCANCODE_3]) player.queuedAttacks.push_back(Poison());
+if (keys[SDL_SCANCODE_4]) player.queuedAttacks.push_back(Stun());
+if (keys[SDL_SCANCODE_5]) player.queuedAttacks.push_back(ItemUse(Item()));
+if (keys[SDL_SCANCODE_6]) player.queuedAttacks.push_back(Flee());
+pressedButton = true;
+} else {
+pressedButton = false;
+}
+
+if (keys[SDL_SCANCODE_Q])
+{
+for each (C_Attack var in player.queuedAttacks)
+{
+cout << var.GetAttackName() << " " << var.GetManaCost() << endl;
+}
+cout << "END " << player.queuedAttacks.size() << endl;
+}
+
+if (inCombat)
+{
+player.inCombat = true;
+enemy.inCombat = true;
+player.Attack(enemy);
+enemy.Attack(player);
+if (player.health <= 0 || enemy.health <= 0)
+{
+inCombat = false;
+player.inCombat = false;
+enemy.inCombat = false;
+}
+}
+} else {
+currentAnim = 5;
+enemyAnim = 7;
+}*/
+
+//player.Update((float)duration);
+//enemy.Update((float)duration);
+
+/*Collisions playerCircle = playerCircle.CollisionCircles(playerPos.x, playerPos.z, 1.0f);
+for (int i = 0; i < SIZE; i++) {
+for (int j = 0; j < SIZE; j++) {
+
+if (Level[i][j].display == '*')
+{
+Collisions Circle = Circle.CollisionCircles(i * 3, j * 3, 0.9f);
+if (Collision(Circle, playerCircle) == true) {
+playerPos = oldPlayerPos;
+}
+}
+}
+}*/
+
+//oldPlayerPos = playerPos;
+
+/*Movement should be handled inside the enemy class for the full game.
+Create checks before moving to ensure the enemy isn't dead/incombat or idle etc.
+-Scott */
+
+/*For collision detection we want to pass in the object.id or name which we assign in the 'GameObject' class.
+Not sure if we've created it for the prototype, but for the finished product having the id means we can work
+out what we need to do for that instance of collison. (ie, pickup weapon, start combat, stop movement etc.)
+-Scott */
+
+//if(inCombat == false && enemy.health > 0)
+//enemyPos = glm::vec3(enemyPos.x + enemyMove.x, enemyPos.y, enemyPos.z + enemyMove.y);
+
+/*Collisions enemyCircle = enemyCircle.CollisionCircles(enemyPos.x, enemyPos.z,1.0f);
+if (inCombat == false && Collision(playerCircle, enemyCircle) == true && player.health > 0 && enemy.health > 0) {
+cout << "PLAYER SPOTTED! -- BEGINING COMBAT!" << endl;
+inCombat = true;
+return;
+}*/
+
+/*for (int i = 0; i < SIZE; i++) {
+for (int j = 0; j < SIZE; j++) {
+
+if (Level[i][j].display == '*')
+{
+Collisions Circle = Circle.CollisionCircles(i * 3, j * 3, 0.9f);
+if (Collision(Circle, enemyCircle) == true)
+{
+//cout << "boom" << endl;
+//enemyMove = moveEnemy();
+enemyMove = -enemyMove;
+}
+}
+}
+}*/
+
+
+
+/*for (int i = 0; i<SIZE; i++) {
+for (int j = 0; j<SIZE; j++) {
+glBindTexture(GL_TEXTURE_2D, textures[0]);
+mvStack.push(mvStack.top());
+if (Level[i][j].display == '*')
+{
+mvStack.top() = glm::translate(mvStack.top(), glm::vec3(i * 3, 1.0f, j * 3));
+mvStack.top() = glm::scale(mvStack.top(), glm::vec3(3.0f, 2.0f, 3.0f));
+}
+else {
+
+mvStack.top() = glm::translate(mvStack.top(), glm::vec3(i  * 3, 0.0f, j  * 3));
+mvStack.top() = glm::scale(mvStack.top(), glm::vec3(3.0f, 0.1f, 3.0f));
+}
+mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.5f, 0.5f, 0.5f));
+rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+rt3d::setMaterial(shaderProgram, material0);
+rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+mvStack.pop();
+}
+}*/
+
+//// Animate the md2 model, and update the mesh with new vertex data
+//arnould.Animate(currentAnim, 0.1);
+//rt3d::updateMesh(meshObjects[2], RT3D_VERTEX, arnould.getAnimVerts(), arnould.getVertDataSize());
+
+////draw the arnould
+//glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
+//glBindTexture(GL_TEXTURE_2D, textures[1]);
+//rt3d::materialStruct tmpMaterial = material1;
+//rt3d::setMaterial(shaderProgram, tmpMaterial);
+//mvStack.push(mvStack.top());
+//mvStack.top() = glm::translate(mvStack.top(), playerPos);
+//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
+//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
+//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.03, scale*0.03, scale*0.03));
+//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+//rt3d::drawMesh(meshObjects[2], md2VertCount2, GL_TRIANGLES);
+//mvStack.pop();
+//glCullFace(GL_BACK);
+
+
+//// Animate the md2 model, and update the mesh with new vertex data
+//weapon.Animate(currentAnim, 0.1);
+//rt3d::updateMesh(meshObjects[3], RT3D_VERTEX, weapon.getAnimVerts(), weapon.getVertDataSize());
+
+////draw the sword
+//glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
+//glBindTexture(GL_TEXTURE_2D, textures[1]);
+//tmpMaterial = material1;
+//rt3d::setMaterial(shaderProgram, tmpMaterial);
+//mvStack.push(mvStack.top());
+//mvStack.top() = glm::translate(mvStack.top(), playerPos);
+//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
+//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN - playerRotation / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
+//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.03, scale*0.03, scale*0.03));
+//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+//rt3d::drawMesh(meshObjects[3], md2VertCount3, GL_TRIANGLES);
+//mvStack.pop();
+//glCullFace(GL_BACK);
+
+//tmpModel.Animate(enemyAnim, 0.1);
+//rt3d::updateMesh(meshObjects[1], RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
+
+////draw the enemy
+//glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
+//glBindTexture(GL_TEXTURE_2D, textures[1]);
+//tmpMaterial = material1;
+//rt3d::setMaterial(shaderProgram, tmpMaterial);
+//mvStack.push(mvStack.top());
+//mvStack.top() = glm::translate(mvStack.top(), enemyPos);
+//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN), glm::vec3(-1.0f, 0.0f, 0.0f));
+//mvStack.top() = glm::rotate(mvStack.top(), float(90.0f*DEG_TO_RADIAN + (180-playerRotation) / 57.5), glm::vec3(0.0f, 0.0f, 1.0f));
+//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.08, scale*0.08, scale*0.08));
+//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+//rt3d::drawMesh(meshObjects[1], md2VertCount, GL_TRIANGLES);
+//mvStack.pop();
+//glCullFace(GL_BACK);
+
+
+//rt3d::setUniformMatrix4fv(maze->shaderProgram, "projection", glm::value_ptr(projection));
+
+//glDepthMask(GL_FALSE); // make sure depth test is off
+//glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
+//mvStack.push(glm::mat4(mvRotOnlyMat3));
+
+
+
+
+/*
+// front
+mvStack.push(mvStack.top());
+glBindTexture(GL_TEXTURE_2D, skybox[0]);
+mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
+mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, -2.0f));
+rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
+rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+mvStack.pop();
+
+// back
+mvStack.push(mvStack.top());
+glBindTexture(GL_TEXTURE_2D, skybox[1]);
+mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
+mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, 2.0f));
+rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
+rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+mvStack.pop();
+
+// left
+mvStack.push(mvStack.top());
+glBindTexture(GL_TEXTURE_2D, skybox[2]);
+mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
+mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-2.0f, 0.0f, 0.0f));
+rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
+rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+mvStack.pop();
+
+// right
+mvStack.push(mvStack.top());
+glBindTexture(GL_TEXTURE_2D, skybox[3]);
+mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
+mvStack.top() = glm::translate(mvStack.top(), glm::vec3(2.0f, 0.0f, 0.0f));
+rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
+rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+mvStack.pop();
+
+mvStack.pop();
+
+// back to remainder of rendering
+glDepthMask(GL_TRUE); // make sure depth test is on
+*/
+
+
+/*if (camera == 1) {
+at = moveForward(eye, r, 1.0f);
+mvStack.top() = glm::lookAt(eye, at, up);
+}
+
+if (camera == 2){
+at = glm::vec3(playerPos.x, playerPos.y + heightOfCam, playerPos.z);
+eye = moveForward(at, r, -5.0f);
+mvStack.top() = glm::lookAt(eye, at, up);
+}*/
+//mvStack.top() = glm::lookAt(Game_Camera.eye, Game_Camera.at, Game_Camera.up);
