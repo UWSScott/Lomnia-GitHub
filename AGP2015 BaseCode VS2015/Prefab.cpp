@@ -1,11 +1,12 @@
 #include "Prefab.h"
 
-Prefab::Prefab(GLuint s_shaderProgram, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position)
+Prefab::Prefab(GLuint s_shaderProgram, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, float s_rotation)
 {
 	collisionName = "STATIC_PREFAB";
 	shaderProgram = s_shaderProgram;
 	position = s_position;
 	scale = s_scale;
+	rotation = s_rotation;
 
 	FileLoader* fileLoader = new FileLoader;
 	texture = fileLoader->loadBitmap(textureName);
@@ -33,8 +34,10 @@ void Prefab::draw(glm::mat4 object)
 	//rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
 
 	//rt3d::setLightPos(shaderProgram, glm::value_ptr(tmp));
-	
+
 	object = glm::translate(object, position);
+	//object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
+	//object = glm::translate(object, -position);
 	object = glm::scale(object, scale);
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
 	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
