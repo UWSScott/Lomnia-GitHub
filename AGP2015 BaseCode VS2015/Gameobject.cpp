@@ -46,3 +46,23 @@ void Gameobject::SetMaterial()
 	};
 
 }
+
+void Gameobject::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
+{
+	glUseProgram(s_shaderUsed);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, depthMapTexture);
+
+	if (pass == 1)
+		glCullFace(GL_BACK);
+	else
+		glCullFace(GL_FRONT);
+
+	object = glm::translate(object, glm::vec3(position.x, position.y, position.z));
+	object = glm::scale(object, glm::vec3(scale.x, scale.y, scale.z));
+	object = glm::rotate(object, float(rotation*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
+	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
+}

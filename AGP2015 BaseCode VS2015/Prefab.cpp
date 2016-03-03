@@ -27,18 +27,28 @@ void Prefab::draw(glm::mat4 object)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	//object = glm::translate(object, position);
-	//object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
-	//object = glm::scale(object, glm::vec3(scale.x, scale.y, scale.z));
-	//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
-	//rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
-
-	//rt3d::setLightPos(shaderProgram, glm::value_ptr(tmp));
-
 	object = glm::translate(object, position);
-	//object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
-	//object = glm::translate(object, -position);
 	object = glm::scale(object, scale);
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
+	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
+}
+
+void Prefab::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
+{
+	glUseProgram(s_shaderUsed);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, depthMapTexture);
+
+	if (pass == 0)
+		glCullFace(GL_BACK);
+	else
+		glCullFace(GL_FRONT);
+
+	object = glm::translate(object, glm::vec3(position.x, position.y, position.z));
+	object = glm::scale(object, glm::vec3(scale.x, scale.y, scale.z));
+	object = glm::rotate(object, float(rotation*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
+	rt3d::setUniformMatrix4fv(s_shaderUsed, "modelview", glm::value_ptr(object));
 	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
 }

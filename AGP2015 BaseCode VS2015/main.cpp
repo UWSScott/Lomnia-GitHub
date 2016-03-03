@@ -85,12 +85,12 @@ GLuint skybox[5];
 GLuint labels[5];
 
 rt3d::lightStruct light0 = {
-	{ 1.0f, 0.3f, 0.3f, 1.0f }, // ambient
+	{ 1.0f, 1.0f, 1.0f, 1.0f }, // ambient
 	{ 1.0f, 1.0f, 1.0f, 1.0f }, // diffuse
 	{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
-	{ -10.0f, 10.0f, 10.0f, 1.0f }  // position
+	{ -5.0f, 4.0f, 2.0f, 1.0f }  // position
 };
-glm::vec4 lightPos(-10.0f, 10.0f, 10.0f, 1.0f); //light position
+glm::vec4 lightPos(8.0f, 5.0f, -12.0f, 0.0f); //light position
 
 rt3d::materialStruct material0 = {
 	{ 0.6f, 0.4f, 0.2f, 1.0f }, // ambient
@@ -124,7 +124,7 @@ const char *skyboxFiles[6] = {
 };
 
 //const char *skyboxFiles[6] = {
-//	"Lomnia_End_Skybox/front.bmp", "Lomnia_End_Skybox/back.bmp", "Lomnia_End_Skybox/right.bmp", "Lomnia_End_Skybox/left.bmp", "Lomnia_End_Skybox/down.bmp", "Lomnia_End_Skybox/up.bmp"
+//	"Lomnia_End_Skybox/front.bmp", "Lomnia_End_Skybox/back.bmp", "Lomnia_End_Skybox/left.bmp", "Lomnia_End_Skybox/right.bmp", "Lomnia_End_Skybox/up.bmp", "Lomnia_End_Skybox/down.bmp"
 //};
 
 
@@ -139,11 +139,23 @@ vector<Character> Game_Hub_Characters_Shop;
 
 Camera Game_Camera = Camera();
 Character* static_character[15];
-PlayableCharacter* character = new PlayableCharacter();
+PlayableCharacter* character;// = new PlayableCharacter();
+Prefab* shadow_Debug;// = new Gameobject()
 Skybox* skyboxTest;
 MazeGenerator* maze;
-Prefab* houseTest = new Prefab();
-Terrain* terrain = new Terrain();
+Prefab* houseTest;// = new Prefab();
+Terrain* terrain;// = new Terrain();
+
+GLuint normalShadowProgram;
+GLuint realShadowShader;
+GLuint simpleDepthShader;
+GLuint debugDepthQuad;
+GLuint depthMapFBO = 0;
+GLuint depthMap;
+const GLuint SHADOW_WIDTH = 1920, SHADOW_HEIGHT = 1080;
+int currentPass = 0;
+GLuint screenHeight = 600;
+GLuint screenWidth = 800;
 
 // textToTexture
 GLuint textToTexture(const char * str, GLuint textID/*, TTF_Font *font, SDL_Color colour, GLuint &w,GLuint &h */) {
@@ -316,8 +328,29 @@ return movePos;
 */
 
 
-void init(void) {
+void init(void)
+{
+	glGenFramebuffers(1, &depthMapFBO);
+	glGenTextures(1, &depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
+
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		cout << " ERROR ;";
 
 
 
@@ -326,6 +359,12 @@ void init(void) {
 	rt3d::setMaterial(shaderProgram, material0);
 
 	skyboxProgram = rt3d::initShaders("textured.vert", "textured.frag");
+
+	normalShadowProgram = rt3d::initShaders("realTimeShadow.vert", "realTimeShadow.frag");
+	glUniform1i(glGetUniformLocation(normalShadowProgram, "diffuseTexture"), 1);
+	glUniform1i(glGetUniformLocation(normalShadowProgram, "shadowMap"), 0);
+	simpleDepthShader = rt3d::initShaders("shadow.vert", "shadow.frag");
+
 
 	vector<GLfloat> verts;
 	vector<GLfloat> norms;
@@ -379,15 +418,15 @@ void init(void) {
 
 
 
-													//Initialize(Level);
-													//GenerateMaze(Level, posX, posY, goalX, goalY);
+	//Initialize(Level);
+	//GenerateMaze(Level, posX, posY, goalX, goalY);
+	
+	//playerPos = glm::vec3(posX, 0.8, posY);
+	//enemyPos = getEnemyPos();
 
-													//playerPos = glm::vec3(posX, 0.8, posY);
-													//enemyPos = getEnemyPos();
+	//enemyMove = moveEnemy();
 
-													//enemyMove = moveEnemy();
-
-	static_character[0] = new Character("Arnold", "Models/walker.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram);
+	/*static_character[0] = new Character("Arnold", "Models/walker.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram);
 	static_character[1] = new Character("Arnold", "Models/ddz.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(3, 0, 0), shaderProgram);
 	static_character[2] = new Character("Arnold", "Models/blade.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(5, 0, 0), shaderProgram);
 	static_character[3] = new Character("Arnold", "Models/centaur.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(7, 0, 0), shaderProgram);
@@ -399,7 +438,7 @@ void init(void) {
 	static_character[9] = new Character("Arnold", "Models/faerie.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(22, 0, 0), shaderProgram);
 	static_character[10] = new Character("Arnold", "Models/frosty.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(24, 0, 0), shaderProgram);
 	static_character[11] = new Character("Arnold", "Models/pogo_buny.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(26, 0, 0), shaderProgram);
-	static_character[12] = new Character("Arnold", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(28, 0, 0), shaderProgram);
+	static_character[12] = new Character("Arnold", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(28, 0, 0), shaderProgram);*/
 
 	skyboxTest = new Skybox(skyboxFiles);
 	maze = new MazeGenerator(shaderProgram);
@@ -415,8 +454,8 @@ void init(void) {
 	//houseTest = new Prefab(shaderProgram, "Models/House_003.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/House_003.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
 	//houseTest = new Prefab(shaderProgram, "Models/Well.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Well.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
 	//houseTest = new Prefab(shaderProgram, "Models/Teleporter_Stand.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Well.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
-	houseTest = new Prefab(shaderProgram, "Models/House_003.obj", "Models/Textures/House_002.bmp", glm::vec3(2.5, 2.0, 2.5), glm::vec3(-20, 1, -20));
-	terrain = new Terrain(shaderProgram, "Models/Desert_Terrain_Low.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(1, 1, 1), glm::vec3(300, -1.5, -300));
+	houseTest = new Prefab(shaderProgram, "cube.obj", "Models/Textures/House_002.bmp", glm::vec3(20.0, 0.1, 20.0), glm::vec3(0, -1, 0));
+	terrain = new Terrain(shaderProgram, "Models/Desert_Terrain_New_Low.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(1, 1, 1), glm::vec3(300, -1.4, -300));
 
 
 	//Buildings etc.. non useful or usable items
@@ -451,11 +490,7 @@ void init(void) {
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, "Models/Destroyed_House_001.obj", "Models/Textures/Techy_Metal.bmp", glm::vec3(1.0, 1.0, 1.0), glm::vec3(-50, -3, 20)));
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, "Models/Destroyed_House_001.obj", "Models/Textures/House_002.bmp", glm::vec3(1.0, 1.0, 1.0), glm::vec3(-25, -3, -80)));
 
-	/*Game_Hub_Prefabs.push_back(Prefab(shaderProgram, "Models/Loot_Drop_001.obj", "Models/Textures/House_002.bmp", glm::vec3(0.01, 0.01, 0.01), glm::vec3(6, -1, 8)));
-
-
-	)));
-	*/
+	/*Game_Hub_Prefabs.push_back(Prefab(shaderProgram, "Models/Loot_Drop_001.obj", "Models/Textures/House_002.bmp", glm::vec3(0.01, 0.01, 0.01), glm::vec3(6, -1, 8)));*/
 
 
 
@@ -464,42 +499,18 @@ void init(void) {
 	//Game_Hub_Characters.push_back(Character("Arnold", "Models/pogo_bunny.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(10, 0, 10), shaderProgram));
 
 
-
-
-
-
-
-
-
 	//NPCs in the hub area
 	//Game_Hub_Characters.push_back(Character("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram));
 
 	//NPCS that serve a purpose (shop owners/traders) 
 	//Game_Hub_Characters_Shop.push_back(Character("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(-4, 2, -4), shaderProgram));
 
+	lightPos.x += 50;
+	lightPos.y += 100;
+	lightPos.z += 50;
+	shadow_Debug = new Prefab(shaderProgram, "Models/House_Player.obj", "Models/Textures/House_002.bmp", glm::vec3(500.0, 0.1, 500.0), glm::vec3(0, -5.0, 0), 0);
 
 }
-
-/*bool Collision(Collisions circle, Collisions circle2) {
-GLfloat radius = circle.getRadius();
-GLfloat x = circle.getX();
-GLfloat z = circle.getZ();
-
-GLfloat radius2 = circle2.getRadius();
-GLfloat x2 = circle2.getX();
-GLfloat z2 = circle2.getZ();
-
-int minDist = radius + radius2;
-int distance = sqrt(((x - x2) * (x - x2)) + ((z - z2) *(z - z2)));
-if (minDist >= distance) {
-return true;
-}
-else if ((minDist < distance))
-{
-return false;
-}
-
-}*/
 
 glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d) {
 	return glm::vec3(pos.x + d*std::sin(r*DEG_TO_RADIAN), pos.y, pos.z - d*std::cos(r*DEG_TO_RADIAN));
@@ -513,210 +524,75 @@ void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	Game_Camera.update(character->getModelEye(), character->getRotation());
 	character->Update();
-
-	/*if (inCombat == false)
-	{
-	enemyAnim = 1;
-	if (keys[SDL_SCANCODE_W])
-	{
-
-	currentAnim = 1;
-
-	}
-	else if (keys[SDL_SCANCODE_S]) {
-
-	currentAnim = 13;
-
-	}
-	else if (keys[SDL_SCANCODE_A]) {
-	r -= 1.3f;
-	currentAnim = 0;
-
-
-	}
-	else if (keys[SDL_SCANCODE_D]) {
-	r += 1.3f;
-	currentAnim = 0;
-
-	}
-
-	else if (keys[SDL_SCANCODE_SPACE])
-	{
-	currentAnim = 6;
-	}
-	else currentAnim = 0;
-	} else {
-	currentAnim = 14;
-	enemyAnim = 10;
-	}*/
-
-	/*if (player.health > 0)
-	{
-	if (keys[SDL_SCANCODE_W]) { if(inCombat == false) playerPos = moveForward(playerPos, r, 0.1f);  eye = moveForward(eye, r, 0.1f); }
-	if (keys[SDL_SCANCODE_S]) { if(inCombat == false) playerPos = moveForward(playerPos, -r - 180, -0.1f); eye = moveForward(eye, r, -0.1f); }
-	if (keys[SDL_SCANCODE_A]) eye = moveRight(eye, r, -0.1f);
-	if (keys[SDL_SCANCODE_D]) eye = moveRight(eye, r, 0.1f);
-	if (keys[SDL_SCANCODE_R]) eye.y += 0.1;
-	if (keys[SDL_SCANCODE_F]) eye.y -= 0.1;
-
-	if (keys[SDL_SCANCODE_C] || inCombat == true) {
-	camera = 1;
-	heightOfCam = 1;
-	}
-	if (keys[SDL_SCANCODE_X]) {
-	camera = 2;
-	heightOfCam+=0.1f;
-	}
-	if (keys[SDL_SCANCODE_COMMA]) r -= 1.0f;
-	if (keys[SDL_SCANCODE_PERIOD]) r += 1.0f;
-	if (inCombat == false)
-	playerRotation = r;
-	if (keys[SDL_SCANCODE_B]) { Initialize(Level); GenerateMaze(Level, posX, posY, goalX, goalY); }
-	if (keys[SDL_SCANCODE_M]) SaveMaze();
-	if (keys[SDL_SCANCODE_N]) LoadMaze();
-
-	duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
-
-	/*NOTE - Move combat to within the player class in final version. - Scott*/
-
-	/*I need someone to block the input so it's not spammed when a button is pressed.
-	Someone said they had this working for something else? */
-	/*	if (keys[SDL_SCANCODE_0]) { if (inCombat == false) { cout << "COMBAT BEGINS!" << endl; inCombat = true; } }
-	if (pressedButton == false)
-	{
-	if (keys[SDL_SCANCODE_1]) player.queuedAttacks.push_back(LightAttack());
-	if (keys[SDL_SCANCODE_2]) player.queuedAttacks.push_back(HeavyAttack());
-	if (keys[SDL_SCANCODE_3]) player.queuedAttacks.push_back(Poison());
-	if (keys[SDL_SCANCODE_4]) player.queuedAttacks.push_back(Stun());
-	if (keys[SDL_SCANCODE_5]) player.queuedAttacks.push_back(ItemUse(Item()));
-	if (keys[SDL_SCANCODE_6]) player.queuedAttacks.push_back(Flee());
-	pressedButton = true;
-	} else {
-	pressedButton = false;
-	}
-
-	if (keys[SDL_SCANCODE_Q])
-	{
-	for each (C_Attack var in player.queuedAttacks)
-	{
-	cout << var.GetAttackName() << " " << var.GetManaCost() << endl;
-	}
-	cout << "END " << player.queuedAttacks.size() << endl;
-	}
-
-	if (inCombat)
-	{
-	player.inCombat = true;
-	enemy.inCombat = true;
-	player.Attack(enemy);
-	enemy.Attack(player);
-	if (player.health <= 0 || enemy.health <= 0)
-	{
-	inCombat = false;
-	player.inCombat = false;
-	enemy.inCombat = false;
-	}
-	}
-	} else {
-	currentAnim = 5;
-	enemyAnim = 7;
-	}*/
-
-	//player.Update((float)duration);
-	//enemy.Update((float)duration);
-
-	/*Collisions playerCircle = playerCircle.CollisionCircles(playerPos.x, playerPos.z, 1.0f);
-	for (int i = 0; i < SIZE; i++) {
-	for (int j = 0; j < SIZE; j++) {
-
-	if (Level[i][j].display == '*')
-	{
-	Collisions Circle = Circle.CollisionCircles(i * 3, j * 3, 0.9f);
-	if (Collision(Circle, playerCircle) == true) {
-	playerPos = oldPlayerPos;
-	}
-	}
-	}
-	}*/
-
-	//oldPlayerPos = playerPos;
-
-	/*Movement should be handled inside the enemy class for the full game.
-	Create checks before moving to ensure the enemy isn't dead/incombat or idle etc.
-	-Scott */
-
-	/*For collision detection we want to pass in the object.id or name which we assign in the 'GameObject' class.
-	Not sure if we've created it for the prototype, but for the finished product having the id means we can work
-	out what we need to do for that instance of collison. (ie, pickup weapon, start combat, stop movement etc.)
-	-Scott */
-
-	//if(inCombat == false && enemy.health > 0)
-	//enemyPos = glm::vec3(enemyPos.x + enemyMove.x, enemyPos.y, enemyPos.z + enemyMove.y);
-
-	/*Collisions enemyCircle = enemyCircle.CollisionCircles(enemyPos.x, enemyPos.z,1.0f);
-	if (inCombat == false && Collision(playerCircle, enemyCircle) == true && player.health > 0 && enemy.health > 0) {
-	cout << "PLAYER SPOTTED! -- BEGINING COMBAT!" << endl;
-	inCombat = true;
-	return;
-	}*/
-
-	/*for (int i = 0; i < SIZE; i++) {
-	for (int j = 0; j < SIZE; j++) {
-
-	if (Level[i][j].display == '*')
-	{
-	Collisions Circle = Circle.CollisionCircles(i * 3, j * 3, 0.9f);
-	if (Collision(Circle, enemyCircle) == true)
-	{
-	//cout << "boom" << endl;
-	//enemyMove = moveEnemy();
-	enemyMove = -enemyMove;
-	}
-	}
-	}
-	}*/
 }
 
 
-
-
-void draw(SDL_Window * window) {
+void RenderScene(GLuint refShaderProgram) {
 	// clear the screen
-	glEnable(GL_CULL_FACE);
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 1920.0f / 1080.0f, 1.0f, 300.0f);
-	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
+	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 1920.0f / 1080.0f, 1.0f, 1000.0f);
+
 
 
 	GLfloat scale(1.0f); // just to allow easy scaling of complete scene
 
 	glm::mat4 modelview(1.0); // set base position for scene
 	mvStack.push(modelview);
+
+
+
 	Game_Camera.draw(mvStack.top(), character->getModelEye());
-
 	rt3d::setUniformMatrix4fv(skyboxTest->shaderProgram, "projection", glm::value_ptr(projection));
-	skyboxTest->draw(mvStack.top());
+	if (currentPass == 1)
+		skyboxTest->draw(mvStack.top());
 
-	glUseProgram(shaderProgram);
+	/***********************************************************/
 
+	// The light calculations for the shadows.
+	glm::vec3 lightDirection = glm::vec3(light0.position[0], light0.position[1], light0.position[2]);
+	glm::mat4 lightProjection = glm::ortho<float>(-60, 60, -60, 60, 0, 250);
+	glm::mat4 lightViewPosition = glm::lookAt(lightDirection, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::mat4 lightView = lightProjection * lightViewPosition;
+	glUseProgram(refShaderProgram);
+	cout << currentPass << endl;
+
+
+	glUseProgram(refShaderProgram);
+
+
+	glUniformMatrix4fv(glGetUniformLocation(refShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+	glUniformMatrix4fv(glGetUniformLocation(refShaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(mvStack.top()));
+	glUniform3fv(glGetUniformLocation(refShaderProgram, "viewPos"), 1, &Game_Camera.position[0]);
+	glUniform3fv(glGetUniformLocation(refShaderProgram, "lightPos"), 1, &lightDirection[0]);
+	glUniformMatrix4fv(glGetUniformLocation(refShaderProgram, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightView));
+
+	//glUniformMatrix4fv(glGetUniformLocation(program, uniformName), 1, GL_FALSE, data);
+	//mvStack.pop();
+
+
+	//Setting the light position for current shader.
 	glm::vec4 tmp = mvStack.top()*lightPos;
-	light0.position[0] = tmp.x;
-	light0.position[1] = tmp.y;
-	light0.position[2] = tmp.z;
-	rt3d::setLightPos(shaderProgram, glm::value_ptr(tmp));
+	light0.position[0] = lightPos.x;
+	light0.position[1] = lightPos.y;
+	light0.position[2] = lightPos.z;
+	rt3d::setMaterial(refShaderProgram, material1);
+	rt3d::setLightPos(refShaderProgram, glm::value_ptr(tmp));
+	rt3d::setLight(refShaderProgram, light0);
 
 
-	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
+	mvStack.push(modelview);
 
-	terrain->draw(mvStack.top());
+
 	rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
 	maze->baseShaderProgram = houseTest->shaderProgram;
-	//maze->draw(mvStack.top());
-	character->draw(mvStack.top());
+	maze->draw(mvStack.top());
+
+	character->draw(mvStack.top(), refShaderProgram, currentPass);
+
+	if (currentPass == 1)
+		terrain->draw(mvStack.top(), refShaderProgram, currentPass);
 
 	for (int i = 0; i < Game_Hub_Characters.size(); i++)
 	{
@@ -724,22 +600,48 @@ void draw(SDL_Window * window) {
 	}
 	for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
 	{
-		Game_Hub_Prefabs[i].draw(mvStack.top());
+		Game_Hub_Prefabs[i].draw(mvStack.top(), refShaderProgram, currentPass);
 	}
 	for (int i = 0; i < Game_Hub_Characters_Shop.size(); i++)
 	{
 		Game_Hub_Characters_Shop[i].draw(mvStack.top());
 	}
 
-	static_character[2]->draw(mvStack.top());
-
-	//houseTest->draw(mvStack.top());
+	currentPass++;
 
 	// remember to use at least one pop operation per push...
 	mvStack.pop(); // initial matrix
 	glDepthMask(GL_TRUE);
 
+	//SDL_GL_SwapWindow(window); // swap buffers
+}
+
+
+void draw(SDL_Window * window)
+{
+	currentPass = 0;
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, depthMapFBO);
+	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glCullFace(GL_FRONT);
+	RenderScene(simpleDepthShader);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//Render to frame buffer
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glViewport(0, 0, screenWidth, screenHeight);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+	//Passing in the depth map into the classes
+	houseTest->SetDepthMap(depthMap);
+	terrain->SetDepthMap(depthMap);
+	shadow_Debug->SetDepthMap(depthMap);
+	character->SetDepthMap(depthMap);
+	cout << lightPos.x << " y: " << lightPos.y << " light pos: \z: " << lightPos.z << endl;
+	RenderScene(normalShadowProgram);
 	SDL_GL_SwapWindow(window); // swap buffers
+
 }
 
 

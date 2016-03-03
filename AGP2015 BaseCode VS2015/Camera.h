@@ -46,7 +46,7 @@ private:
 	float camera_Pitch = 0.0f;
 	double duration = 0;
 	double timeDifference = 0;
-	int camera_Type = 1; //1-Normal(locked), 2-Cinematic Camera, 3-Free camera
+	int camera_Type = 3; //First Person //1-Normal(locked), 2-Cinematic Camera, 3-Free camera
 	float Cinematic_X = 0;
 	float Cinematic_Y = 0;
 	float Cinematic_Z = 0;

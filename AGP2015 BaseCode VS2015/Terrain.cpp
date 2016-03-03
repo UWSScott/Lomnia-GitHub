@@ -32,3 +32,22 @@ void Terrain::draw(glm::mat4 object)
 	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
 	glUniform1i(glGetUniformLocation(shaderProgram, "textureScaleModifier"), 1);
 }
+
+void Terrain::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
+{
+	glUseProgram(s_shaderUsed);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, depthMapTexture);
+
+	//if (pass == 1)
+	//	glCullFace(GL_BACK);
+	//else
+	//	glCullFace(GL_FRONT);
+
+	object = glm::translate(object, position);
+	object = glm::scale(object, scale);
+	rt3d::setUniformMatrix4fv(s_shaderUsed, "modelview", glm::value_ptr(object));
+	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
+}

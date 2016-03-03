@@ -238,6 +238,10 @@
     <None Include="Partical_sword.md2" />
     <None Include="phong-tex.frag" />
     <None Include="phong-tex.vert" />
+    <None Include="realTimeShadow.frag" />
+    <None Include="realTimeShadow.vert" />
+    <None Include="shadow.frag" />
+    <None Include="shadow.vert" />
     <None Include="textured.frag" />
     <None Include="textured.vert" />
     <None Include="tris.MD2" />

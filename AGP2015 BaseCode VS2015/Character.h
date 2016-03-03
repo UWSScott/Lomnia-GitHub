@@ -64,6 +64,7 @@ public:
 	virtual void Animate();
 	virtual void InitalStats(GLuint setShaderProgram);
 	virtual void draw(glm::mat4 object);
+	virtual void draw(glm::mat4 object, GLuint s_shaderUsed, int pass);
 	virtual void GetAvailableAttacks(vector<C_Attack>& attackList);
 	virtual  glm::vec3 getModelEye();
 	virtual int getRotation();

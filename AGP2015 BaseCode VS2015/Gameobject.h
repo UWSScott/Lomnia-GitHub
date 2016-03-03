@@ -29,11 +29,14 @@ public:
 	GLuint meshObject;
 	GLuint shaderProgram;
 	GLuint texture;
+	GLuint depthMapTexture;
 
 	Gameobject() {};
 	virtual void setShader(GLuint s_shaderProgram);
 	virtual void draw(glm::mat4 object);
+	virtual void draw(glm::mat4 object, GLuint s_shaderUsed, int pass);
 	virtual void LoadTexture();
 	virtual void SetMaterial();
+	virtual void SetDepthMap(GLuint s_depthMap) { depthMapTexture = s_depthMap; };
 };
 #endif
