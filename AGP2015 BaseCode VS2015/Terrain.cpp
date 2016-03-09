@@ -1,11 +1,12 @@
 #include "Terrain.h"
 
-Terrain::Terrain(GLuint s_shaderProgram, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position)
+Terrain::Terrain(GLuint s_shaderProgram, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, float s_rotation)
 {
 	collisionName = "STATIC_PREFAB";
 	shaderProgram = s_shaderProgram;
 	position = s_position;
 	scale = s_scale;
+	rotation = s_rotation;
 
 	FileLoader* fileLoader = new FileLoader;
 	texture = fileLoader->loadBitmap(textureName);
@@ -40,7 +41,7 @@ void Terrain::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthMapTexture);
-
+	glUniform1i(glGetUniformLocation(s_shaderUsed, "textureScaleModifier"), 80);
 	//if (pass == 1)
 	//	glCullFace(GL_BACK);
 	//else
@@ -48,6 +49,8 @@ void Terrain::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 
 	object = glm::translate(object, position);
 	object = glm::scale(object, scale);
+	object = glm::rotate(object, float(rotation*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
 	rt3d::setUniformMatrix4fv(s_shaderUsed, "modelview", glm::value_ptr(object));
 	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
+	glUniform1i(glGetUniformLocation(s_shaderUsed, "textureScaleModifier"), 1);
 }
