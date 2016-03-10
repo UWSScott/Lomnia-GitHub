@@ -103,7 +103,7 @@ void Character::draw(glm::mat4 object)
 	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
 
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
-	rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
+	rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 
 	if (weapon->getEquiped())
@@ -133,7 +133,7 @@ void Character::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
 
 	rt3d::setUniformMatrix4fv(s_shaderUsed, "modelview", glm::value_ptr(object));
-	rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
+	rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 }
 

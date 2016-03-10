@@ -134,8 +134,8 @@ bool inCombat = false;
 glm::vec3 oldPlayerPos;
 
 vector<Prefab> Game_Hub_Prefabs;
-vector<Character> Game_Hub_Characters;
-vector<Character> Game_Hub_Characters_Shop;
+vector<Character*> Game_Hub_Characters;
+vector<Character*> Game_Hub_Characters_Shop;
 
 Camera Game_Camera = Camera();
 Character* static_character[15];
@@ -542,9 +542,9 @@ void init(void)
 
 
 
-	//Game_Hub_Characters.push_back(Character("Arnold", "Models/ripper.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(50, 0, -30), shaderProgram));
-	//Game_Hub_Characters.push_back(Character("Arnold", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(30, 0, 20), shaderProgram));
-	//Game_Hub_Characters.push_back(Character("Arnold", "Models/pogo_bunny.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(10, 0, 10), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("Arnold", "Models/ripper.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(50, 0, -30), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("Arnold", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(30, 0, 20), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("Arnold", "Models/pogo_buny.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(10, 0, 10), shaderProgram));
 
 
 	//NPCs in the hub area
@@ -644,7 +644,7 @@ void RenderScene(GLuint refShaderProgram) {
 
 	for (int i = 0; i < Game_Hub_Characters.size(); i++)
 	{
-		Game_Hub_Characters[i].draw(mvStack.top());
+		Game_Hub_Characters[i]->draw(mvStack.top());
 	}
 	for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
 	{
@@ -652,7 +652,7 @@ void RenderScene(GLuint refShaderProgram) {
 	}
 	for (int i = 0; i < Game_Hub_Characters_Shop.size(); i++)
 	{
-		Game_Hub_Characters_Shop[i].draw(mvStack.top());
+		Game_Hub_Characters_Shop[i]->draw(mvStack.top());
 	}
 
 	currentPass++;
