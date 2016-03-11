@@ -13,6 +13,7 @@ public:
 	~Weapon() {};
 	virtual void InitalStats(GLuint s_shaderprogram);
 	void draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimation, int playerRotation);
+	void draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimation, int playerRotation, GLuint s_shaderUsed, GLuint depthTexture, int pass);
 	bool getEquiped() { return equiped; }
 	void setEquiped(bool setting) { equiped = setting; }
 	int cost = 0;

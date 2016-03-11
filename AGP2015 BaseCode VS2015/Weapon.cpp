@@ -110,3 +110,25 @@ void Weapon::draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimati
 	rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 }
+
+void Weapon::draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimation, int playerRotation, GLuint s_shaderUsed, GLuint depthTexture, int pass)
+{
+	glUseProgram(s_shaderUsed);
+	glCullFace(GL_FRONT);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, depthMapTexture);
+
+	object = glm::translate(object, playerPosition);
+	object = glm::rotate(object, float((rotation)*DEG_TO_RAD), glm::vec3(0.0f, -1.0f, 0.0f));
+	object = glm::scale(object, scale* glm::vec3(0.05));
+	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
+	object = glm::scale(object, scale);
+
+
+	rt3d::setUniformMatrix4fv(s_shaderUsed, "modelview", glm::value_ptr(object));
+	rt3d::drawMesh(meshObject, md2VertCount / 3, GL_TRIANGLES);
+	glCullFace(GL_BACK);
+
+}

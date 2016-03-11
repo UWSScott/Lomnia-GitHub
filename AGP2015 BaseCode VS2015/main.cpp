@@ -449,7 +449,7 @@ void init(void)
 
 	skyboxTest = new Skybox(skyboxFiles);
 	maze = new MazeGenerator(shaderProgram);
-	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(0), shaderProgram);
+	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1.3), shaderProgram);
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
 
@@ -723,8 +723,6 @@ void draw(SDL_Window * window)
 	{
 		Game_Hub_Characters_Shop[i]->SetDepthMap(depthMap);
 	}
-
-	cout << lightPos.x << " y: " << lightPos.y << " light pos: \z: " << lightPos.z << endl;
 	RenderScene(normalShadowProgram);
 	SDL_GL_SwapWindow(window); // swap buffers
 
