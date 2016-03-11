@@ -14,27 +14,27 @@ void Inventory::addItem(string itemNameID)
 	if (itemNameID == "Medkit")
 	{
 		Medkit tempPotion(1);
-		itemInventory.push_back(tempPotion);
+		items.push_back(tempPotion);
 	} 
 	else if (itemNameID == "ManaPotion")
 	{
 		ManaPotion tempPotion;
-		itemInventory.push_back(tempPotion);
+		items.push_back(tempPotion);
 	}
 	else if (itemNameID == "Sword")
 	{
 		Sword tempSword;
-		itemInventory.push_back(tempSword);
+		items.push_back(tempSword);
 	}
 	else if (itemNameID == "Axe")
 	{
 		Axe tempAxe;
-		itemInventory.push_back(tempAxe);
+		items.push_back(tempAxe);
 	}
 	else if (itemNameID == "Knives")
 	{
 		Knives tempKnives;
-		itemInventory.push_back(tempKnives);
+		items.push_back(tempKnives);
 	}
 
 }
@@ -43,11 +43,11 @@ void Inventory::removeItem(string itemNameID)
 {
 	bool itemFound = false;
 
-	for (iter = itemInventory.begin(); iter != itemInventory.end(); iter++)
+	for (iter = items.begin(); iter != items.end(); iter++)
 	{
 		if ((*iter).name == itemNameID)
 		{
-			itemInventory.erase(iter);
+			items.erase(iter);
 			itemFound = true;
 			break;
 			
@@ -76,27 +76,27 @@ void Inventory::buyItem(string itemNameID, float price)
 			cout << "1. Light" << endl << "2. Medium" << endl << "3. Heavy" << endl << "4. Holy"; 
 			cin >> playerChoice; 
 			Medkit tempPotion(playerChoice);
-			itemInventory.push_back(tempPotion);
+			items.push_back(tempPotion);
 		}
 		else if (itemNameID == "ManaPotion")
 		{
 			ManaPotion tempPotion;
-			itemInventory.push_back(tempPotion);
+			items.push_back(tempPotion);
 		}
 		else if (itemNameID == "Sword")
 		{
 			Sword tempSword;
-			itemInventory.push_back(tempSword);
+			items.push_back(tempSword);
 		}
 		else if (itemNameID == "Axe")
 		{
 			Axe tempAxe;
-			itemInventory.push_back(tempAxe);
+			items.push_back(tempAxe);
 		}
 		else if (itemNameID == "Knives")
 		{
 			Knives tempKnives; //could check cost here instead after making object? seems inefficient
-			itemInventory.push_back(tempKnives);
+			items.push_back(tempKnives);
 		}
 		gold -= price;
 	}
@@ -107,13 +107,13 @@ void Inventory::sellItem(string itemNameID, float price)
 {
 	bool itemFound =false; 
 
-	for (iter = itemInventory.begin(); iter != itemInventory.end(); iter++)
+	for (iter = items.begin(); iter != items.end(); iter++)
 	{
 		if ((*iter).name==itemNameID)
 		{
 			//gold += (*iter).price; **** If want price inside Medkit *****
 			gold += price;
-			itemInventory.erase(iter);
+			items.erase(iter);
 			itemFound = true;
 			break;
 			
@@ -130,7 +130,7 @@ void Inventory::sellItem(string itemNameID, float price)
 void Inventory::show()
 {
 	cout << "Inventory (Size:" << getSize() << ") :" << endl;
-	for (iter = itemInventory.begin(); iter != itemInventory.end(); ++iter)
+	for (iter = items.begin(); iter != items.end(); ++iter)
 	{
 		cout << (*iter).name << endl;
 	}
@@ -139,5 +139,18 @@ void Inventory::show()
 
 int Inventory::getSize()
 {
-	return itemInventory.size(); 
+	return items.size();
+}
+
+int Inventory::getCount(string id)
+{
+	int count = 0;
+	for (iter = items.begin(); iter != items.end(); iter++)
+	{
+		if ((*iter).name == id)
+		{
+			count++;
+		}
+	}
+	return count;
 }

@@ -44,6 +44,11 @@ void CombatInstance::Damage(int damageValue)
 	}
 }
 
+void CombatInstance::Input(C_Attack selected_Attack)
+{
+	queuedAttacks.push_back(selected_Attack);
+}
+
 void CombatInstance::Attack()
 {
 	if (currentCharacter->refreshTime <= 0)

@@ -41,9 +41,9 @@ void Prefab::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthMapTexture);
 
-	if (pass == 0)
-		glCullFace(GL_BACK);
-	else
+	//if (pass == 0)
+	//	glCullFace(GL_BACK);
+	//else
 		glCullFace(GL_FRONT);
 
 	object = glm::translate(object, glm::vec3(position.x, position.y, position.z));

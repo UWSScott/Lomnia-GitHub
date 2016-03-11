@@ -186,6 +186,10 @@ void Character::Animate()
 		return;
 
 	currentAnimation = characterState;
+	if (isDead())
+		currentAnimation = DEAD;
+
+
 	tmpModel.Animate(currentAnimation, 0.1);
 	rt3d::updateMesh(meshObject, RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
 }

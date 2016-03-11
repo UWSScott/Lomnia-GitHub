@@ -6,8 +6,36 @@
 #define IDLE 0
 #define WALKING 1
 #define ATTACKING 2
-
+#define HURT_1 3
+#define HURT_2	4
+#define HURT_3	5
 #define DEAD 16
+
+
+
+//#define MD2_STAND	0
+//#define MD2_RUN		1
+//#define MD2_ATTACK	2
+//#define MD2_PAIN1	3
+//#define MD2_PAIN2	4
+//#define MD2_PAIN3	5
+//#define MD2_JUMP	6
+//#define MD2_FLIP	7
+//#define MD2_SALUTE	8
+//#define MD2_TAUNT	9
+//#define MD2_WAVE	10
+//#define MD2_POINT	11
+//#define MD2_CRSTAND	12
+//#define MD2_CRWALK	13
+//#define MD2_CRATTACK	14
+//#define MD2_CRPAIN	15
+//#define MD2_CRDEATH	16
+//#define MD2_DEATH1	17
+//#define MD2_DEATH2	18
+//#define MD2_DEATH3	19
+
+
+
 
 //#include <iostream>
 //#include <string>
@@ -17,6 +45,7 @@
 #include "Weapon.h"
 #include "Attack.h"
 #include "CombatInstance.h"
+#include "Inventory.h"
 
 class CombatInstance;
 
@@ -27,7 +56,7 @@ private:
 
 
 public:
-	int DoIt(float a, char b, char c) { cout << "TMyClass::DoIt" << endl; return 1; };
+	//int DoIt(float a, char b, char c) { cout << "TMyClass::DoIt" << endl; return 1; };
 
 	string characterName = "";
 	int health = 10;
@@ -41,13 +70,15 @@ public:
 	int speed = 5;
 	int max_Speed = 10;
 	Weapon* weapon = new Weapon();
+	Inventory* inventory = new Inventory();
 	//Armor
 	//Inventory List
-
+	
 	float resistance_Fire = 0;
 	float resistance_Water = 0;
 	float resistance_Air = 0;
 	int coins = 0;
+	int level = 1;
 	int xp = 0;
 	int killXP = 0;
 	bool canDie = true;

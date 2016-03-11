@@ -86,7 +86,7 @@ void PlayableCharacter::draw(glm::mat4 object)
 	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
 
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
-	rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
+	rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 
 	if (weapon->getEquiped())
@@ -109,7 +109,7 @@ void PlayableCharacter::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
 
 	rt3d::setUniformMatrix4fv(s_shaderUsed, "modelview", glm::value_ptr(object));
-	rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
+	rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 
 	if (weapon->getEquiped())
@@ -125,12 +125,18 @@ void PlayableCharacter::CombatAttacks()
 {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 
-	if (keys[SDL_SCANCODE_1]) combatInstance->queuedAttacks.push_back(LightAttack());
-	if (keys[SDL_SCANCODE_2]) combatInstance->queuedAttacks.push_back(HeavyAttack());
-	if (keys[SDL_SCANCODE_3]) combatInstance->queuedAttacks.push_back(Poison());
-	if (keys[SDL_SCANCODE_4]) combatInstance->queuedAttacks.push_back(Stun());
-	if (keys[SDL_SCANCODE_5]) combatInstance->queuedAttacks.push_back(ItemUse(Item()));
-	if (keys[SDL_SCANCODE_6]) combatInstance->queuedAttacks.push_back(Flee());
+	if (keys[SDL_SCANCODE_1]) combatInstance->Input(LightAttack());
+	if (keys[SDL_SCANCODE_2]) combatInstance->Input(HeavyAttack());
+	if (keys[SDL_SCANCODE_3]) combatInstance->Input(Poison());
+	if (keys[SDL_SCANCODE_4]) combatInstance->Input(Stun());
+	if (keys[SDL_SCANCODE_5]) combatInstance->Input(ItemUse(Item()));
+	if (keys[SDL_SCANCODE_6]) combatInstance->Input(Flee());
+
+	if (keys[SDL_SCANCODE_H])
+	{
+		if(inventory->getCount("Health_Potion") > 0)
+			combatInstance->Input(ItemUse());
+	}
 
 	/*if (combatInstance->incomingAttack.attackCompleted == false)
 	{

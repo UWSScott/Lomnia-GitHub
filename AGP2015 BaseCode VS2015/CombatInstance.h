@@ -33,6 +33,7 @@ public:
 	void Damage(int damageValue);
 	void Attack();
 	void BeingAttacked(C_Attack s_attack);
+	void Input(C_Attack selected_Attack);
 
 	bool paused = false;
 };

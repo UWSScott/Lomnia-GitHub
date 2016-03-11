@@ -25,6 +25,7 @@ public:
 	void addItem(string itemNameID); 
 	void removeItem(string itemNameID);
 	int getSize();
+	int getCount(string id);
 	Inventory();
 
 	vector<Item> items;

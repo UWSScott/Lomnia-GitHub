@@ -1,10 +1,10 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#include "Gameobject.h"
+#include "Item.h"
 using namespace std;
 
-class Weapon : public Gameobject
+class Weapon : public Item
 {
 
 public:

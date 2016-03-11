@@ -2,6 +2,7 @@
 
 Medkit::Medkit(int potency)
 {
+	name = "Health_Potion";
 	switch (potency)
 	{
 	case 1:

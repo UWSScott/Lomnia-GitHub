@@ -12,6 +12,7 @@ class Item : public Gameobject
 {
 public:
 	string name = "DEFAULT";
+	string item_ID;
 	float price = 1;
 
 	Item() {};
