@@ -85,23 +85,23 @@ GLuint skybox[5];
 GLuint labels[5];
 
 rt3d::lightStruct light0 = {
-	{ 1.0f, 1.0f, 1.0f, 1.0f }, // ambient
+	{ 0.3f, 0.3f, 0.3f, 0.3f }, // ambient
 	{ 1.0f, 1.0f, 1.0f, 1.0f }, // diffuse
-	{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
+	{ 0.5f, 0.5f, 0.5f, 0.5f }, // specular
 	{ -5.0f, 4.0f, 2.0f, 1.0f }  // position
 };
 glm::vec4 lightPos(8.0f, 5.0f, -12.0f, 0.0f); //light position
 
 rt3d::materialStruct material0 = {
-	{ 0.6f, 0.4f, 0.2f, 1.0f }, // ambient
-	{ 0.5f, 1.0f, 0.5f, 1.0f }, // diffuse
-	{ 0.0f, 0.1f, 0.0f, 1.0f }, // specular
+	{ 1.0f, 1.0f, 1.0f, 1.0f }, // ambient
+	{ 1.0f, 1.0f, 1.0f, 1.0f }, // diffuse
+	{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
 	2.0f  // shininess
 };
 rt3d::materialStruct material1 = {
-	{ 1.0f, 0.4f, 0.4f, 1.0f }, // ambient
-	{ 1.0f, 0.8f, 1.0f, 1.0f }, // diffuse
-	{ 1.0f, 0.8f, 0.8f, 1.0f }, // specular
+	{ 1.0f, 1.0f, 1.0f, 1.0f }, // ambient
+	{ 1.0f, 1.0f, 1.0f, 1.0f }, // diffuse
+	{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
 	1.0f  // shininess
 };
 
@@ -152,7 +152,8 @@ GLuint simpleDepthShader;
 GLuint debugDepthQuad;
 GLuint depthMapFBO = 0;
 GLuint depthMap;
-const GLuint SHADOW_WIDTH = 1920, SHADOW_HEIGHT = 1080;
+const GLuint SHADOW_WIDTH = 3840, SHADOW_HEIGHT = 2160;
+//const GLuint SHADOW_WIDTH = 1920, SHADOW_HEIGHT = 1080;
 int currentPass = 0;
 GLuint screenHeight = 600;
 GLuint screenWidth = 800;
@@ -367,6 +368,11 @@ void init(void)
 	simpleDepthShader = rt3d::initShaders("shadow.vert", "shadow.frag");
 
 
+	//debugDepthQuad = rt3d::initShaders("depthMap.vert", "depthMap.frag");
+	//GLuint uniformIndex = glGetUniformLocation(debugDepthQuad, "depthMap");
+	//glUniform1i(uniformIndex, 1);
+
+
 	vector<GLfloat> verts;
 	vector<GLfloat> norms;
 	vector<GLfloat> tex_coords;
@@ -455,7 +461,7 @@ void init(void)
 	//houseTest = new Prefab(shaderProgram, "Models/House_003.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/House_003.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
 	//houseTest = new Prefab(shaderProgram, "Models/Well.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Well.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
 	//houseTest = new Prefab(shaderProgram, "Models/Teleporter_Stand.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Well.bmp", glm::vec3(2.0, 2.0, 2.0), glm::vec3(0, -1, 0)); //Broken but could be used as a back prop out of the way.
-	houseTest = new Prefab(shaderProgram, "cube.obj", "Models/Textures/House_002.bmp", glm::vec3(20.0, 0.1, 20.0), glm::vec3(0, -1, 0));
+	houseTest = new Prefab(shaderProgram, "cube.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(500.0, 0.1, 500.0), glm::vec3(0, 0, 0));
 	terrain = new Terrain(shaderProgram, "Models/Desert_Terrain_New_Low.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(1, 1, 1), glm::vec3(300, 0, -300), 0);
 
 
@@ -556,6 +562,14 @@ void init(void)
 	lightPos.x += 50;
 	lightPos.y += 100;
 	lightPos.z += 50;
+
+	//lightPos.x = 91;
+	//lightPos.y = 95;
+	//lightPos.z = -25;
+
+	lightPos.x = 60;
+	lightPos.y = 100;
+	lightPos.z = -25;
 	//shadow_Debug = new Prefab(shaderProgram, "Models/House_Player.obj", "Models/Textures/House_002.bmp", glm::vec3(500.0, 0.1, 500.0), glm::vec3(0, -5.0, 0), 0);
 
 }
@@ -572,6 +586,15 @@ void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	Game_Camera.update(character->getModelEye(), character->getRotation());
 	character->Update();
+
+
+	if (keys[SDL_SCANCODE_I]) lightPos.x += 0.1f;
+	if (keys[SDL_SCANCODE_K]) lightPos.x -= 0.1f;
+	if (keys[SDL_SCANCODE_J]) lightPos.z += 0.1f;
+	if (keys[SDL_SCANCODE_L]) lightPos.z -= 0.1f;
+	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
+	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
+
 }
 
 
@@ -600,17 +623,15 @@ void RenderScene(GLuint refShaderProgram) {
 
 	// The light calculations for the shadows.
 	glm::vec3 lightDirection = glm::vec3(light0.position[0], light0.position[1], light0.position[2]);
-	glm::mat4 lightProjection = glm::ortho<float>(-60, 60, -60, 60, 0, 250);
+	glm::mat4 lightProjection = glm::ortho<float>(-200, 200, -200, 200, 0, 250);
 	glm::mat4 lightViewPosition = glm::lookAt(lightDirection, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	glm::mat4 lightView = lightProjection * lightViewPosition;
 	glUseProgram(refShaderProgram);
-	cout << currentPass << endl;
+	if(currentPass == 1)
+		glUniformMatrix4fv(glGetUniformLocation(refShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+	else
+		glUniformMatrix4fv(glGetUniformLocation(refShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(lightProjection));
 
-
-	glUseProgram(refShaderProgram);
-
-
-	glUniformMatrix4fv(glGetUniformLocation(refShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(glGetUniformLocation(refShaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(mvStack.top()));
 	glUniform3fv(glGetUniformLocation(refShaderProgram, "viewPos"), 1, &Game_Camera.position[0]);
 	glUniform3fv(glGetUniformLocation(refShaderProgram, "lightPos"), 1, &lightDirection[0]);
@@ -637,6 +658,8 @@ void RenderScene(GLuint refShaderProgram) {
 	maze->baseShaderProgram = houseTest->shaderProgram;
 	maze->draw(mvStack.top());
 
+	//if(currentPass == 1)
+		//houseTest->draw(mvStack.top(), refShaderProgram, currentPass);
 	character->draw(mvStack.top(), refShaderProgram, currentPass);
 
 	if (currentPass == 1)
@@ -680,14 +703,28 @@ void draw(SDL_Window * window)
 	glViewport(0, 0, screenWidth, screenHeight);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	cout << " x: " << Game_Camera.position.x << " y: " << Game_Camera.position.y << " z: " << Game_Camera.position.z << endl;
+	//cout << " x: " << Game_Camera.position.x << " y: " << Game_Camera.position.y << " z: " << Game_Camera.position.z << endl;
 
 	//Passing in the depth map into the classes
 	houseTest->SetDepthMap(depthMap);
 	terrain->SetDepthMap(depthMap);
 	//shadow_Debug->SetDepthMap(depthMap);
 	character->SetDepthMap(depthMap);
-	//cout << lightPos.x << " y: " << lightPos.y << " light pos: \z: " << lightPos.z << endl;
+
+	for (int i = 0; i < Game_Hub_Characters.size(); i++)
+	{
+		Game_Hub_Characters[i]->SetDepthMap(depthMap);
+	}
+	for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
+	{
+		Game_Hub_Prefabs[i].SetDepthMap(depthMap);
+	}
+	for (int i = 0; i < Game_Hub_Characters_Shop.size(); i++)
+	{
+		Game_Hub_Characters_Shop[i]->SetDepthMap(depthMap);
+	}
+
+	cout << lightPos.x << " y: " << lightPos.y << " light pos: \z: " << lightPos.z << endl;
 	RenderScene(normalShadowProgram);
 	SDL_GL_SwapWindow(window); // swap buffers
 

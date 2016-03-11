@@ -6,6 +6,7 @@
 #define IDLE 0
 #define WALKING 1
 #define ATTACKING 2
+
 #define DEAD 16
 
 //#include <iostream>
@@ -51,6 +52,7 @@ public:
 	int killXP = 0;
 	bool canDie = true;
 	bool inCombat = false;
+	bool playAnimation = true;
 	int currentAnimation = 0;
 	int characterState = 0;
 	float refreshTime = 0;

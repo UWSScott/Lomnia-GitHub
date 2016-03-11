@@ -46,7 +46,7 @@ void PlayableCharacter::Dead()
 void PlayableCharacter::Input()
 {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	if (inCombat == false)
+	if (inCombat == false && !isDead())
 	{
 		characterState = IDLE;
 		if (keys[SDL_SCANCODE_A]) { characterState = IDLE;  rotation -= 1.0f; }
@@ -75,8 +75,8 @@ void PlayableCharacter::Update()
 //	glBindTexture(GL_TEXTURE_2D, texture);
 //
 //	//Animation
-//	tmpModel.Animate(currentAnimation, 0.1);
-//	rt3d::updateMesh(meshObject, RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
+//	//tmpModel.Animate(currentAnimation, 0.1);
+//	//rt3d::updateMesh(meshObject, RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
 //
 //	//glBindTexture(GL_TEXTURE_2D, texture);
 //	modelAt = MoveForward(position, rotation, 1.0f);

@@ -300,5 +300,17 @@
     <None Include="shadow.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="drawnShadow.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="drawnShadow.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="depthMap.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="depthMap.vert">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

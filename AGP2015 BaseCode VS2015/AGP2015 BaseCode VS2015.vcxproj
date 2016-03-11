@@ -235,6 +235,10 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="cubeMap.frag" />
     <None Include="cubeMap.vert" />
+    <None Include="depthMap.frag" />
+    <None Include="depthMap.vert" />
+    <None Include="drawnShadow.frag" />
+    <None Include="drawnShadow.vert" />
     <None Include="Partical_sword.md2" />
     <None Include="phong-tex.frag" />
     <None Include="phong-tex.vert" />

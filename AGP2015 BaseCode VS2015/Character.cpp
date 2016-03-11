@@ -89,12 +89,6 @@ void Character::draw(glm::mat4 object)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	//Animation
-	tmpModel.Animate(currentAnimation, 0.1);
-	rt3d::updateMesh(meshObject, RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
-
-	// drawing the player model
-
 	//glBindTexture(GL_TEXTURE_2D, texture);
 	modelAt = MoveForward(position, rotation, 1.0f);
 	object = glm::translate(object, MoveForward(position, rotation, 1.0f));
@@ -103,7 +97,8 @@ void Character::draw(glm::mat4 object)
 	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
 
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
-	rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
+	//rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
+	rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 
 	if (weapon->getEquiped())
@@ -119,12 +114,6 @@ void Character::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthMapTexture);
 
-	//Animation
-	tmpModel.Animate(currentAnimation, 0.1);
-	rt3d::updateMesh(meshObject, RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
-
-	// drawing the player model
-
 	//glBindTexture(GL_TEXTURE_2D, texture);
 	modelAt = MoveForward(position, rotation, 1.0f);
 	object = glm::translate(object, MoveForward(position, rotation, 1.0f));
@@ -133,7 +122,8 @@ void Character::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
 
 	rt3d::setUniformMatrix4fv(s_shaderUsed, "modelview", glm::value_ptr(object));
-	rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
+	//rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
+	rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 }
 
@@ -192,7 +182,12 @@ void Character::InitalStats(GLuint setShaderProgram){}
 
 void Character::Animate()
 {
+	if (!playAnimation)
+		return;
+
 	currentAnimation = characterState;
+	tmpModel.Animate(currentAnimation, 0.1);
+	rt3d::updateMesh(meshObject, RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
 }
 
 void Character::Update()
@@ -219,6 +214,7 @@ void Character::Update()
 		if (keys[SDL_SCANCODE_A]) rotation -= 5.0f;
 		if (keys[SDL_SCANCODE_D]) rotation += 5.0f;
 	}
+	Animate();
 }
 
 
