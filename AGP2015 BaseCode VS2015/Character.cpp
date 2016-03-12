@@ -82,6 +82,16 @@ glm::vec3 Character::getModelEye()
 	return position;
 }
 
+void Character::EnterCombat()
+{
+	status = STATE_COMBAT;
+}
+
+void Character::LeaveCombat()
+{
+	status = STATE_NORMAL;
+}
+
 void Character::draw(glm::mat4 object)
 {
 	glUseProgram(shaderProgram);

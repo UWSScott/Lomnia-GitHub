@@ -1,4 +1,5 @@
 #include "PlayableCharacter.h"
+#include "Medkit.h"
 
 
 PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram)
@@ -59,10 +60,13 @@ void PlayableCharacter::Input()
 	}
 }
 
-void PlayableCharacter::Update()
+void PlayableCharacter::Update(Camera* camera)
 {
 	Input();
 	Animate();
+
+	if (camera != NULL)
+		camera->SetPlayerStatus(status, this);
 }
 
 

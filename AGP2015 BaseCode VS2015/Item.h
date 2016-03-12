@@ -17,6 +17,7 @@ public:
 
 	Item() {};
 	virtual void Apply(Character& attacker, Character& opponent); //TODO Move this to potion class... override with that items specific use ie health will heal etc.
+	virtual void Use(Character* character) {};
 };
 
 #endif

@@ -15,6 +15,12 @@ using namespace std;
 //#include "md2model.h"
 #include <SDL_ttf.h>
 
+#define STATE_LOADING 0
+#define STATE_NORMAL 1
+#define STATE_COMBAT 2
+
+
+
 class Gameobject
 {
 public:

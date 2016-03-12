@@ -17,6 +17,8 @@
 #include "FileLoader.h"
 #include "PlayableCharacter.h"
 
+class PlayableCharacter;
+
 class Camera : public Gameobject
 {
 public:
@@ -30,6 +32,7 @@ public:
 	void CinematicValues(glm::vec3 characterPosition, float playerRotation);
 	void update(glm::vec3 modelEye, float playerRotation);
 	void Sound(int soundFile);
+	void SetPlayerStatus(int status, PlayableCharacter* character);
 	glm::vec3 MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d);
 	glm::vec3 MoveRight(glm::vec3 pos, GLfloat angle, GLfloat d);
 	float rotation;

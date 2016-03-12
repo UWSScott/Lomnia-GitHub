@@ -9,8 +9,6 @@ Inventory::Inventory()
 void Inventory::addItem(string itemNameID)
 {
 	// find out what item to add, create item, push onto inventory
-
-
 	if (itemNameID == "Medkit")
 	{
 		Medkit tempPotion(1);
@@ -36,7 +34,6 @@ void Inventory::addItem(string itemNameID)
 		Knives tempKnives;
 		items.push_back(tempKnives);
 	}
-
 }
 
 void Inventory::removeItem(string itemNameID)
@@ -105,8 +102,7 @@ void Inventory::buyItem(string itemNameID, float price)
 
 void Inventory::sellItem(string itemNameID, float price)
 {
-	bool itemFound =false; 
-
+	bool itemFound = false; 
 	for (iter = items.begin(); iter != items.end(); iter++)
 	{
 		if ((*iter).name==itemNameID)
@@ -116,7 +112,6 @@ void Inventory::sellItem(string itemNameID, float price)
 			items.erase(iter);
 			itemFound = true;
 			break;
-			
 		}
 	}
 
@@ -124,7 +119,33 @@ void Inventory::sellItem(string itemNameID, float price)
 	{
 		cout << "Stop trying to break my test program by selling items that you don't have." << endl;
 	}
+}
 
+Item* Inventory::FindItem(string itemNameID)
+{
+	bool itemFound = false;
+	Item* tempItem;
+	for (iter = items.begin(); iter != items.end(); iter++)
+	{
+		if ((*iter).name == itemNameID)
+		{
+			tempItem = &*iter;
+			return tempItem;
+			break;
+		}
+	}
+	return NULL;
+}
+
+void Inventory::UseItem(string itemNameID, Character* character)
+{
+	Item* foundItem = FindItem(itemNameID);
+	if (foundItem == NULL)
+		return;
+
+	//TODO: Hayley needs to fix inventory.
+	foundItem->Use(character);
+	removeItem(itemNameID);
 }
 
 void Inventory::show()

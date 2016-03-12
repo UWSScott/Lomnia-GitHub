@@ -86,6 +86,7 @@ public:
 	bool playAnimation = true;
 	int currentAnimation = 0;
 	int characterState = 0;
+	int status = 0;
 	float refreshTime = 0;
 	CombatInstance* combatInstance;
 	virtual void CombatAttacks();
@@ -101,6 +102,8 @@ public:
 	virtual void GetAvailableAttacks(vector<C_Attack>& attackList);
 	virtual  glm::vec3 getModelEye();
 	virtual int getRotation();
+	virtual void EnterCombat();
+	virtual void LeaveCombat();
 	//void Attack(Character& enemyCharacter);
 	float ResSelect(int resType);
 	virtual bool isDead();

@@ -291,3 +291,10 @@ void Camera::SwitchState(int state, PlayableCharacter* character)
 	}
 	camera_Type = state;
 }
+
+void Camera::SetPlayerStatus(int status, PlayableCharacter* character)
+{
+	if (camera_Type != status)
+		camera_Type = status;
+
+}

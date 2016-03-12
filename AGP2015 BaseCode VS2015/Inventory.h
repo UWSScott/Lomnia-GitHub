@@ -9,9 +9,11 @@
 #include "Sword.h"
 #include "Axe.h"
 #include "Knives.h"
+//#include "Character.h"
 
 using namespace std;
 
+class Character;
 
 class Inventory
 {
@@ -22,7 +24,9 @@ public:
 	void show(); 
 	void sellItem(string itemNameID, float price); 
 	void buyItem(string itemNameID, float price); 
-	void addItem(string itemNameID); 
+	void addItem(string itemNameID);
+	Item* FindItem(string itemNameID);
+	void UseItem(string itemNameID, Character* character);
 	void removeItem(string itemNameID);
 	int getSize();
 	int getCount(string id);
