@@ -26,6 +26,7 @@ public:
 	void buyItem(string itemNameID, float price); 
 	void addItem(string itemNameID);
 	Item* FindItem(string itemNameID);
+	Item* GetItem(string itemNameID);
 	void UseItem(string itemNameID, Character* character);
 	void removeItem(string itemNameID);
 	int getSize();

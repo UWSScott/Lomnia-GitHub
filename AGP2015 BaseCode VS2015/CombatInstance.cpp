@@ -59,18 +59,22 @@ void CombatInstance::Attack()
 		{
 			std::list<C_Attack>::iterator it = queuedAttacks.begin();
 			std::advance(it, 0);
+			it->SetCharacterReference(currentCharacter);
 			opponent->combatInstance->BeingAttacked(*it);
 			currentCharacter->refreshTime += it->Refresh();
 			currentCharacter->manaPool -= it->GetManaCost();
 			it = queuedAttacks.erase(it);
-		}
-		else {
+		} else {
 			int attackOption = rand() % 5 + 1;
-			//all classes created quickly for time, will be refined in full game...
 			LightAttack defualtAttack_1 = LightAttack();
 			HeavyAttack defualtAttack_2 = HeavyAttack();
 			Poison defualtAttack_3 = Poison();
 			Stun defualtAttack_4 = Stun();
+
+			defualtAttack_1.SetCharacterReference(currentCharacter);
+			defualtAttack_2.SetCharacterReference(currentCharacter);
+			defualtAttack_3.SetCharacterReference(currentCharacter);
+			defualtAttack_4.SetCharacterReference(currentCharacter);
 
 			switch (attackOption)
 			{

@@ -38,9 +38,10 @@ public:
 
 	C_Attack() {};
 	C_Attack(Character* characterRef);
+	virtual void SetCharacterReference(Character* characterRef);
 	virtual void Attack(Character& attacker, Character &opponent, int block);
 	//void Attack(NPC attacker);
-	virtual void DoEffect(float time) {};
+	virtual void DoEffect(float time, Character* character) {};
 	virtual void Animation() {};
 	virtual void SoundEffect() {};
 	virtual float AttackSpeed(Character* character);

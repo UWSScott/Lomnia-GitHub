@@ -134,13 +134,14 @@ void PlayableCharacter::CombatAttacks()
 	if (keys[SDL_SCANCODE_2]) combatInstance->Input(HeavyAttack());
 	if (keys[SDL_SCANCODE_3]) combatInstance->Input(Poison());
 	if (keys[SDL_SCANCODE_4]) combatInstance->Input(Stun());
-	if (keys[SDL_SCANCODE_5]) combatInstance->Input(ItemUse(Item()));
-	if (keys[SDL_SCANCODE_6]) combatInstance->Input(Flee());
+	if (keys[SDL_SCANCODE_5]) combatInstance->Input(Flee());
 
 	if (keys[SDL_SCANCODE_H])
 	{
-		if(inventory->getCount("Health_Potion") > 0)
-			combatInstance->Input(ItemUse());
+		if (inventory->getCount("Health_Potion") > 0)
+		{
+			combatInstance->Input(ItemUse(inventory->GetItem("Health_Potion")));
+		}
 	}
 
 	/*if (combatInstance->incomingAttack.attackCompleted == false)

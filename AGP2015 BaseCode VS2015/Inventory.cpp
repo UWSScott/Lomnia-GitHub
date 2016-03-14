@@ -137,6 +137,23 @@ Item* Inventory::FindItem(string itemNameID)
 	return NULL;
 }
 
+Item* Inventory::GetItem(string itemNameID)
+{
+	bool itemFound = false;
+	Item* tempItem;
+	for (iter = items.begin(); iter != items.end(); iter++)
+	{
+		if ((*iter).name == itemNameID)
+		{
+			tempItem = &*iter;
+			items.erase(iter);
+			return tempItem;
+			break;
+		}
+	}
+	return NULL;
+}
+
 void Inventory::UseItem(string itemNameID, Character* character)
 {
 	Item* foundItem = FindItem(itemNameID);

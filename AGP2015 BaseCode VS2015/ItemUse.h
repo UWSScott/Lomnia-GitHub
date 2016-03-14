@@ -8,10 +8,10 @@
 class ItemUse : public C_Attack
 {
 private:
-	Item itemObject;
+	Item* itemObject;
 public:
 	ItemUse() { attackText = "ItemUse";  CreateBlockingButton(); };
-	ItemUse(Item s_itemObject);
+	ItemUse(Item* s_itemObject);
 	void Attack(Character& attacker, Character& opponent);
 };
 

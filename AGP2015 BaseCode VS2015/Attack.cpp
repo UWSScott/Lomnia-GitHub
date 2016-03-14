@@ -6,6 +6,12 @@ C_Attack::C_Attack(Character* characterRef)
 	characterReference = characterRef;
 }
 
+void C_Attack::SetCharacterReference(Character* characterRef)
+{
+	characterReference = characterRef;
+}
+
+
 float C_Attack::AttackSpeed(Character* character)
 {
 	possibleRefresh = refreshTime - ((character->speed / 100) * character->weapon->speed);
