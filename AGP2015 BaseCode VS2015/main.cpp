@@ -120,7 +120,7 @@ float heightOfCam = 0;
 TTF_Font * textFont;
 
 const char *skyboxFiles[6] = {
-	"red-sky/red_sky_front.bmp", "red-sky/red_sky_back.bmp", "red-sky/red_sky_right.bmp", "red-sky/red_sky_left.bmp", "red-sky/red_sky_top.bmp", "red-sky/red_sky_top.bmp"
+	"red-sky/red_sky_right.bmp", "red-sky/red_sky_left.bmp", "red-sky/red_sky_back.bmp", "red-sky/red_sky_front.bmp", "red-sky/red_sky_top.bmp", "red-sky/red_sky_top.bmp"
 };
 
 //const char *skyboxFiles[6] = {
@@ -551,7 +551,7 @@ void init(void)
 	Game_Hub_Characters.push_back(new Character("Arnold", "Models/ripper.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(50, 0, -30), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("Arnold", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(30, 0, 20), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("Arnold", "Models/pogo_buny.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(10, 0, 10), shaderProgram));
-
+	//Game_Hub_Characters.push_back(character);
 
 	//NPCs in the hub area
 	//Game_Hub_Characters.push_back(Character("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram));
@@ -559,13 +559,9 @@ void init(void)
 	//NPCS that serve a purpose (shop owners/traders) 
 	//Game_Hub_Characters_Shop.push_back(Character("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(-4, 2, -4), shaderProgram));
 
-	lightPos.x += 50;
-	lightPos.y += 100;
-	lightPos.z += 50;
-
-	//lightPos.x = 91;
-	//lightPos.y = 95;
-	//lightPos.z = -25;
+	//lightPos.x += 50;
+	//lightPos.y += 100;
+	//lightPos.z += 50;
 
 	lightPos.x = 60;
 	lightPos.y = 100;

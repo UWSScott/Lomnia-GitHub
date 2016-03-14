@@ -123,6 +123,7 @@ void PlayableCharacter::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 void PlayableCharacter::CheckQuestGoal(Character *character)
 {
 	//Ian do quest checking etc here - Scott.
+	cout << " PLAYER CLASS" << endl;
 }
 
 void PlayableCharacter::CombatAttacks()

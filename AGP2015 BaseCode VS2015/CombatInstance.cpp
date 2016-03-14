@@ -13,6 +13,8 @@ void CombatInstance::EndCombat()
 	if (opponent->isDead())
 		currentCharacter->LootEnemy(opponent);
 	currentCharacter->CheckQuestGoal(opponent);
+
+
 }
 
 void CombatInstance::Update()

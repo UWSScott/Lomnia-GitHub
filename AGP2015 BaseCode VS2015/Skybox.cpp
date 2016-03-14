@@ -55,6 +55,7 @@ Skybox::Skybox(const char *skyboxmap[6])
 	meshIndexCount = size;
 	meshObject = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
 	loadCubeMapTex(skyboxmap, &textures[0]);
+	rotation = 160;
 }
 
 

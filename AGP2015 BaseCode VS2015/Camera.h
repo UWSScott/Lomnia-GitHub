@@ -26,7 +26,7 @@ public:
 	~Camera(){};
 	void InitalStats();
 	void draw(glm::mat4 &object, glm::vec3 modelEye);
-	void SwitchState(int state, PlayableCharacter* character);// { camera_Type = state; }
+	void SwitchState(int state, PlayableCharacter* character);
 	void TranslateTo(float &currentPosition, float &newPosition);
 	void CombatCinematic(glm::mat4 &object, glm::vec3 modelEye);
 	void CinematicValues(glm::vec3 characterPosition, float playerRotation);

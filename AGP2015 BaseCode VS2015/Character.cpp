@@ -50,6 +50,7 @@ void Character::CheckQuestGoal(Character *character)
 	//This should only apply to AI. If this passes the AI has defeated the player OR the ai was spared meaning we need to 
 	//keep track of the current character as he will return at the end to help the player.
 	//The player class overrides this, so any quest checking should be done inside that.
+	cout << " CHARACTER CLASS " << endl;
 }
 
 void Character::Dead()
