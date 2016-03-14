@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DEFENCEPOTION_H
+#define DEFENCEPOTION_H
 #include "Potion.h"
 
 
@@ -10,3 +11,5 @@ public:
 
 
 };
+
+#endif

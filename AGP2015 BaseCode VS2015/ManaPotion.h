@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MANAPOTION_H
+#define MANAPOTION_H
 #include "Potion.h"
 
 
@@ -10,3 +11,5 @@ public:
 
 
 };
+
+#endif

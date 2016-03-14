@@ -1,3 +1,6 @@
+#ifndef INVENTORY_H
+#define INVENTORY_H
+
 #include <iostream> 
 #include <vector>
 #include <ctime> 
@@ -38,3 +41,5 @@ public:
 	float gold;
 	
 };
+
+#endif

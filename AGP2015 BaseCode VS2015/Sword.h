@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SWORD_H
+#define SWORD_H
 
 #include "Weapon.h"
 
@@ -11,3 +12,5 @@ public:
 	//add rarity!
 
 };
+
+#endif

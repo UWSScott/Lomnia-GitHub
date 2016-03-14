@@ -1,4 +1,5 @@
-#pragma once
+#ifndef KNIVES_H
+#define KNIVES_H
 
 #include "Weapon.h"
 
@@ -8,3 +9,6 @@ public:
 	Knives();
 
 };
+
+
+#endif
