@@ -35,7 +35,7 @@ float C_Attack::damageCalc(Character& a, Character& b) //A is attacker, B is vic
 void C_Attack::Attack(Character& attacker, Character &opponent, int block)
 {
 	int damage = (damageCalc(attacker, opponent)/block);
-	//opponent.Damage(damage);
+	opponent.Damage(damage);
 	cout << damage << " damage done to " << attacker.characterName << " by : " << attackText <<" current health of character: " << attacker.health << endl;
 	attackCompleted = true;
 }

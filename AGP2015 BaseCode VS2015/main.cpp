@@ -548,9 +548,13 @@ void init(void)
 
 
 
-	Game_Hub_Characters.push_back(new Character("Arnold", "Models/ripper.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(50, 0, -30), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("Arnold", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(30, 0, 20), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("Arnold", "Models/pogo_buny.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(10, 0, 10), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_1", "Models/ripper.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(50, 0, -30), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_2", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(30, 0, 20), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_3", "Models/pogo_buny.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(10, 0, 10), shaderProgram));
+
+	character->EnterCombat(Game_Hub_Characters[0]);
+	Game_Hub_Characters[0]->EnterCombat(character);
+
 	//Game_Hub_Characters.push_back(character);
 
 	//NPCs in the hub area
@@ -583,6 +587,10 @@ void update(void) {
 	Game_Camera.update(character->getModelEye(), character->getRotation());
 	character->Update();
 
+	for (int i = 0; i < Game_Hub_Characters.size(); i++)
+	{
+		Game_Hub_Characters[i]->Update();
+	}
 
 	if (keys[SDL_SCANCODE_I]) lightPos.x += 0.1f;
 	if (keys[SDL_SCANCODE_K]) lightPos.x -= 0.1f;

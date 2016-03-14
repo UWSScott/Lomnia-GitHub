@@ -16,7 +16,8 @@ class CombatInstance
 {
 private:
 	std::clock_t start;
-	double duration;
+	double duration = 0;
+	double timeDifference = 0;
 
 public:
 	float peviousTime = 0;

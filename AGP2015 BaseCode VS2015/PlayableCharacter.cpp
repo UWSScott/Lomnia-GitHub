@@ -47,7 +47,7 @@ void PlayableCharacter::Dead()
 void PlayableCharacter::Input()
 {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	if (inCombat == false && !isDead())
+	if (combatInstance == NULL && !isDead())
 	{
 		characterState = IDLE;
 		if (keys[SDL_SCANCODE_A]) { characterState = IDLE;  rotation -= 1.0f; }
@@ -55,7 +55,9 @@ void PlayableCharacter::Input()
 		if (keys[SDL_SCANCODE_W]) { characterState = WALKING;  position = MoveForward(position, rotation, 0.1f); }
 		if (keys[SDL_SCANCODE_S]) { characterState = WALKING;  position = MoveForward(position, rotation, -0.1f); }
 		if (keys[SDL_SCANCODE_X]) { characterState = ATTACKING; }
-	} else if(inCombat == true && combatInstance != NULL){
+	} else if(combatInstance != NULL){
+		combatInstance->Update();
+		//BlockAttack();
 		CombatAttacks();
 	}
 }

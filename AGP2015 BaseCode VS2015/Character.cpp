@@ -83,14 +83,16 @@ glm::vec3 Character::getModelEye()
 	return position;
 }
 
-void Character::EnterCombat()
+void Character::EnterCombat(Character* opponent)
 {
 	status = STATE_COMBAT;
+	combatInstance = new CombatInstance(this, opponent);
 }
 
 void Character::LeaveCombat()
 {
 	status = STATE_NORMAL;
+	combatInstance = NULL;
 }
 
 void Character::draw(glm::mat4 object)
@@ -209,6 +211,12 @@ void Character::Update()
 {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 
+	if (combatInstance != NULL)
+	{
+		//cout << "HRERE" << endl;
+		combatInstance->Update();
+	}
+
 	if (!isDead())
 	{
 		currentAnimation = 0;
@@ -229,6 +237,7 @@ void Character::Update()
 		if (keys[SDL_SCANCODE_A]) rotation -= 5.0f;
 		if (keys[SDL_SCANCODE_D]) rotation += 5.0f;
 	}
+
 	Animate();
 }
 

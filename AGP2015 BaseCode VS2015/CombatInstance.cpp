@@ -2,7 +2,7 @@
 
 CombatInstance::CombatInstance(Character *s_current, Character *s_opponent)
 {
-	currentCharacter = s_current;  opponent = s_opponent; start = std::clock(); currentCharacter->inCombat = true; 
+	currentCharacter = s_current;  opponent = s_opponent; currentCharacter->inCombat = true; start = 0; //start = std::clock();
 }
 
 
@@ -19,9 +19,22 @@ void CombatInstance::EndCombat()
 
 void CombatInstance::Update()
 {
-	duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+	//duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+	duration = (((std::clock() - start) / (double)CLOCKS_PER_SEC));
+	timeDifference = duration - start;
+	if (timeDifference >= currentCharacter->refreshTime)
+	{
+		start = duration;
+		currentCharacter->refreshTime = 0;
+	}
+
+	//cout << currentCharacter->characterName << " t: " << timeDifference << "start: " << start << " duration: " << duration << endl;
+
+	//if (incomingAttack != NULL)
+	incomingAttack.blockingTime -= duration;
+	incomingAttack.DoEffect(duration, opponent);
+	Attack();
 	currentCharacter->BlockAttack();
-	incomingAttack.DoEffect(duration);
 }
 
 void CombatInstance::BeingAttacked(C_Attack s_attack)
@@ -55,6 +68,8 @@ void CombatInstance::Attack()
 {
 	if (currentCharacter->refreshTime <= 0)
 	{
+		cout << currentCharacter->characterName << "("<<currentCharacter->health<<")" << " should be attacking! : " << opponent->characterName << " has (attacks) : " << queuedAttacks.size() << endl;
+
 		if (queuedAttacks.size() > 0)
 		{
 			std::list<C_Attack>::iterator it = queuedAttacks.begin();

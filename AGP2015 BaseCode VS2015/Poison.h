@@ -19,8 +19,8 @@ public:
 	virtual void DoEffect(float time, Character* character)
 	{
 		//TODO setup function to poison character
-		if(rand() % 500 == 0)
-			character->combatInstance->Damage(rand() % maxDamage);
+	//	if(rand() % 500 == 0)
+		//	character->combatInstance->Damage(rand() % maxDamage);
 	}
 };
 

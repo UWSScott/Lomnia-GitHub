@@ -88,7 +88,7 @@ public:
 	int characterState = 0;
 	int status = 0;
 	float refreshTime = 0;
-	CombatInstance* combatInstance;
+	CombatInstance* combatInstance = NULL;
 	virtual void CombatAttacks();
 	virtual void BlockAttack();
 
@@ -96,13 +96,14 @@ public:
 	Character(string s_characterName, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram);
 	virtual void Update();
 	virtual void Animate();
+	virtual void Damage(float damageValue) { health -= damageValue; };
 	virtual void InitalStats(GLuint setShaderProgram);
 	virtual void draw(glm::mat4 object);
 	virtual void draw(glm::mat4 object, GLuint s_shaderUsed, int pass);
 	virtual void GetAvailableAttacks(vector<C_Attack>& attackList);
 	virtual  glm::vec3 getModelEye();
 	virtual int getRotation();
-	virtual void EnterCombat();
+	virtual void EnterCombat(Character* opponent);
 	virtual void LeaveCombat();
 	//void Attack(Character& enemyCharacter);
 	float ResSelect(int resType);
