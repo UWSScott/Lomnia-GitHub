@@ -42,12 +42,14 @@
 #include <list>
 #include <random>
 #include <algorithm> 
+#include "Quest.h"
 #include "Weapon.h"
 #include "Attack.h"
 #include "CombatInstance.h"
 #include "Inventory.h"
 
 class CombatInstance;
+
 
 class Character : public Gameobject
 {
@@ -69,6 +71,7 @@ public:
 	int max_Defence = 5;
 	int speed = 5;
 	int max_Speed = 10;
+	Quest* currentQuest = new Quest();
 	Weapon* weapon = new Weapon();
 	Inventory* inventory = new Inventory();
 	//Armor

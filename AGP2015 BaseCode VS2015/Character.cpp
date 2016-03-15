@@ -51,6 +51,7 @@ void Character::CheckQuestGoal(Character *character)
 	//keep track of the current character as he will return at the end to help the player.
 	//The player class overrides this, so any quest checking should be done inside that.
 	cout << " CHARACTER CLASS " << endl;
+	currentQuest->Conditions(character);
 }
 
 void Character::Dead()

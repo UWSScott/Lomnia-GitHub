@@ -129,6 +129,9 @@
     <ClCompile Include="Inventory.cpp">
       <Filter>Source Files\Item</Filter>
     </ClCompile>
+    <ClCompile Include="Quest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="anorms.h">
@@ -246,6 +249,9 @@
       <Filter>Header Files\Item</Filter>
     </ClInclude>
     <ClInclude Include="Terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Quest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
