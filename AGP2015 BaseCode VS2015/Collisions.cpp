@@ -35,31 +35,6 @@ Collisions Collisions::CollisionCircles(GLfloat ix, GLfloat iz, GLfloat r) {
 
 }
 
-//Collisions::createCubes(glm::vec3 vecMax, glm::vec3 vecMin) {
-//	struct AABB aabb;
-//	aabb.vecMax = vecMax;
-//	aabb.vecMax = vecMin;
-//	return aabb;
-//}
-
-
-//bool Collisions::checkCollision(Collisions circle, Collisions circle2) {
-//	GLfloat radius = circle.getRadius();
-//	GLfloat x = circle.getX();
-//	GLfloat z = circle.getZ();
-//
-//	GLfloat radius2 = circle2.getRadius();
-//	GLfloat x2 = circle2.getX();
-//	GLfloat z2 = circle2.getZ();
-//
-//	int minDist = radius + radius2;
-//	int distance = sqrt(((x - x2) * (x - x2)) + ((z - z2) *(z - z2)));
-//	if (minDist >= distance) {
-//		return true;
-//	}
-//	else return false;
-//}
-
 bool Collisions::checkCollision(const AABB* tBox, const glm::vec3& vecPoint)
 {
 
@@ -75,9 +50,6 @@ bool Collisions::checkCollision(const AABB* tBox, const glm::vec3& vecPoint)
 	return false;
 
 }
-
-
-
 
 
 Collisions::~Collisions()

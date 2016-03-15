@@ -218,7 +218,7 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 	timeDifference = duration - start;
 	//cout << duration << " cinematic timer: " << Cinematic_Timer << " start: " << start << " y timeDifference: " << timeDifference << endl;
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	if (keys[SDL_SCANCODE_F12])
+	if (keys[SDL_SCANCODE_P])
 	{
 		camera_Type++;
 		if (camera_Type > 3)

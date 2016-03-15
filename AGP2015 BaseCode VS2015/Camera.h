@@ -38,7 +38,6 @@ public:
 	float rotation;
 
 	glm::vec3 cinematicLookAt;
-
 	glm::vec3 eye;
 	glm::vec3 at;
 	glm::vec3 up;

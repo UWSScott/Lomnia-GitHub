@@ -29,16 +29,13 @@ public:
 	glm::vec3 scale = glm::vec3(1,1,1);
 	float rotation = 0;
 	string collisionName = "DEFAULT";
-	Collisions* Collider = new Collisions();
+	Collisions* Collider;// = new Collisions();
 	rt3d::materialStruct material;
 	GLuint meshIndexCount;
 	GLuint meshObject;
 	GLuint shaderProgram;
 	GLuint texture;
 	GLuint depthMapTexture;
-	glm::vec3 maxVec;
-	glm::vec3 minVec;
-
 
 	Gameobject() {};
 	virtual void setShader(GLuint s_shaderProgram);

@@ -660,6 +660,7 @@ void update(void) {
 		if (character->Collider->checkCollision(Game_Hub_Prefabs[i].Collider->aabb, character->position))
 		{
 			character->position = oldPlayerPos;
+			character->CheckCollision(&Game_Hub_Prefabs[i], typeid(Game_Hub_Prefabs[i]).name());
 			cout << "collision with " << i << endl;
 		}
 	}

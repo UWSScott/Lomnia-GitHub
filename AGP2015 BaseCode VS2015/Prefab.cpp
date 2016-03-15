@@ -2,14 +2,12 @@
 
 Prefab::Prefab(GLuint s_shaderProgram, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, float s_rotation, glm::vec3 s_maxVec, glm::vec3 s_minVec)
 {
+	Collider = new Collisions(s_minVec, s_maxVec);
 	collisionName = "STATIC_PREFAB";
 	shaderProgram = s_shaderProgram;
 	position = s_position;
 	scale = s_scale;
 	rotation = s_rotation;
-	maxVec = s_maxVec;
-	minVec = s_minVec;
-	Collider = new Collisions(s_minVec, s_maxVec);
 	FileLoader* fileLoader = new FileLoader;
 	texture = fileLoader->loadBitmap(textureName);
 	delete fileLoader;

@@ -1,4 +1,5 @@
 #include "Character.h"
+#include "Prefab.h"
 
 struct MostDamageSort {
 	MostDamageSort(Character& character) { this->character = character; }
@@ -202,14 +203,35 @@ void Character::CombatAttacks()
 
 void Character::InitalStats(GLuint setShaderProgram){}
 
+void Character::CheckCollision(Gameobject* s_gameobject, string idType)
+{
+	cout << " idType : " << idType << endl;
+	//(Character)s_gameobject->
+	//cout << dynamic_cast <Prefab*>(s_gameobject)->position.x << endl;
+
+	if (Character* d = dynamic_cast<Character*>(s_gameobject))
+	{
+		cout << d->characterName << endl;
+	}
+
+	//if (objectID == "ENEMY")
+	//{
+	//	//EnterCombat()
+	//}
+}
+
 void Character::Animate()
 {
 	if (!playAnimation)
 		return;
 
-	currentAnimation = characterState;
+	if(combatInstance != NULL)
+		characterState = ATTACKING;
 	if (isDead())
-		currentAnimation = DEAD;
+		characterState = DEAD;
+
+	currentAnimation = characterState;
+
 
 
 	tmpModel.Animate(currentAnimation, 0.1);
@@ -226,12 +248,13 @@ void Character::Update()
 		combatInstance->Update();
 	}
 
+	characterState = IDLE;
 	if (!isDead())
 	{
 		currentAnimation = 0;
 		if (keys[SDL_SCANCODE_W])
 		{
-			currentAnimation = 1;
+			characterState = WALKING;
 			position = MoveForward(position, rotation, 0.1f);
 		}
 		else {
@@ -239,12 +262,13 @@ void Character::Update()
 		}
 		if (keys[SDL_SCANCODE_S])
 		{
-			currentAnimation = 1;
+			characterState = WALKING;
 			position = MoveForward(position, rotation, -0.1f);
 		}
 
-		if (keys[SDL_SCANCODE_A]) rotation -= 5.0f;
-		if (keys[SDL_SCANCODE_D]) rotation += 5.0f;
+		if (keys[SDL_SCANCODE_A]) rotation -= 2.0f;
+		if (keys[SDL_SCANCODE_D]) rotation += 2.0f;
+		if (keys[SDL_SCANCODE_M]) characterState = ATTACKING;
 	}
 
 	Animate();

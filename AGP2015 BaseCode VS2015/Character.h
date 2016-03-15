@@ -62,8 +62,8 @@ public:
 
 	string characterName = "";
 	string ID = "";
-	int health = 10;
-	int max_Health = 10;
+	int health = 100;
+	int max_Health = 100;
 	int manaPool;
 	int max_Mana = 10;
 	int strength = 5;
@@ -105,6 +105,7 @@ public:
 	virtual void draw(glm::mat4 object);
 	virtual void draw(glm::mat4 object, GLuint s_shaderUsed, int pass);
 	virtual void GetAvailableAttacks(vector<C_Attack>& attackList);
+	virtual void CheckCollision(Gameobject* s_gameobject, string idType);
 	virtual  glm::vec3 getModelEye();
 	virtual int getRotation();
 	virtual void EnterCombat(Character* opponent);
