@@ -61,6 +61,7 @@ public:
 	//int DoIt(float a, char b, char c) { cout << "TMyClass::DoIt" << endl; return 1; };
 
 	string characterName = "";
+	string ID = "";
 	int health = 10;
 	int max_Health = 10;
 	int manaPool;

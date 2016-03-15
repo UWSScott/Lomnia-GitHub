@@ -552,8 +552,8 @@ void init(void)
 	Game_Hub_Characters.push_back(new Character("AI_2", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(30, 0, 20), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_3", "Models/pogo_buny.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(10, 0, 10), shaderProgram));
 
-	character->EnterCombat(Game_Hub_Characters[0]);
-	Game_Hub_Characters[0]->EnterCombat(character);
+	//character->EnterCombat(Game_Hub_Characters[0]);
+	//Game_Hub_Characters[0]->EnterCombat(character);
 
 	//Game_Hub_Characters.push_back(character);
 
@@ -602,6 +602,12 @@ void update(void) {
 	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
 	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
 	if (keys[SDL_SCANCODE_Z]) character->Damage(100);
+	if (keys[SDL_SCANCODE_C])
+	{
+		character->EnterCombat(Game_Hub_Characters[0]);
+		Game_Hub_Characters[0]->EnterCombat(character);
+	}
+
 }
 
 
