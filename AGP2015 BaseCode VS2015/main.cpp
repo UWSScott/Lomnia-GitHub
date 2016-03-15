@@ -552,8 +552,8 @@ void init(void)
 	Game_Hub_Characters.push_back(new Character("AI_2", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(30, 0, 20), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_3", "Models/pogo_buny.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(10, 0, 10), shaderProgram));
 
-	character->EnterCombat(Game_Hub_Characters[0]);
-	Game_Hub_Characters[0]->EnterCombat(character);
+	//character->EnterCombat(Game_Hub_Characters[0]);
+	//Game_Hub_Characters[0]->EnterCombat(character);
 
 	//Game_Hub_Characters.push_back(character);
 
