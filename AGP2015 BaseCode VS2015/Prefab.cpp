@@ -1,13 +1,15 @@
 #include "Prefab.h"
 
-Prefab::Prefab(GLuint s_shaderProgram, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, float s_rotation)
+Prefab::Prefab(GLuint s_shaderProgram, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, float s_rotation, glm::vec3 s_maxVec, glm::vec3 s_minVec)
 {
 	collisionName = "STATIC_PREFAB";
 	shaderProgram = s_shaderProgram;
 	position = s_position;
 	scale = s_scale;
 	rotation = s_rotation;
-
+	maxVec = s_maxVec;
+	minVec = s_minVec;
+	Collider = new Collisions(s_minVec, s_maxVec);
 	FileLoader* fileLoader = new FileLoader;
 	texture = fileLoader->loadBitmap(textureName);
 	delete fileLoader;
@@ -41,9 +43,9 @@ void Prefab::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthMapTexture);
 
-	//if (pass == 0)
-	//	glCullFace(GL_BACK);
-	//else
+	if (pass == 0)
+		glCullFace(GL_BACK);
+	else
 		glCullFace(GL_FRONT);
 
 	object = glm::translate(object, glm::vec3(position.x, position.y, position.z));
