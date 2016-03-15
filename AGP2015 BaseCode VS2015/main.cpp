@@ -552,8 +552,8 @@ void init(void)
 	Game_Hub_Characters.push_back(new Character("AI_2", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(30, 0, 20), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_3", "Models/pogo_buny.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(10, 0, 10), shaderProgram));
 
-	//character->EnterCombat(Game_Hub_Characters[0]);
-	//Game_Hub_Characters[0]->EnterCombat(character);
+	character->EnterCombat(Game_Hub_Characters[0]);
+	Game_Hub_Characters[0]->EnterCombat(character);
 
 	//Game_Hub_Characters.push_back(character);
 
@@ -587,9 +587,12 @@ void update(void) {
 	Game_Camera.update(character->getModelEye(), character->getRotation());
 	character->Update();
 
+
 	for (int i = 0; i < Game_Hub_Characters.size(); i++)
 	{
 		Game_Hub_Characters[i]->Update();
+		//if (Game_Hub_Characters[i]->isDead())
+		//	cout << Game_Hub_Characters[i]->characterName << " : " << Game_Hub_Characters[i]->isDead() << endl;
 	}
 
 	if (keys[SDL_SCANCODE_I]) lightPos.x += 0.1f;
@@ -598,14 +601,12 @@ void update(void) {
 	if (keys[SDL_SCANCODE_L]) lightPos.z -= 0.1f;
 	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
 	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
-
+	if (keys[SDL_SCANCODE_Z]) character->Damage(100);
 }
 
 
 void RenderScene(GLuint refShaderProgram) {
 	// clear the screen
-
-
 	glm::mat4 projection(1.0);
 	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 1920.0f / 1080.0f, 1.0f, 1000.0f);
 
@@ -662,11 +663,11 @@ void RenderScene(GLuint refShaderProgram) {
 
 	//if(currentPass == 1)
 		//houseTest->draw(mvStack.top(), refShaderProgram, currentPass);
+
 	character->draw(mvStack.top(), refShaderProgram, currentPass);
 
 	if (currentPass == 1)
 		terrain->draw(mvStack.top(), refShaderProgram, currentPass);
-
 	for (int i = 0; i < Game_Hub_Characters.size(); i++)
 	{
 		Game_Hub_Characters[i]->draw(mvStack.top());
@@ -725,7 +726,9 @@ void draw(SDL_Window * window)
 	{
 		Game_Hub_Characters_Shop[i]->SetDepthMap(depthMap);
 	}
+
 	RenderScene(normalShadowProgram);
+
 	SDL_GL_SwapWindow(window); // swap buffers
 
 }

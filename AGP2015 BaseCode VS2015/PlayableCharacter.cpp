@@ -59,6 +59,8 @@ void PlayableCharacter::Input()
 		combatInstance->Update();
 		//BlockAttack();
 		CombatAttacks();
+		if (combatInstance == NULL)
+			cout << " FSAFAS HIHIHIH ";
 	}
 }
 
@@ -80,11 +82,6 @@ void PlayableCharacter::draw(glm::mat4 object)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	//Animation
-	//tmpModel.Animate(currentAnimation, 0.1);
-	//rt3d::updateMesh(meshObject, RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
-
-	//glBindTexture(GL_TEXTURE_2D, texture);
 	modelAt = MoveForward(position, rotation, 1.0f);
 	object = glm::translate(object, MoveForward(position, rotation, 1.0f));
 	object = glm::rotate(object, float((90.0f - rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -95,7 +92,7 @@ void PlayableCharacter::draw(glm::mat4 object)
 	rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 
-	if (weapon->getEquiped())
+	if (weapon != NULL && weapon->getEquiped())
 		weapon->draw(object, position, currentAnimation, rotation);
 }
 
@@ -118,8 +115,8 @@ void PlayableCharacter::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 	rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 
-	if (weapon->getEquiped())
-		weapon->draw(object, position, currentAnimation, rotation);
+	if (weapon != NULL && weapon->getEquiped())
+		weapon->draw(object, position, currentAnimation, rotation, s_shaderUsed, depthMapTexture, pass);
 }
 
 void PlayableCharacter::CheckQuestGoal(Character *character)
@@ -130,6 +127,9 @@ void PlayableCharacter::CheckQuestGoal(Character *character)
 
 void PlayableCharacter::CombatAttacks()
 {
+	if (isDead() == true || combatInstance == NULL)
+		return;
+
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 
 	if (keys[SDL_SCANCODE_1]) combatInstance->Input(LightAttack());

@@ -9,7 +9,7 @@
 #define HURT_1 3
 #define HURT_2	4
 #define HURT_3	5
-#define DEAD 16
+#define DEAD 17
 
 
 

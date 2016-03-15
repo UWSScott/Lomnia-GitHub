@@ -8,17 +8,30 @@ CombatInstance::CombatInstance(Character *s_current, Character *s_opponent)
 
 void CombatInstance::EndCombat()
 {
-	if (currentCharacter->isDead() == true)
-		return;
+	//if (currentCharacter->isDead() == true)
+	//	return;
+
 	if (opponent->isDead())
 		currentCharacter->LootEnemy(opponent);
-	currentCharacter->CheckQuestGoal(opponent);
+
+	if (currentCharacter->isDead() || opponent->isDead())
+	{
+		currentCharacter->CheckQuestGoal(opponent);
+		opponent->LeaveCombat();
+		currentCharacter->LeaveCombat();
+	}
 
 
 }
 
 void CombatInstance::Update()
 {
+	if (currentCharacter == NULL || opponent == NULL || currentCharacter->isDead()|| opponent->isDead())
+	{
+		EndCombat();
+		return;
+	}
+
 	//duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
 	duration = (((std::clock() - start) / (double)CLOCKS_PER_SEC));
 	timeDifference = duration - start;
@@ -35,6 +48,7 @@ void CombatInstance::Update()
 	incomingAttack.DoEffect(duration, opponent);
 	Attack();
 	currentCharacter->BlockAttack();
+	EndCombat();
 }
 
 void CombatInstance::BeingAttacked(C_Attack s_attack)
@@ -66,6 +80,12 @@ void CombatInstance::Input(C_Attack selected_Attack)
 
 void CombatInstance::Attack()
 {
+	if (currentCharacter == NULL || currentCharacter->isDead() || opponent == NULL || opponent->isDead())
+	{
+		cout << "FSFADSFAFDFASFDSAFDA" << endl;
+		return;
+	}
+
 	if (currentCharacter->refreshTime <= 0)
 	{
 		cout << currentCharacter->characterName << "("<<currentCharacter->health<<")" << " should be attacking! : " << opponent->characterName << " has (attacks) : " << queuedAttacks.size() << endl;
