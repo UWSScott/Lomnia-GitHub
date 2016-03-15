@@ -1,4 +1,5 @@
-#pragma once
+#ifndef POTION_H
+#define POTION_H
 #include "Item.h"
 
 
@@ -11,3 +12,6 @@ public:
 	virtual void use() = 0; //pure virtual function
 
 };
+
+
+#endif

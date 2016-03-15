@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STRENGTHPOTION_H
+#define STRENGTHPOTION_H
 #include "Potion.h"
 
 
@@ -10,3 +11,5 @@ public:
 
 
 };
+
+#endif

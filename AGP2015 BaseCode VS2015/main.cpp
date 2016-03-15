@@ -609,8 +609,6 @@ void RenderScene(GLuint refShaderProgram) {
 	glm::mat4 projection(1.0);
 	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 1920.0f / 1080.0f, 1.0f, 1000.0f);
 
-
-
 	GLfloat scale(1.0f); // just to allow easy scaling of complete scene
 
 	glm::mat4 modelview(1.0); // set base position for scene

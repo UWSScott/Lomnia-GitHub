@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AXE_H
+#define AXE_H
 
 #include "Weapon.h"
 
@@ -8,3 +9,5 @@ public:
 	Axe();
 	
 };
+
+#endif
