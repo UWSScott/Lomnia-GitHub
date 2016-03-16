@@ -175,6 +175,7 @@
     <ClCompile Include="PlayableCharacter.cpp" />
     <ClCompile Include="Prefab.cpp" />
     <ClCompile Include="Quest.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="rt3d.cpp" />
     <ClCompile Include="rt3dObjLoader.cpp" />
     <ClCompile Include="Skybox.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Potion.h" />
     <ClInclude Include="Prefab.h" />
     <ClInclude Include="Quest.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="rt3d.h" />
     <ClInclude Include="rt3dObjLoader.h" />
     <ClInclude Include="Skybox.h" />

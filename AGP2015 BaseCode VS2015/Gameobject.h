@@ -13,6 +13,7 @@ using namespace std;
 //#include <glm/gtc/type_ptr.hpp>
 //#include <stack>
 //#include "md2model.h"
+#include "ResourceManager.h"
 #include <SDL_ttf.h>
 
 #define STATE_LOADING 0

@@ -42,6 +42,32 @@ Character::Character(string s_characterName, char *modelName, char *textureName,
 	delete fileLoader;
 }
 
+Character::Character(string s_characterName, MD2Holder* modelInfo, TextureHolder* textureInfo, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram)
+{
+	//Collider = new Collisions();
+	characterName = s_characterName;
+	shaderProgram = s_shaderprogram;
+	material =
+	{
+		{ 0.4f, 0.2f, 0.2f, 1.0f }, // ambient
+		{ 0.8f, 0.5f, 0.5f, 1.0f }, // diffuse
+		{ 1.0f, 0.8f, 0.8f, 1.0f }, // specular
+		2.0f  // shininess
+	};
+
+	tmpModel = modelInfo->md2model;
+	meshObject = modelInfo->model; //tmpModel.ReadMD2Model(modelName);
+	md2VertCount = modelInfo->md2VertCount;
+	texture = textureInfo->texture;
+
+	scale = s_scale;
+	position = s_position;
+
+	//FileLoader* fileLoader = new FileLoader;
+	//texture = fileLoader->loadBitmap(textureName);
+	//delete fileLoader;
+}
+
 glm::vec3 Character::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d)
 {
 	return glm::vec3(cam.x + d*std::sin(angle*DEG_TO_RAD), cam.y, cam.z - d*std::cos(angle*DEG_TO_RAD));

@@ -98,6 +98,7 @@ public:
 
 	Character() {};
 	Character(string s_characterName, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram);
+	Character(string s_characterName, MD2Holder* modelInfo, TextureHolder* textureInfo, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram);
 	virtual void Update();
 	virtual void Animate();
 	virtual void Damage(float damageValue) { health -= damageValue; };
