@@ -7,6 +7,7 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 	characterName = s_characterName;
 	shaderProgram = s_shaderprogram;
 	status = STATE_NORMAL;
+	canDie = false;
 
 	material =
 	{
@@ -22,8 +23,12 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 	weapon->setEquiped(true);
 
 	rotation = 0;
+	manaPool = 10;
 	scale = s_scale;
 	position = s_position;
+
+	//Potion* tempPotion = new Medkit(1);
+	inventory->addItem("Health_Potion");
 
 	FileLoader* fileLoader = new FileLoader;
 	texture = fileLoader->loadBitmap(textureName);
@@ -145,6 +150,7 @@ void PlayableCharacter::CombatAttacks()
 		if (inventory->getCount("Health_Potion") > 0)
 		{
 			combatInstance->Input(ItemUse(inventory->GetItem("Health_Potion")));
+			cout << " PLAYER HEALED " << endl;
 		}
 	}
 }

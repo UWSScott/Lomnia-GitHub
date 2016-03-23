@@ -14,6 +14,11 @@ void Inventory::addItem(string itemNameID)
 		Medkit tempPotion(1);
 		items.push_back(tempPotion);
 	} 
+	if (itemNameID == "Health_Potion")
+	{
+		Medkit tempPotion(1);
+		items.push_back(tempPotion);
+	}
 	else if (itemNameID == "ManaPotion")
 	{
 		ManaPotion tempPotion;

@@ -2,6 +2,9 @@
 #include "PlayableCharacter.h"
 
 #define DEG_TO_RAD 0.017453293
+HCHANNEL ch;
+HCHANNEL combatCh;
+
 
 /* Updates camera position. Same function used in character class. */
 glm::vec3 Camera::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d) {
@@ -31,17 +34,20 @@ void Camera::InitalStats()
 		std::cout << "Can't initialize device";
 
 	songs = new HSAMPLE[4];
-	//songs[0] = fileLoader->loadSample("Sound/Music/Battle_of_the_Titans.wav");
+	songs[0] = fileLoader->loadSample("Sound/Music/Ambient_Hub.wav");
+	songs[2] = fileLoader->loadSample("Sound/Music/Battle_of_the_Titans.wav");
+	
 	delete fileLoader;
 }
 
-void Camera::Sound(int soundFile)
+void Camera::Sound(HCHANNEL &channel, int soundFile)
 {
-	HCHANNEL ch = BASS_SampleGetChannel(songs[soundFile], FALSE);
-	BASS_ChannelSetAttribute(ch, BASS_ATTRIB_FREQ, 0);
-	BASS_ChannelSetAttribute(ch, BASS_ATTRIB_VOL, 0.5);
-	BASS_ChannelSetAttribute(ch, BASS_ATTRIB_PAN, -1);
-	if (!BASS_ChannelPlay(ch, FALSE))
+	BASS_ChannelPause(channel);
+	channel = BASS_SampleGetChannel(songs[soundFile], FALSE);
+	//BASS_ChannelSetAttribute(ch, BASS_ATTRIB_FREQ, 0);
+	//BASS_ChannelSetAttribute(ch, BASS_ATTRIB_VOL, 0.5);
+	//BASS_ChannelSetAttribute(ch, BASS_ATTRIB_PAN, -1);
+	if (!BASS_ChannelPlay(channel, FALSE))
 		std::cout << "Can't play sample" << std::endl;
 
 }
@@ -202,7 +208,6 @@ void Camera::CinematicValues(glm::vec3 characterPosition, float playerRotation)
 	//cout << "cinematic end position: " << Cinematic_X << " Y " << Cinematic_Y << " Z " << Cinematic_Z << endl << endl;
 }
 
-
 void Camera::CombatCinematic(glm::mat4 &object, glm::vec3 modelEye)
 {
 	object = glm::lookAt(position, at, up);
@@ -294,10 +299,29 @@ void Camera::SwitchState(int state, PlayableCharacter* character)
 
 void Camera::SetPlayerStatus(int status, PlayableCharacter* character)
 {
+	int tempholder = camera_Type;
 	if (camera_Type != status)
 	{
 		camera_Type = status;
+		//BASS_StreamFree(songs[tempholder]);
+		//BASS_ChannelStop(ch);
+		//BASS_Start();
+	
+		//BASS_Pause();
+
+		switch (camera_Type)
+		{
+		case STATE_LOADING:
+			Sound(ch, status);
+		case STATE_NORMAL:
+			Sound(ch, status);
+		case STATE_COMBAT:
+			Sound(ch, status);
+		default:
+			break;
+		}
+		
+		
 		cout << "NEW CAMERA STATUS: " << status;
 	}
-
 }

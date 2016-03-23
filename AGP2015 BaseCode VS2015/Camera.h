@@ -31,7 +31,7 @@ public:
 	void CombatCinematic(glm::mat4 &object, glm::vec3 modelEye);
 	void CinematicValues(glm::vec3 characterPosition, float playerRotation);
 	void update(glm::vec3 modelEye, float playerRotation);
-	void Sound(int soundFile);
+	void Sound(HCHANNEL& channel, int soundFile);
 	void SetPlayerStatus(int status, PlayableCharacter* character);
 	glm::vec3 MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d);
 	glm::vec3 MoveRight(glm::vec3 pos, GLfloat angle, GLfloat d);

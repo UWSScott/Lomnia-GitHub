@@ -60,6 +60,7 @@ Character::Character(string s_characterName, MD2Holder* modelInfo, TextureHolder
 	md2VertCount = modelInfo->md2VertCount;
 	texture = textureInfo->texture;
 
+	health = 5;
 	scale = s_scale;
 	position = s_position;
 

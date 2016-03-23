@@ -470,6 +470,8 @@ void update(void) {
 	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
 	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
 	if (keys[SDL_SCANCODE_Z]) character->Damage(100);
+	if (keys[SDL_SCANCODE_B]) character->status = 0;
+	if (keys[SDL_SCANCODE_N]) character->status = 2;
 	if (keys[SDL_SCANCODE_C])
 	{
 		character->EnterCombat(Game_Hub_Characters[0]);
@@ -551,16 +553,13 @@ void RenderScene(GLuint refShaderProgram) {
 	{
 		Game_Hub_Characters_Shop[i]->draw(mvStack.top());
 	}
-	ui->textBox(text[0], skyboxProgram, -0.55, textures[2], true, names[0]);
-	ui->textBox(text[1], skyboxProgram, -0.75, textures[2], false, names[0]);
-	character->manaPool = 10;
+	//ui->textBox(text[0], skyboxProgram, -0.55, textures[2], true, names[0]);
+	//ui->textBox(text[1], skyboxProgram, -0.75, textures[2], false, names[0]);
+	//ui->button(skyboxProgram, textures[6], button[0], 10);
+	//character->manaPool = 10;
 	ui->statusBar(skyboxProgram, 0.9, textures[3], textures[4], (float)character->health / 200);
-
 	ui->statusBar(skyboxProgram, 0.8, textures[5], textures[4], (float)character->manaPool / 20);
 
-
-
-	ui->button(skyboxProgram, textures[6], button[0], 10);
 	currentPass++;
 
 	// remember to use at least one pop operation per push...

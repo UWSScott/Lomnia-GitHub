@@ -48,7 +48,7 @@ GLuint FileLoader::loadBitmap(char *fname, bool repeatTexture)
 HSAMPLE FileLoader::loadSample(char * filename)
 {
 	HSAMPLE sam;
-	if (sam = BASS_SampleLoad(FALSE, filename, 0, 0, 3, BASS_SAMPLE_OVER_POS))
+	if (sam = BASS_SampleLoad(FALSE, filename, 0, 0, 1, BASS_SAMPLE_OVER_POS))
 		std::cout << "sample " << filename << " loaded!" << std::endl;
 	else
 	{
