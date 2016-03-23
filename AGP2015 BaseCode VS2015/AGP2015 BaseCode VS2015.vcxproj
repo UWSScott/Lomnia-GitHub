@@ -183,6 +183,7 @@
     <ClCompile Include="StrengthPotion.cpp" />
     <ClCompile Include="Sword.cpp" />
     <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +227,7 @@
     <ClInclude Include="Stun.h" />
     <ClInclude Include="Sword.h" />
     <ClInclude Include="Terrain.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
