@@ -41,6 +41,7 @@
 #include "HeightMap.h"
 #include "Terrain.h"
 #include "ResourceManager.h"
+#include "UI.h"
 
 /*#include "Stun.h"
 #include "Poison.h"
@@ -118,6 +119,11 @@ int camera = 1;
 float heightOfCam = 0;
 
 TTF_Font * textFont;
+
+UI * ui;
+GLuint text[10];
+GLuint names[10];
+GLuint button[10];
 
 const char *skyboxFiles[6] = {
 	"red-sky/red_sky_right.bmp", "red-sky/red_sky_left.bmp", "red-sky/red_sky_back.bmp", "red-sky/red_sky_front.bmp", "red-sky/red_sky_top.bmp", "red-sky/red_sky_top.bmp"
@@ -311,6 +317,27 @@ void init(void)
 	glUniform1i(glGetUniformLocation(normalShadowProgram, "diffuseTexture"), 1);
 	glUniform1i(glGetUniformLocation(normalShadowProgram, "shadowMap"), 0);
 	simpleDepthShader = rt3d::initShaders("shadow.vert", "shadow.frag");
+
+	ui = new UI;
+
+	if (TTF_Init() == -1)
+		cout << "TTF failed to initialise." << endl;
+
+	textFont = TTF_OpenFont("ESKARGOT.ttf", 48);
+	if (textFont == NULL)
+		cout << "Failed to open font." << endl;
+
+
+	textures[2] = loadBitmap("Models/Textures/textbox.bmp");
+	textures[3] = loadBitmap("Models/Textures/health texture.bmp");
+	textures[4] = loadBitmap("Models/Textures/StatusBar.bmp");
+	textures[5] = loadBitmap("Models/Textures/mana texture.bmp");
+
+	ui->loadRect();
+	text[0] = ui->createTexture("Ahh, the mighty Arnould the wild!", textFont);
+	text[1] = ui->createTexture("Your challenger this time is the raging beast known as fred!", textFont);
+	names[0] = ui->createTexture("Ian:", textFont);
+	button[0] = ui->createTexture("G", textFont);
 
 	/*static_character[0] = new Character("Arnold", "Models/walker.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram);
 	static_character[1] = new Character("Arnold", "Models/ddz.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(3, 0, 0), shaderProgram);
@@ -524,7 +551,16 @@ void RenderScene(GLuint refShaderProgram) {
 	{
 		Game_Hub_Characters_Shop[i]->draw(mvStack.top());
 	}
+	ui->textBox(text[0], skyboxProgram, -0.55, textures[2], true, names[0]);
+	ui->textBox(text[1], skyboxProgram, -0.75, textures[2], false, names[0]);
+	character->manaPool = 10;
+	ui->statusBar(skyboxProgram, 0.9, textures[3], textures[4], (float)character->health / 200);
 
+	ui->statusBar(skyboxProgram, 0.8, textures[5], textures[4], (float)character->manaPool / 20);
+
+
+
+	ui->button(skyboxProgram, textures[6], button[0], 10);
 	currentPass++;
 
 	// remember to use at least one pop operation per push...
@@ -568,6 +604,8 @@ void draw(SDL_Window * window)
 	{
 		Game_Hub_Characters_Shop[i]->SetDepthMap(depthMap);
 	}
+
+	
 
 	RenderScene(normalShadowProgram);
 	SDL_GL_SwapWindow(window); // swap buffers
