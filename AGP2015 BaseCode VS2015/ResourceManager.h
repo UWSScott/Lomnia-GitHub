@@ -75,6 +75,3 @@ public:
 };
 
 #endif
-
-//vector<string> LoadedFileNames;
-//FileLoader* fileLoader = new FileLoader();

@@ -28,8 +28,6 @@ MD2Holder* ResourceManager::LoadMD2(char *fileName)
 		GLuint meshObject = tmpModel.ReadMD2Model(fileName);
 		GLuint md2VertCount = tmpModel.getVertDataSize();
 		LoadedMD2Models.push_back(new MD2Holder(fileName));
-		//LoadedMD2Models.push_back(new MD2Holder(tmpModel, meshObject, md2VertCount, fileName));
-		//LoadedMD2Models.push_back(new MD2Holder(tmpModel, md2VertCount, fileName));
 		return LoadedMD2Models[LoadedMD2Models.size()-1];
 	} else {
 		return LoadedMD2Models[valueFound];
