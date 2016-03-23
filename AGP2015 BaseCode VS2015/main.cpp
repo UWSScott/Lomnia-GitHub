@@ -41,6 +41,7 @@
 #include "HeightMap.h"
 #include "Terrain.h"
 #include "ResourceManager.h"
+#include "UI.h"
 
 /*#include "Stun.h"
 #include "Poison.h"
@@ -80,9 +81,14 @@ glm::vec3 up(0.0f, 1.0f, 0.0f);
 stack<glm::mat4> mvStack;
 
 // TEXTURE STUFF
-GLuint textures[2];
+GLuint textures[7];
 GLuint skybox[5];
 GLuint labels[5];
+
+UI * ui;
+GLuint text[10];
+GLuint names[10];
+GLuint button[10];
 
 rt3d::lightStruct light0 = {
 	{ 0.3f, 0.3f, 0.3f, 0.3f }, // ambient
@@ -394,6 +400,11 @@ void init(void)
 	meshObjects[3] = weapon.ReadMD2Model("Partical_sword.MD2");
 	md2VertCount3 = weapon.getVertDataCount();
 
+	textures[2] = loadBitmap("Models/Textures/textbox.bmp");
+	textures[3] = loadBitmap("Models/Textures/health texture.bmp");
+	textures[4] = loadBitmap("Models/Textures/StatusBar.bmp");
+	textures[5] = loadBitmap("Models/Textures/mana texture.bmp");
+
 
 	/*skybox[0] = loadBitmap("red-sky/Town_ft.bmp");
 	skybox[1] = loadBitmap("red-sky/Town_bk.bmp");
@@ -417,7 +428,7 @@ void init(void)
 	if (TTF_Init() == -1)
 		cout << "TTF failed to initialise." << endl;
 
-	textFont = TTF_OpenFont("MavenPro-Regular.ttf", 48);
+	textFont = TTF_OpenFont("ESKARGOT.ttf", 48);
 	if (textFont == NULL)
 		cout << "Failed to open font." << endl;
 
@@ -454,7 +465,7 @@ void init(void)
 	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(10, 1.2, 10), shaderProgram);
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
-
+	ui = new UI;
 	//Update
 	//houseTest = new Prefab(shaderProgram, "Models/Shop_002.obj" /*"Models/desert.obj"*/ /*"Models/House_001.obj"*/, "Models/Textures/House_001.bmp",glm::vec3(1.3,1.3,1.3),glm::vec3(-10,-0.5,-10));
 	//houseTest = new Prefab(shaderProgram, "Models/Shop_001.obj" /**/ /*"Models/House_001.obj"*/, "Models/Textures/Shop_001.bmp", glm::vec3(1.0, 1.0, 1.0), glm::vec3(0, -1, 0));
@@ -634,6 +645,12 @@ void init(void)
 	//	Game_Hub_Prefabs[i].Collider->aabb =  vecMax = Game_Hub_Prefabs[i].maxVec;
 	//	Game_Hub_Prefabs[i].Collider->aabb->vecMin = Game_Hub_Prefabs[i].minVec;
 	//}
+
+	ui->loadRect();
+	text[0] = ui->createTexture("Ahh, the mighty Arnould the wild!", textFont);
+	text[1] = ui->createTexture("Your challenger this time is the raging beast known as fred!", textFont);
+	names[0] = ui->createTexture("Ian:", textFont);
+	button[0] = ui->createTexture("G", textFont);
 }
 
 glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d) {
@@ -757,6 +774,17 @@ void RenderScene(GLuint refShaderProgram) {
 	{
 		Game_Hub_Characters_Shop[i]->draw(mvStack.top());
 	}
+
+	ui->textBox(text[0] , skyboxProgram, -0.55, textures[2], true, names[0]);
+	ui->textBox(text[1], skyboxProgram, -0.75, textures[2], false, names[0]); 
+	character->manaPool = 10;
+	ui->statusBar(skyboxProgram, 0.9, textures[3], textures[4], (float)character->health/200);
+
+	ui->statusBar(skyboxProgram, 0.8, textures[5], textures[4], (float)character->manaPool/20);
+
+	cout << character->manaPool;
+
+	ui->button(skyboxProgram, textures[6], button[0], 10);
 
 	currentPass++;
 

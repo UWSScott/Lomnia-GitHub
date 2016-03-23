@@ -64,7 +64,7 @@ public:
 	string ID = "";
 	int health = 100;
 	int max_Health = 100;
-	int manaPool;
+	int manaPool = 5;
 	int max_Mana = 10;
 	int strength = 5;
 	int max_Strength = 10;
