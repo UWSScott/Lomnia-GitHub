@@ -295,6 +295,9 @@ void Camera::SwitchState(int state, PlayableCharacter* character)
 void Camera::SetPlayerStatus(int status, PlayableCharacter* character)
 {
 	if (camera_Type != status)
+	{
 		camera_Type = status;
+		cout << "NEW CAMERA STATUS: " << status;
+	}
 
 }

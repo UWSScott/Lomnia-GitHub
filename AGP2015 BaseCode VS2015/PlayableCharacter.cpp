@@ -6,6 +6,8 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 {
 	characterName = s_characterName;
 	shaderProgram = s_shaderprogram;
+	status = STATE_NORMAL;
+
 	material =
 	{
 		{ 0.4f, 0.2f, 0.2f, 1.0f }, // ambient

@@ -80,7 +80,7 @@ glm::vec3 up(0.0f, 1.0f, 0.0f);
 stack<glm::mat4> mvStack;
 
 // TEXTURE STUFF
-GLuint textures[2];
+GLuint textures[7];
 GLuint skybox[5];
 GLuint labels[5];
 
@@ -361,8 +361,6 @@ void init(void)
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/Teleporter_Stand.obj"), Resource_Managment->LoadTexture("Models/Textures/Well.bmp"), glm::vec3(0.4, 0.4, 0.4), glm::vec3(39.33, 0.01, 2.52), 0, glm::vec3(39, 3.2, 4.5), glm::vec3(36.4, -1.0, 2.8)));
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/Teleporter_Stand.obj"), Resource_Managment->LoadTexture("Models/Textures/Well.bmp"), glm::vec3(0.4, 0.4, 0.4), glm::vec3(34.6, 0.01, -2.1), 0, glm::vec3(35.3, 3.2, 0.0), glm::vec3(32.6, -1.0, -4)));
 
-	//do we need these??
-
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/Teleporter_Stand.obj"), Resource_Managment->LoadTexture("Models/Textures/Well.bmp"), glm::vec3(5, 5, 5), glm::vec3(-149.33, 1.86, 77.7), 0, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0)));
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/Teleporter_Stand.obj"), Resource_Managment->LoadTexture("Models/Textures/Well.bmp"), glm::vec3(10, 10, 10), glm::vec3(15.5, 1.86, -126), 0, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0)));
 
@@ -381,12 +379,12 @@ void init(void)
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/Destroyed_House_001.obj"), Resource_Managment->LoadTexture("Models/Textures/Rusty_Shed_Metal_Texture.bmp"), glm::vec3(1.0, 1.0, 1.0), glm::vec3(21.4, 0, 96.3), 0, glm::vec3(30, 20, 104.5), glm::vec3(12.5, -1.0, 88)));
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/Destroyed_House_001.obj"), Resource_Managment->LoadTexture("Models/Textures/Rusty_Shed_Metal_Texture.bmp"), glm::vec3(1.0, 1.0, 1.0), glm::vec3(0, 0, 0), -47.9, glm::vec3(5.6, 20, 10), glm::vec3(-9, -1.0, -9)));
 
-	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(17, 0, -88), -205, glm::vec3(23.8, 6.6, -80), glm::vec3(9.1, -1.0, -96.5)));
-	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(144.5, 1.07, 17.43), 39.4, glm::vec3(156, 6.6, 23.4), glm::vec3(134.8, -1.0, 8.5)));
-	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(-68.3, 0, -18), -93.5, glm::vec3(-60, 6.6, -8.5), glm::vec3(-77, -1.0, -26)));
-	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(62.9, 0, 61.5), -64.4, glm::vec3(70.4, 6.6, 72), glm::vec3(54, -1.0, 51.7)));
-	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(86.5, 0, 58.8), 39.4, glm::vec3(96, 6.6, 68), glm::vec3(76, -1.0, 48)));
-	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(97.11, 0, -50.2), 150, glm::vec3(106, 6.6, -40), glm::vec3(87.6, -1.0, -60)));
+	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/House_002.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(17, 0, -88), -205, glm::vec3(23.8, 6.6, -80), glm::vec3(9.1, -1.0, -96.5)));
+	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/House_002.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(144.5, 1.07, 17.43), 39.4, glm::vec3(156, 6.6, 23.4), glm::vec3(134.8, -1.0, 8.5)));
+	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/House_002.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(-68.3, 0, -18), -93.5, glm::vec3(-60, 6.6, -8.5), glm::vec3(-77, -1.0, -26)));
+	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/House_002.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(62.9, 0, 61.5), -64.4, glm::vec3(70.4, 6.6, 72), glm::vec3(54, -1.0, 51.7)));
+	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/House_002.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(86.5, 0, 58.8), 39.4, glm::vec3(96, 6.6, 68), glm::vec3(76, -1.0, 48)));
+	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/House_002.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(97.11, 0, -50.2), 150, glm::vec3(106, 6.6, -40), glm::vec3(87.6, -1.0, -60)));
 
 	Game_Hub_Characters.push_back(new Character("AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("hobgoblin2.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_2", Resource_Managment->LoadMD2("Models/quigon.MD2"), Resource_Managment->LoadTexture("hobgoblin2.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 20), shaderProgram));
@@ -418,7 +416,7 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	Game_Camera.update(character->getModelEye(), character->getRotation());
-	character->Update();
+	character->Update(&Game_Camera);
 
 
 	for (int i = 0; i < Game_Hub_Characters.size(); i++)

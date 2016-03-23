@@ -90,7 +90,7 @@ public:
 	bool playAnimation = true;
 	int currentAnimation = 0;
 	int characterState = 0;
-	int status = 0;
+	int status = STATE_NORMAL;
 	float refreshTime = 0;
 	CombatInstance* combatInstance = NULL;
 	virtual void CombatAttacks();
