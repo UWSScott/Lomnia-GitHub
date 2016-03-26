@@ -413,9 +413,12 @@ void init(void)
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/House_002.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(86.5, 0, 58.8), 39.4, glm::vec3(96, 6.6, 68), glm::vec3(76, -1.0, 48)));
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/House_002.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(97.11, 0, -50.2), 150, glm::vec3(106, 6.6, -40), glm::vec3(87.6, -1.0, -60)));
 
-	Game_Hub_Characters.push_back(new Character("AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("hobgoblin2.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_1", Resource_Managment->LoadMD2("Models/dragon.MD2"), Resource_Managment->LoadTexture("hobgoblin2.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_2", Resource_Managment->LoadMD2("Models/quigon.MD2"), Resource_Managment->LoadTexture("hobgoblin2.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 20), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_3", Resource_Managment->LoadMD2("Models/pogo_buny.MD2"), Resource_Managment->LoadTexture("hobgoblin2.bmp"), glm::vec3(1), glm::vec3(10, 1.2, 10), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_4", Resource_Managment->LoadMD2("Models/centaur.MD2"), Resource_Managment->LoadTexture("Models/Textures/Final.bmp"), glm::vec3(1), glm::vec3(15, 1.2, 15), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_5", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/delete.bmp"), glm::vec3(1), glm::vec3(19, 1.2, 19), shaderProgram));
+
 
 	//NPCs in the hub area
 	//Game_Hub_Characters.push_back(Character("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram));
@@ -462,6 +465,12 @@ void update(void) {
 		}
 	}
 	oldPlayerPos = character->position;
+
+	if (keys[SDL_SCANCODE_0]) Game_Camera.SetPlayerStatus(0, NULL);
+	if (keys[SDL_SCANCODE_1]) Game_Camera.SetPlayerStatus(1, NULL);
+	if (keys[SDL_SCANCODE_2]) Game_Camera.SetPlayerStatus(2, NULL);
+	if (keys[SDL_SCANCODE_3]) Game_Camera.SetPlayerStatus(3, NULL);
+	if (keys[SDL_SCANCODE_4]) Game_Camera.SetPlayerStatus(4, NULL);
 
 	if (keys[SDL_SCANCODE_I]) lightPos.x += 0.1f;
 	if (keys[SDL_SCANCODE_K]) lightPos.x -= 0.1f;

@@ -2,9 +2,8 @@
 #include "PlayableCharacter.h"
 
 #define DEG_TO_RAD 0.017453293
-HCHANNEL ch;
 HCHANNEL combatCh;
-
+HCHANNEL ch;
 
 /* Updates camera position. Same function used in character class. */
 glm::vec3 Camera::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d) {
@@ -21,7 +20,6 @@ glm::vec3 Camera::MoveRight(glm::vec3 pos, GLfloat angle, GLfloat d)
 	return glm::vec3(pos.x + d*std::cos(angle*DEG_TO_RAD), pos.y, pos.z + d*std::sin(angle*DEG_TO_RAD));
 }
 
-/*The camera information is not loaded from a file, instead hardcoded.*/
 void Camera::InitalStats()
 {
 	position = { 0.0f, 2.5f, 10.0f };
@@ -33,12 +31,15 @@ void Camera::InitalStats()
 	if (!BASS_Init(-1, 44100, 0, 0, NULL))
 		std::cout << "Can't initialize device";
 
-	songs = new HSAMPLE[4];
-	songs[0] = fileLoader->loadSample("Sound/Music/Ambient_Hub.wav");
-	songs[2] = fileLoader->loadSample("Sound/Music/Battle_of_the_Titans.wav");
-	
+	songs = new HSAMPLE[5];
+	songs[0] = fileLoader->loadSample("Sound/Music/Menu_Music.wav"); //Menu
+	songs[1] = fileLoader->loadSample("Sound/Music/Ambient_Hub.wav"); //Ambient
+	songs[2] = fileLoader->loadSample("Sound/Music/Battle_of_the_Titans.wav"); //Combat
+	songs[3] = fileLoader->loadSample("Sound/Music/Shop_Music.wav"); //Vendor
+	songs[4] = fileLoader->loadSample("Sound/Music/Death_Music.wav"); //Death
 	delete fileLoader;
 }
+
 
 void Camera::Sound(HCHANNEL &channel, int soundFile)
 {
@@ -248,6 +249,7 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 		rotation = playerRotation;
 		break;
 	case COMBAT_CINEMATIC:
+	case DEATH_CINEMATIC:
 		if (timeDifference >= Cinematic_Timer || position.y < 0)
 			CinematicValues(modelEye, playerRotation);
 		break;
@@ -279,49 +281,41 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 
 void Camera::SwitchState(int state, PlayableCharacter* character)
 {
-	switch (state)
-	{
-	case FIRST_PERSON:
+	//switch (state)
+	//{
+	//case FIRST_PERSON:
 
-		break;
-	case THIRD_PERSON:
+	//	break;
+	//case THIRD_PERSON:
 
-		break;
-	case COMBAT_CINEMATIC:
-		//Sound(0);// character->characterState);
-		break;
-	default:
-		return;
-		break;
-	}
-	camera_Type = state;
+	//	break;
+	//case COMBAT_CINEMATIC:
+	//	//Sound(0);// character->characterState);
+	//	break;
+	//default:
+	//	return;
+	//	break;
+	//}
+	//camera_Type = state;
 }
 
 void Camera::SetPlayerStatus(int status, PlayableCharacter* character)
 {
+	if (status == STATE_DEATH && camera_Type == FREE_VIEW)
+		return;
+
 	int tempholder = camera_Type;
 	if (camera_Type != status)
 	{
-		camera_Type = status;
-		//BASS_StreamFree(songs[tempholder]);
-		//BASS_ChannelStop(ch);
-		//BASS_Start();
-	
-		//BASS_Pause();
-
-		switch (camera_Type)
+		if (camera_Type < 4)
 		{
-		case STATE_LOADING:
-			Sound(ch, status);
-		case STATE_NORMAL:
-			Sound(ch, status);
-		case STATE_COMBAT:
-			Sound(ch, status);
-		default:
-			break;
+			camera_Type = status;
+			//cout << "NEW CAMERA STATUS: " << status;
 		}
-		
-		
-		cout << "NEW CAMERA STATUS: " << status;
+
+		Sound(ch, status);
+		if(status == STATE_DEATH)
+			camera_Type = FREE_VIEW;
+		//cout << "NEW CAMERA STATUS: " << status;
 	}
 }

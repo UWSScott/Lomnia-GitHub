@@ -5,6 +5,7 @@
 #define THIRD_PERSON 1
 #define COMBAT_CINEMATIC 2
 #define FREE_VIEW 3
+#define DEATH_CINEMATIC 4
 
 #include "rt3d.h"
 #include "rt3dObjLoader.h"
@@ -41,6 +42,7 @@ public:
 	glm::vec3 eye;
 	glm::vec3 at;
 	glm::vec3 up;
+
 private:
 	std::clock_t start = 0;
 	float y_mouse_Smoothing = 1.0f;

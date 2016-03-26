@@ -34,6 +34,7 @@ Character::Character(string s_characterName, char *modelName, char *textureName,
 	meshObject = tmpModel.ReadMD2Model(modelName);
 	md2VertCount = tmpModel.getVertDataSize();
 
+	health = 5;
 	scale = s_scale;
 	position = s_position;
 
@@ -86,6 +87,7 @@ void Character::CheckQuestGoal(Character *character)
 void Character::Dead()
 {
 	characterState = DEAD;
+	status = STATE_DEATH;
 }
 
 void Character::LootEnemy(Character* character)
@@ -122,10 +124,13 @@ void Character::EnterCombat(Character* opponent)
 void Character::LeaveCombat()
 {
 	status = STATE_NORMAL;
-	cout << " GOT HERE DEBUG" << endl;
 	delete combatInstance;
 	combatInstance = NULL;
-	cout << " GOT HERE 2-1 DEBUG" << endl;
+
+	if (isDead())
+	{
+		status = STATE_DEATH;
+	}
 }
 
 void Character::draw(glm::mat4 object)
@@ -169,7 +174,6 @@ void Character::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 
 	rt3d::setUniformMatrix4fv(s_shaderUsed, "modelview", glm::value_ptr(object));
 	rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
-	//rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
 
 	if (weapon != NULL && weapon->getEquiped())
 		weapon->draw(object, position, currentAnimation, rotation);

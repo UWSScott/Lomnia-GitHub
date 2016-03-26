@@ -14,7 +14,7 @@ GLuint FileLoader::loadBitmap(char *fname, bool repeatTexture)
 	tmpSurface = SDL_LoadBMP(fname);
 	if (!tmpSurface)
 	{
-		std::cout << "Error loading bitmap" << std::endl;
+		std::cout << "Error loading bitmap " << fname << std::endl;
 	}
 
 	// bind texture and set parameters

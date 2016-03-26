@@ -62,7 +62,7 @@ public:
 
 	string characterName = "";
 	string ID = "";
-	int health = 100;
+	int health = 10;
 	int max_Health = 100;
 	int manaPool = 10;
 	int max_Mana = 10;

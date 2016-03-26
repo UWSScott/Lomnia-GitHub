@@ -9,10 +9,12 @@
 #include <cstdlib>
 #include <iostream>
 
+#define SOUND_BLOCK 0
+#define SOUND_ATTACK 1
+#define SOUND_HURT 2
+
 class Character;
-
 using namespace std;
-
 
 class C_Attack
 {
@@ -56,6 +58,8 @@ public:
 	virtual float GetBalanceValue() { return (possibleDamage / possibleRefresh); }
 	virtual string GetAttackName() { return attackText; }
 	float damageCalc(Character& a, Character& b); //A is attacker, B is victim
+	virtual void PlayAttackSound(int soundFile);
+	//HSAMPLE *sounds = NULL;
 };
 
 #endif
