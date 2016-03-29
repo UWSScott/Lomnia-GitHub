@@ -4,11 +4,11 @@
 
 Inventory::Inventory()
 {
-	for (int i = 0; i < 5; i++) //Arnould starts with 5 potions
-	{
-		Potion* tempPotion = new Medkit(1);
-		items.push_back(tempPotion);
-	}
+	//for (int i = 0; i < 5; i++) //Arnould starts with 5 potions
+	//{
+	//	Potion* tempPotion = new Medkit(1);
+	//	items.push_back(tempPotion);
+	//}
 
 	gold = 50.00f;
 }
