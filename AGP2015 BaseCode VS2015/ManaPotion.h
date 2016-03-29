@@ -3,12 +3,12 @@
 #include "Potion.h"
 
 
-class ManaPotion : public Potion
+class ManaPotion : public Potion // hello 
 {
 public:
 	ManaPotion();
-	virtual void use();
-
+	void virtual Use(Character* character);
+	void virtual Restore(int restoreValue, Character* character);
 
 };
 

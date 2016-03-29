@@ -416,8 +416,8 @@ void init(void)
 	Game_Hub_Characters.push_back(new Character("AI_1", Resource_Managment->LoadMD2("Models/dragon.MD2"), Resource_Managment->LoadTexture("hobgoblin2.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_2", Resource_Managment->LoadMD2("Models/quigon.MD2"), Resource_Managment->LoadTexture("hobgoblin2.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 20), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_3", Resource_Managment->LoadMD2("Models/pogo_buny.MD2"), Resource_Managment->LoadTexture("hobgoblin2.bmp"), glm::vec3(1), glm::vec3(10, 1.2, 10), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("AI_4", Resource_Managment->LoadMD2("Models/centaur.MD2"), Resource_Managment->LoadTexture("Models/Textures/Final.bmp"), glm::vec3(1), glm::vec3(15, 1.2, 15), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("AI_5", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/delete.bmp"), glm::vec3(1), glm::vec3(19, 1.2, 19), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_4", Resource_Managment->LoadMD2("Models/centaur.MD2"), Resource_Managment->LoadTexture("Models/Textures/Blue_Leather.bmp"), glm::vec3(1), glm::vec3(15, 1.2, 15), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_5", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/White_Fur.bmp"), glm::vec3(1), glm::vec3(19, 1.2, 19), shaderProgram));
 
 
 	//NPCs in the hub area

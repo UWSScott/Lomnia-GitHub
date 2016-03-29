@@ -7,9 +7,8 @@ class SpeedPotion : public Potion
 {
 public:
 	SpeedPotion();
-	virtual void use();
-
-
+	void virtual Use(Character* character);
+	void virtual Restore(int restoreValue, Character* character);
 };
 
 #endif

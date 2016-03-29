@@ -7,7 +7,8 @@ class BonusArmourPotion : public Potion
 {
 public:
 	BonusArmourPotion();
-	virtual void use();
+	void virtual Use(Character* character);
+	void virtual Restore(int restoreValue, Character* character);
 
 
 };

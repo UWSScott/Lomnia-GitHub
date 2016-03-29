@@ -16,6 +16,7 @@ public:
 	void draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimation, int playerRotation, GLuint s_shaderUsed, GLuint depthTexture, int pass);
 	bool getEquiped() { return equiped; }
 	void setEquiped(bool setting) { equiped = setting; }
+	void Use(Character* character) {};
 	int cost = 0;
 	float attackPower = 0;
 	float speed = 0;
