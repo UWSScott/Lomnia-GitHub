@@ -7,9 +7,8 @@ class Medkit : public Potion
 {
 public:
 	Medkit(int potency);
-	virtual void use(); 
-
-
+	void virtual Use(Character* character);
+	void virtual Restore(int restoreValue, Character* character);
 };
 
 #endif

@@ -5,12 +5,12 @@
 
 class Potion : public Item
 {
-private: 
+private:
 	//enum potency {LIGHT, MEDIUM, HEAVY};
 
-public: 
-	virtual void use() = 0; //pure virtual function
-
+public:
+	virtual void Use(Character* character) = 0; //pure virtual function
+	void virtual Restore(int restoreValue, Character* character) = 0;
 };
 
 

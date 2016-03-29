@@ -4,6 +4,7 @@
 #include <string>
 #include "Gameobject.h"
 
+
 using namespace std;
 class Character;
 
@@ -15,8 +16,9 @@ public:
 	float price = 1;
 
 	Item() {};
-	virtual void Apply(Character& attacker, Character& opponent); //TODO Move this to potion class... override with that items specific use ie health will heal etc.
-	virtual void Use(Character* character) {};
+	virtual void Apply(Character& attacker, Character& opponent); // Scotts for poison
+	void virtual Use(Character* character) = 0;
+
 };
 
 #endif

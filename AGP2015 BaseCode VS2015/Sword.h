@@ -5,11 +5,9 @@
 
 class Sword : public Weapon
 {
-public: 
-	
+public:
+
 	Sword();
-	
-	//add rarity!
 
 };
 

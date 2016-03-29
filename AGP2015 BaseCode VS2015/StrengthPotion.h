@@ -5,10 +5,12 @@
 
 class StrengthPotion : public Potion
 {
+
+
 public:
 	StrengthPotion();
-	virtual void use();
-
+	void virtual Use(Character* character);
+	void virtual Restore(int restoreValue, Character* character);
 
 };
 

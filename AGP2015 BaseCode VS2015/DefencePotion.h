@@ -7,8 +7,8 @@ class DefencePotion : public Potion
 {
 public:
 	DefencePotion();
-	virtual void use();
-
+	void virtual Use(Character* character);
+	void virtual Restore(int restoreValue, Character* character);
 
 };
 

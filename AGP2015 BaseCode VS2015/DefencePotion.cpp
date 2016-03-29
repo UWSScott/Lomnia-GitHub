@@ -1,4 +1,5 @@
 #include "DefencePotion.h"
+#include "Character.h"
 
 DefencePotion::DefencePotion()
 {
@@ -7,7 +8,16 @@ DefencePotion::DefencePotion()
 
 }
 
-void DefencePotion::use()
+void DefencePotion::Use(Character* character)
 {
-	cout << " Bonus defence." << endl;
+	cout << " Test: Restoring health to player." << endl;
+	//cout << "Bonus defence for a number of rounds - need to work with scott to do this" << endl;
+
+}
+
+
+void DefencePotion::Restore(int restoreValue, Character* character)
+{
+
+	//cout << "Bonus defence for a number of rounds - need to work with scott to do this" << endl;
 }

@@ -12,7 +12,10 @@
 #include "Sword.h"
 #include "Axe.h"
 #include "Knives.h"
-//#include "Character.h"
+#include "BonusArmourPotion.h"
+#include "DefencePotion.h"
+#include "SpeedPotion.h"
+#include "StrengthPotion.h"
 
 using namespace std;
 
@@ -23,23 +26,25 @@ class Inventory
 private:
 	//vector<string> inventory
 
-public: 
-	void show(); 
-	void sellItem(string itemNameID, float price); 
-	void buyItem(string itemNameID, float price); 
+public:
+	void show();
+	void sellItem(string itemNameID, float price);
+	void buyItem(string itemNameID, float price);
 	void addItem(string itemNameID);
+	void openShop();
 	Item* FindItem(string itemNameID);
 	Item* GetItem(string itemNameID);
+	void AddRandomItem(); // To be called after item pick up / generate random quest reward
 	void UseItem(string itemNameID, Character* character);
 	void removeItem(string itemNameID);
 	int getSize();
 	int getCount(string id);
 	Inventory();
 
-	vector<Item> items;
-	vector<Item>::iterator iter;
+	vector<Item*> items;
+	vector<Item*>::iterator iter;
 	float gold;
-	
+
 };
 
 #endif

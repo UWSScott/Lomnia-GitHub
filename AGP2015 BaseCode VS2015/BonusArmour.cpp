@@ -7,7 +7,14 @@ BonusArmourPotion::BonusArmourPotion()
 
 }
 
-void BonusArmourPotion::use()
+void BonusArmourPotion::Use(Character* character)
 {
-	cout << " Bonus armour." << endl;
+	//cout << "Bonus armour for a number of rounds - need to work with scott to do this" << endl;
+}
+
+
+void BonusArmourPotion::Restore(int restoreValue, Character* character)
+{
+
+	//cout << "Bonus armour for a number of rounds - need to work with scott to do this" << endl;
 }
