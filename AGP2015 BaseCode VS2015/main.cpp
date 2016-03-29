@@ -162,6 +162,8 @@ int currentPass = 0;
 GLuint screenHeight = 600;
 GLuint screenWidth = 800;
 
+MazePrefab* mazePrefabTest;// = new MazePrefab(shaderProgram, prefab.getObject(), prefab.meshIndexCount, prefab.texture, glm::vec3(3, 1.6, 3), glm::vec3(i * 6, 0.5, j * 6));
+
 // textToTexture
 GLuint textToTexture(const char * str, GLuint textID/*, TTF_Font *font, SDL_Color colour, GLuint &w,GLuint &h */) {
 	TTF_Font *font = textFont;
@@ -359,8 +361,11 @@ void init(void)
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
 
-	houseTest = new Prefab(shaderProgram, "cube.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(500.0, 0.1, 500.0), glm::vec3(0, 0, 0));
+	//houseTest = new Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_Player.obj"), Resource_Managment->LoadTexture("Models/Textures/Texture_Alien.bmp"), glm::vec3(2.5, 2, 2.5), glm::vec3(-61.1, 0.49, -41.55), -110, glm::vec3(-62, 6.8, -35), glm::vec3(-65.5, -1.0, -42));//Prefab(shaderProgram, "Models/House_001.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(0.03, 0.02, 0.03), character->position);
+	houseTest = new Prefab(shaderProgram, Resource_Managment->LoadObject("cube.obj"), Resource_Managment->LoadTexture("Models/Textures/Texture_Alien.bmp"), glm::vec3(1), glm::vec3(0), -110, glm::vec3(-62, 6.8, -35), glm::vec3(-65.5, -1.0, -42));//Prefab(shaderProgram, "Models/House_001.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(0.03, 0.02, 0.03), character->position);
 	terrain = new Terrain(shaderProgram, "Models/Desert_Terrain_New_Low.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(1, 1, 1), glm::vec3(300, 0, -300), 0);
+	//Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_001.obj"), Resource_Managment->LoadTexture("Models/Textures/Texture_Alien.bmp"), glm::vec3(0.03, 0.02, 0.03), character->position, 97.2, glm::vec3(27, 6.8, -59), glm::vec3(21, -1.0, -64)));
+
 
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/Corner_Ruin.obj"), Resource_Managment->LoadTexture("Models/Textures/Texture_Alien.bmp"), glm::vec3(0.03, 0.02, 0.03), glm::vec3(-61.1, 0.49, -41.55), -110, glm::vec3(-62, 6.8, -35), glm::vec3(-65.5, -1.0, -42)));
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/Corner_Ruin.obj"), Resource_Managment->LoadTexture("Models/Textures/Texture_Alien.bmp"), glm::vec3(0.03, 0.02, 0.03), glm::vec3(3.3, 0.49, 71.2), -110, glm::vec3(1.6, 6.8, 77), glm::vec3(-3, -1.0, 69)));
@@ -419,6 +424,7 @@ void init(void)
 	Game_Hub_Characters.push_back(new Character("AI_4", Resource_Managment->LoadMD2("Models/centaur.MD2"), Resource_Managment->LoadTexture("Models/Textures/Final.bmp"), glm::vec3(1), glm::vec3(15, 1.2, 15), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_5", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/delete.bmp"), glm::vec3(1), glm::vec3(19, 1.2, 19), shaderProgram));
 
+	mazePrefabTest = new MazePrefab(shaderProgram, houseTest->getObject(), houseTest->meshIndexCount, houseTest->texture, houseTest->scale, houseTest->position);
 
 	//NPCs in the hub area
 	//Game_Hub_Characters.push_back(Character("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram));
@@ -538,18 +544,15 @@ void RenderScene(GLuint refShaderProgram) {
 
 	mvStack.push(modelview);
 
-
-	rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
-	maze->baseShaderProgram = houseTest->shaderProgram;
-	maze->draw(mvStack.top());
-
-	//if(currentPass == 1)
-		//houseTest->draw(mvStack.top(), refShaderProgram, currentPass);
+	rt3d::setUniformMatrix4fv(refShaderProgram, "projection", glm::value_ptr(projection));
 
 	character->draw(mvStack.top(), refShaderProgram, currentPass);
+	maze->draw(mvStack.top(), refShaderProgram, currentPass);
+	//mazePrefabTest->draw(mvStack.top(), refShaderProgram, currentPass);
 
 	if (currentPass == 1)
 		terrain->draw(mvStack.top(), refShaderProgram, currentPass);
+
 	for (int i = 0; i < Game_Hub_Characters.size(); i++)
 	{
 		Game_Hub_Characters[i]->draw(mvStack.top(), refShaderProgram, currentPass);
@@ -558,16 +561,20 @@ void RenderScene(GLuint refShaderProgram) {
 	{
 		Game_Hub_Prefabs[i].draw(mvStack.top(), refShaderProgram, currentPass);
 	}
+
 	for (int i = 0; i < Game_Hub_Characters_Shop.size(); i++)
 	{
 		Game_Hub_Characters_Shop[i]->draw(mvStack.top());
 	}
+
 	//ui->textBox(text[0], skyboxProgram, -0.55, textures[2], true, names[0]);
 	//ui->textBox(text[1], skyboxProgram, -0.75, textures[2], false, names[0]);
 	//ui->button(skyboxProgram, textures[6], button[0], 10);
 	//character->manaPool = 10;
 	ui->statusBar(skyboxProgram, 0.9, textures[3], textures[4], (float)character->health / 200);
 	ui->statusBar(skyboxProgram, 0.8, textures[5], textures[4], (float)character->manaPool / 20);
+
+	//houseTest->draw(mvStack.top(), refShaderProgram, currentPass);
 
 	currentPass++;
 
@@ -595,7 +602,7 @@ void draw(SDL_Window * window)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Passing in the depth map into the classes
-	houseTest->SetDepthMap(depthMap);
+	//houseTest->SetDepthMap(depthMap);
 	terrain->SetDepthMap(depthMap);
 	//shadow_Debug->SetDepthMap(depthMap);
 	character->SetDepthMap(depthMap);
@@ -613,6 +620,7 @@ void draw(SDL_Window * window)
 		Game_Hub_Characters_Shop[i]->SetDepthMap(depthMap);
 	}
 
+	maze->SetDepthMap(depthMap);
 	
 
 	RenderScene(normalShadowProgram);

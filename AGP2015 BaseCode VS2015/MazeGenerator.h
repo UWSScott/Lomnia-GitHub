@@ -41,7 +41,8 @@ public:
 	void GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &goalX, int &goalY);
 	void SaveMaze();
 	void LoadMaze();
-	virtual void draw(glm::mat4 object);
+	virtual void SetDepthMap(GLuint s_depthMap);// { depthMapTexture = s_depthMap; };
+	virtual void draw(glm::mat4 object, GLuint s_shaderProgram, int pass);
 	GLuint baseShaderProgram; 
 };
 
