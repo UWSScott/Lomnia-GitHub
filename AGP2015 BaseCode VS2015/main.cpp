@@ -589,8 +589,8 @@ void RenderScene(GLuint refShaderProgram) {
 
 
 	rt3d::setUniformMatrix4fv(houseTest->shaderProgram, "projection", glm::value_ptr(projection));
-	maze->baseShaderProgram = houseTest->shaderProgram;
-	maze->draw(mvStack.top());
+	//maze->baseShaderProgram = houseTest->shaderProgram;
+	//maze->draw(mvStack.top(), refShaderProgram, currentPass);
 
 	//if(currentPass == 1)
 		//houseTest->draw(mvStack.top(), refShaderProgram, currentPass);
