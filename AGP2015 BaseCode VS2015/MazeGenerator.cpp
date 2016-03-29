@@ -1,33 +1,15 @@
 #include "MazeGenerator.h"
 #define CUBE_DOWN -2.7
-void MazeGenerator::draw(glm::mat4 object)
+void MazeGenerator::draw(glm::mat4 object,  GLuint s_shaderProgram, int pass)
 {
 	//glm::mat4 modelview(1.0);
 
 	for (int i = 0; i<SIZE; i++) {
-		for (int j = 0; j<SIZE; j++) {
+		for (int j = 0; j<SIZE; j++) 
+		{
 			//cout << " position: " << Maze_Tiles[i][j]->position.x << " y: " << Maze_Tiles[i][j]->position.y << " z: " << Maze_Tiles[i][j]->position.z << endl;
 			Maze_Tiles[i][j]->position.x = i;
-			Maze_Tiles[i][j]->shaderProgram = baseShaderProgram;
-			Maze_Tiles[i][j]->draw(object);
-
-			//glBindTexture(GL_TEXTURE_2D, textures[0]);
-			//mvStack.push(mvStack.top());
-			//if (Level[i][j].display == '*')
-			//{
-			//	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(i * 3, 1.0f, j * 3));
-			//	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(3.0f, 2.0f, 3.0f));
-			//}
-			//else {
-
-			//	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(i * 3, 0.0f, j * 3));
-			//	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(3.0f, 0.1f, 3.0f));
-			//}
-			//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.5f, 0.5f, 0.5f));
-			//rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-			//rt3d::setMaterial(shaderProgram, material0);
-			//rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
-			//mvStack.pop();
+			Maze_Tiles[i][j]->draw(object, s_shaderProgram, pass);
 		}
 	}
 }
@@ -35,7 +17,8 @@ void MazeGenerator::draw(glm::mat4 object)
 // INITIALIZE MAZE
 void MazeGenerator::Initialize(Cell Level[][SIZE], GLuint shaderProgram) 
 {
-	Prefab prefab = Prefab(shaderProgram, "cube.obj", "lava_cube.bmp", glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
+	ResourceManager* Resource_Managment = new ResourceManager();
+	Prefab prefab = Prefab(shaderProgram, Resource_Managment->LoadObject("cube.obj"), Resource_Managment->LoadTexture("lava_cube.bmp"), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), 0, glm::vec3(-62, 6.8, -35), glm::vec3(-65.5, -1.0, -42));//Prefab(shaderProgram, "Models/House_001.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(0.03, 0.02, 0.03), character->position); Prefab(shaderProgram, "cube.obj", "lava_cube.bmp", glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
 
 	for (int i = 1; i<=SIZE; i++) {
 		for (int j = 1; j<=SIZE; j++) {
@@ -236,3 +219,12 @@ void MazeGenerator::LoadMaze()
 	}
 	else { cout << "Unable to open file"; }
 }
+
+void MazeGenerator::SetDepthMap(GLuint s_depthMap)
+{
+	for (int i = 0; i<SIZE; i++) {
+		for (int j = 0; j<SIZE; j++) {
+			Maze_Tiles[i][j]->SetDepthMap(s_depthMap);
+		}
+	}
+};
