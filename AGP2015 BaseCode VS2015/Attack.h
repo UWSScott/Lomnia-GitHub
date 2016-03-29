@@ -3,7 +3,6 @@
 #ifndef C_ATTACK_H
 #define C_ATTACK_H
 
-//#include "Character.h"
 #include <string>
 #include <stdlib.h> 
 #include <cstdlib>
