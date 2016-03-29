@@ -69,6 +69,9 @@ bool pressedButton = false;
 GLuint shaderProgram;
 GLuint skyboxProgram;
 
+enum GameStates { COMBAT, HUB, MAZE }; // Game states
+GameStates gameState;
+
 glm::vec2 enemyMove;
 
 GLfloat playerRotation = 0.0f;
@@ -309,6 +312,8 @@ void init(void)
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		cout << " ERROR ;";
 
+	gameState = HUB;
+
 	shaderProgram = rt3d::initShaders("phong-tex.vert", "phong-tex.frag");
 	rt3d::setLight(shaderProgram, light0);
 	rt3d::setMaterial(shaderProgram, material0);
@@ -413,11 +418,15 @@ void init(void)
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/House_002.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(86.5, 0, 58.8), 39.4, glm::vec3(96, 6.6, 68), glm::vec3(76, -1.0, 48)));
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/House_002.obj"), Resource_Managment->LoadTexture("Models/Textures/House_002.bmp"), glm::vec3(60.0, 60.0, 60.0), glm::vec3(97.11, 0, -50.2), 150, glm::vec3(106, 6.6, -40), glm::vec3(87.6, -1.0, -60)));
 
-	Game_Hub_Characters.push_back(new Character("AI_1", Resource_Managment->LoadMD2("Models/dragon.MD2"), Resource_Managment->LoadTexture("hobgoblin2.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("AI_2", Resource_Managment->LoadMD2("Models/quigon.MD2"), Resource_Managment->LoadTexture("hobgoblin2.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 20), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("AI_3", Resource_Managment->LoadMD2("Models/pogo_buny.MD2"), Resource_Managment->LoadTexture("hobgoblin2.bmp"), glm::vec3(1), glm::vec3(10, 1.2, 10), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("AI_4", Resource_Managment->LoadMD2("Models/centaur.MD2"), Resource_Managment->LoadTexture("Models/Textures/Blue_Leather.bmp"), glm::vec3(1), glm::vec3(15, 1.2, 15), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("AI_5", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/White_Fur.bmp"), glm::vec3(1), glm::vec3(19, 1.2, 19), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_2", Resource_Managment->LoadMD2("Models/quigon.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chris_Skin.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 20), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_3", Resource_Managment->LoadMD2("Models/pogo_buny.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chain_Link.bmp"), glm::vec3(1), glm::vec3(10, 1.2, 10), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_4", Resource_Managment->LoadMD2("Models/dragon.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(15, 1.2, 15), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_5", Resource_Managment->LoadMD2("Models/faerie.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chain_Link.bmp"), glm::vec3(1), glm::vec3(20, 1.8, 15), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_6", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/White_Fur.bmp"), glm::vec3(1), glm::vec3(30, 1.2, -10), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_7", Resource_Managment->LoadMD2("Models/centaur.MD2"), Resource_Managment->LoadTexture("Models/Textures/Blue_Leather.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 10), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_8", Resource_Managment->LoadMD2("Models/blade.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(5, 1.2, -10), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/zf19.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(15, 1.2, -10), shaderProgram));
 
 
 	//NPCs in the hub area
@@ -449,28 +458,61 @@ void update(void) {
 	character->Update(&Game_Camera);
 
 
-	for (int i = 0; i < Game_Hub_Characters.size(); i++)
+	if (gameState == HUB)
 	{
-		Game_Hub_Characters[i]->Update();
-	}
-
-	for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
-	{
-
-		if (character->Collider->checkCollision(Game_Hub_Prefabs[i].Collider->aabb, character->position))
+		if (character->inCombat)
 		{
-			character->position = oldPlayerPos;
-			character->CheckCollision(&Game_Hub_Prefabs[i], typeid(Game_Hub_Prefabs[i]).name());
-			cout << "collision with " << i << endl;
+			character->LeaveCombat();
 		}
-	}
-	oldPlayerPos = character->position;
+		else
+		{
+			for (int i = 0; i < Game_Hub_Characters.size(); i++)
+			{
+				Game_Hub_Characters[i]->Update();
+			}
 
-	if (keys[SDL_SCANCODE_0]) Game_Camera.SetPlayerStatus(0, NULL);
-	if (keys[SDL_SCANCODE_1]) Game_Camera.SetPlayerStatus(1, NULL);
-	if (keys[SDL_SCANCODE_2]) Game_Camera.SetPlayerStatus(2, NULL);
-	if (keys[SDL_SCANCODE_3]) Game_Camera.SetPlayerStatus(3, NULL);
-	if (keys[SDL_SCANCODE_4]) Game_Camera.SetPlayerStatus(4, NULL);
+			for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
+			{
+				if (character->Collider->checkCollision(Game_Hub_Prefabs[i].Collider->aabb, character->position))
+				{
+					character->position = oldPlayerPos;
+					character->CheckCollision(&Game_Hub_Prefabs[i], typeid(Game_Hub_Prefabs[i]).name());
+					cout << "collision with " << i << endl;
+
+					// check here what 'i' (if item or not) and then if item, call inventory.addrandomitem
+
+					if (i == 13) // if teleporter
+					{
+						gameState = MAZE;
+
+					}
+					if (i == 37) // if item 
+					{
+						character->inventory->AddRandomItem();
+						character->inventory->show();
+						Game_Hub_Prefabs.pop_back();
+					}
+
+				}
+
+			}
+		}
+
+	}
+	else if (gameState == COMBAT)
+	{
+		
+
+	}
+	else if (gameState == MAZE)
+	{
+		if (character->inCombat)
+			character->LeaveCombat();
+
+	}
+
+
+	oldPlayerPos = character->position;
 
 	if (keys[SDL_SCANCODE_I]) lightPos.x += 0.1f;
 	if (keys[SDL_SCANCODE_K]) lightPos.x -= 0.1f;
@@ -478,14 +520,15 @@ void update(void) {
 	if (keys[SDL_SCANCODE_L]) lightPos.z -= 0.1f;
 	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
 	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
-	if (keys[SDL_SCANCODE_Z]) character->Damage(100);
-	if (keys[SDL_SCANCODE_B]) character->status = 0;
-	if (keys[SDL_SCANCODE_N]) character->status = 2;
+	if (keys[SDL_SCANCODE_Z]) character->Damage(100);//Kill butten 
 	if (keys[SDL_SCANCODE_C])
 	{
+		gameState = COMBAT;
 		character->EnterCombat(Game_Hub_Characters[0]);
 		Game_Hub_Characters[0]->EnterCombat(character);
 	}
+	if (keys[SDL_SCANCODE_7]) gameState = HUB;
+	if (keys[SDL_SCANCODE_Y]) gameState = MAZE;
 }
 
 
@@ -548,19 +591,33 @@ void RenderScene(GLuint refShaderProgram) {
 
 	character->draw(mvStack.top(), refShaderProgram, currentPass);
 
-	if (currentPass == 1)
-		terrain->draw(mvStack.top(), refShaderProgram, currentPass);
-	for (int i = 0; i < Game_Hub_Characters.size(); i++)
+	if (gameState == HUB)
 	{
-		Game_Hub_Characters[i]->draw(mvStack.top(), refShaderProgram, currentPass);
+		if (currentPass == 1)
+			terrain->draw(mvStack.top(), refShaderProgram, currentPass);
+		for (int i = 0; i < Game_Hub_Characters.size(); i++)
+		{
+			Game_Hub_Characters[i]->draw(mvStack.top(), refShaderProgram, currentPass);
+		}
+		for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
+		{
+			Game_Hub_Prefabs[i].draw(mvStack.top(), refShaderProgram, currentPass);
+		}
+		for (int i = 0; i < Game_Hub_Characters_Shop.size(); i++)
+		{
+			Game_Hub_Characters_Shop[i]->draw(mvStack.top());
+		}
+
 	}
-	for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
+	else if (gameState == COMBAT)
 	{
-		Game_Hub_Prefabs[i].draw(mvStack.top(), refShaderProgram, currentPass);
+		if (currentPass == 1)
+			terrain->draw(mvStack.top(), refShaderProgram, currentPass);
 	}
-	for (int i = 0; i < Game_Hub_Characters_Shop.size(); i++)
+	else if (gameState == MAZE)
 	{
-		Game_Hub_Characters_Shop[i]->draw(mvStack.top());
+
+		// we can't get the maze to work :( 
 	}
 	//ui->textBox(text[0], skyboxProgram, -0.55, textures[2], true, names[0]);
 	//ui->textBox(text[1], skyboxProgram, -0.75, textures[2], false, names[0]);
@@ -600,17 +657,29 @@ void draw(SDL_Window * window)
 	//shadow_Debug->SetDepthMap(depthMap);
 	character->SetDepthMap(depthMap);
 
-	for (int i = 0; i < Game_Hub_Characters.size(); i++)
+	if (gameState == HUB)
 	{
-		Game_Hub_Characters[i]->SetDepthMap(depthMap);
+		for (int i = 0; i < Game_Hub_Characters.size(); i++)
+		{
+			Game_Hub_Characters[i]->SetDepthMap(depthMap);
+		}
+		for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
+		{
+			Game_Hub_Prefabs[i].SetDepthMap(depthMap);
+		}
+		for (int i = 0; i < Game_Hub_Characters_Shop.size(); i++)
+		{
+			Game_Hub_Characters_Shop[i]->SetDepthMap(depthMap);
+		}
 	}
-	for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
+	else if (gameState == COMBAT)
 	{
-		Game_Hub_Prefabs[i].SetDepthMap(depthMap);
+
 	}
-	for (int i = 0; i < Game_Hub_Characters_Shop.size(); i++)
+	else if (gameState == MAZE)
 	{
-		Game_Hub_Characters_Shop[i]->SetDepthMap(depthMap);
+
+
 	}
 
 	
