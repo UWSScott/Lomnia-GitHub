@@ -86,6 +86,7 @@ public:
 	int xp = 0;
 	int killXP = 0;
 	bool canDie = true;
+	bool enemy = true;
 	bool inCombat = false;
 	bool playAnimation = true;
 	int currentAnimation = 0;

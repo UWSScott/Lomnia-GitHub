@@ -243,7 +243,11 @@ void Character::CheckCollision(Gameobject* s_gameobject, string idType)
 
 	if (Character* d = dynamic_cast<Character*>(s_gameobject))
 	{
+		if (!d->enemy)
+			return;
+
 		cout << d->characterName << endl;
+		this->EnterCombat(d);
 	}
 
 	//if (objectID == "ENEMY")
@@ -281,27 +285,27 @@ void Character::Update()
 	}
 
 	characterState = IDLE;
-	if (!isDead())
-	{
-		currentAnimation = 0;
-		if (keys[SDL_SCANCODE_W])
-		{
-			characterState = WALKING;
-			position = MoveForward(position, rotation, 0.1f);
-		}
-		else {
-			//currentAnim = 0;
-		}
-		if (keys[SDL_SCANCODE_S])
-		{
-			characterState = WALKING;
-			position = MoveForward(position, rotation, -0.1f);
-		}
+	//if (!isDead())
+	//{
+	//	currentAnimation = 0;
+	//	if (keys[SDL_SCANCODE_W])
+	//	{
+	//		characterState = WALKING;
+	//		position = MoveForward(position, rotation, 0.1f);
+	//	}
+	//	else {
+	//		//currentAnim = 0;
+	//	}
+	//	if (keys[SDL_SCANCODE_S])
+	//	{
+	//		characterState = WALKING;
+	//		position = MoveForward(position, rotation, -0.1f);
+	//	}
 
-		if (keys[SDL_SCANCODE_A]) rotation -= 2.0f;
-		if (keys[SDL_SCANCODE_D]) rotation += 2.0f;
-		if (keys[SDL_SCANCODE_M]) characterState = ATTACKING;
-	}
+	//	if (keys[SDL_SCANCODE_A]) rotation -= 2.0f;
+	//	if (keys[SDL_SCANCODE_D]) rotation += 2.0f;
+	//	if (keys[SDL_SCANCODE_M]) characterState = ATTACKING;
+	//}
 
 	Animate();
 	//if (combatInstance == NULL)
