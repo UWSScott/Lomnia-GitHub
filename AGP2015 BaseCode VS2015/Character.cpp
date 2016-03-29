@@ -45,7 +45,7 @@ Character::Character(string s_characterName, char *modelName, char *textureName,
 
 Character::Character(string s_characterName, MD2Holder* modelInfo, TextureHolder* textureInfo, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram)
 {
-	//Collider = new Collisions();
+	Collider = new Collisions();
 	characterName = s_characterName;
 	shaderProgram = s_shaderprogram;
 	material =

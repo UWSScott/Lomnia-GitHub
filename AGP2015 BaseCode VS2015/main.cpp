@@ -426,7 +426,7 @@ void init(void)
 
 	Game_Hub_Characters.push_back(new Character("AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_2", Resource_Managment->LoadMD2("Models/quigon.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chris_Skin.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 20), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("AI_3", Resource_Managment->LoadMD2("Models/pogo_buny.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chain_Link.bmp"), glm::vec3(1), glm::vec3(10, 1.2, 10), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_3", Resource_Managment->LoadMD2("Models/pogo_buny.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chain_Link.bmp"), glm::vec3(1), glm::vec3(20, 1.2, 20), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_4", Resource_Managment->LoadMD2("Models/dragon.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(15, 1.2, 15), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_5", Resource_Managment->LoadMD2("Models/faerie.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chain_Link.bmp"), glm::vec3(1), glm::vec3(20, 1.8, 15), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_6", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/White_Fur.bmp"), glm::vec3(1), glm::vec3(30, 1.2, -10), shaderProgram));
@@ -571,6 +571,20 @@ void update(void) {
 		if (character->inCombat)
 			character->LeaveCombat();
 
+	}
+	// collisions with npc
+	character->Collider->CollisionCircles(character->position.x, character->position.x, 0.5);
+
+	for (int i = 0; i < Game_Hub_Characters.size(); i++)
+	{
+		Game_Hub_Characters[i]->Collider->CollisionCircles(Game_Hub_Characters[i]->position.x, Game_Hub_Characters[i]->position.x, 0.5);
+
+		if (character->Collider->checkCollision(Game_Hub_Characters[i]->Collider, character->Collider))
+		{
+			character->position = oldPlayerPos;
+			//character->CheckCollision(&Game_Hub_Characters[i], typeid(Game_Hub_Characters[i]).name());
+			cout << " character collision with " << i << endl;
+		}
 	}
 
 

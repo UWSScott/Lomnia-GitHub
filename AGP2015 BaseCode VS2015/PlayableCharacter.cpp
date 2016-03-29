@@ -27,6 +27,7 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 	manaPool = 10;
 	scale = s_scale;
 	position = s_position;
+	Collider = new Collisions();
 
 	//Potion* tempPotion = new Medkit(1);
 	inventory->addItem("Health_Potion");
