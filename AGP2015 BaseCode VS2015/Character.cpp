@@ -94,7 +94,8 @@ void Character::LootEnemy(Character* character)
 {
 	coins += character->coins;
 	xp += character->killXP;
-	//Pass inventory of current character to new killer.
+	inventory->AddRandomItem(); // Loot random reward
+
 	//All other transferable stats should go here.
 }
 
