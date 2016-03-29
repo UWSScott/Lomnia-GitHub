@@ -159,6 +159,7 @@ GLuint simpleDepthShader;
 GLuint debugDepthQuad;
 GLuint depthMapFBO = 0;
 GLuint depthMap;
+bool openShop; 
 const GLuint SHADOW_WIDTH = 3840, SHADOW_HEIGHT = 2160;
 //const GLuint SHADOW_WIDTH = 1920, SHADOW_HEIGHT = 1080;
 int currentPass = 0;
@@ -341,6 +342,7 @@ void init(void)
 	ui->loadRect();
 	text[0] = ui->createTexture("Ahh, the mighty Arnould the wild!", textFont);
 	text[1] = ui->createTexture("Your challenger this time is the raging beast known as fred!", textFont);
+	text[2] = ui->createTexture("Welcome to the shop.", textFont);
 	names[0] = ui->createTexture("Ian:", textFont);
 	button[0] = ui->createTexture("G", textFont);
 
@@ -483,8 +485,6 @@ void update(void) {
 					character->CheckCollision(&Game_Hub_Prefabs[i], typeid(Game_Hub_Prefabs[i]).name());
 					cout << "collision with " << i << endl;
 
-					// check here what 'i' (if item or not) and then if item, call inventory.addrandomitem
-
 					if (i == 13) // if teleporter
 					{
 						gameState = MAZE;
@@ -496,12 +496,68 @@ void update(void) {
 						character->inventory->show();
 						Game_Hub_Prefabs.pop_back();
 					}
+					if (i == 10) // colliding with shop
+					{
+						names[0] = ui->createTexture(" ", textFont);
+						openShop = true; 
+					}
+					else
+					{
+						openShop = false; 
+
+					}
 
 				}
 			}
 		}
 
 	}
+
+	if (openShop)
+	{
+	
+			text[2] = ui->createTexture("1. Health Potion 2. Mana Potion 3. Sword 4.Axe 5.Knives", textFont);
+
+			if (keys[SDL_SCANCODE_1]) // if health potion
+			{
+				
+				character->inventory->buyItem("HealthPotion", 5);
+				character->inventory->show();
+
+				openShop = false;
+			}
+			else if (keys[SDL_SCANCODE_2]) // if mana potion
+			{
+				
+				character->inventory->buyItem("ManaPotion", 5);
+				character->inventory->show();
+
+				openShop = false; 
+			}
+			else if (keys[SDL_SCANCODE_3])
+			{
+				character->inventory->buyItem("Sword", 5);
+				character->inventory->show();
+
+				openShop = false;
+			}
+			else if (keys[SDL_SCANCODE_4])
+			{
+				character->inventory->buyItem("Axe", 5);
+				character->inventory->show();
+
+				openShop = false;
+			}
+			else if (keys[SDL_SCANCODE_5])
+			{
+				character->inventory->buyItem("Knives", 5);
+				character->inventory->show();
+
+				openShop = false;
+			}
+		
+	}
+
 	else if (gameState == COMBAT)
 	{
 		for (int i = 0; i < Game_Hub_Characters.size(); i++)
@@ -614,6 +670,13 @@ void RenderScene(GLuint refShaderProgram) {
 			Game_Hub_Characters_Shop[i]->draw(mvStack.top());
 		}
 
+		if (openShop)
+		{
+			
+			ui->textBox(text[2], skyboxProgram, -0.55, textures[2], true, names[0]);
+		}
+
+
 	}
 	else if (gameState == COMBAT)
 	{
@@ -623,7 +686,7 @@ void RenderScene(GLuint refShaderProgram) {
 	else if (gameState == MAZE)
 	{
 
-		// we can't get the maze to work :( 
+	
 	}
 	//ui->textBox(text[0], skyboxProgram, -0.55, textures[2], true, names[0]);
 	//ui->textBox(text[1], skyboxProgram, -0.75, textures[2], false, names[0]);

@@ -16,6 +16,7 @@
 #include "DefencePotion.h"
 #include "SpeedPotion.h"
 #include "StrengthPotion.h"
+#include "UI.h"
 
 using namespace std;
 
@@ -31,7 +32,6 @@ public:
 	void sellItem(string itemNameID, float price);
 	void buyItem(string itemNameID, float price);
 	void addItem(string itemNameID);
-	void openShop();
 	Item* FindItem(string itemNameID);
 	Item* GetItem(string itemNameID);
 	void AddRandomItem(); // To be called after item pick up / generate random quest reward
@@ -40,6 +40,7 @@ public:
 	int getSize();
 	int getCount(string id);
 	Inventory();
+	UI * menuUI;
 
 	vector<Item*> items;
 	vector<Item*>::iterator iter;

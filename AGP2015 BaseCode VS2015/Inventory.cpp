@@ -9,7 +9,7 @@ Inventory::Inventory()
 	//	Potion* tempPotion = new Medkit(1);
 	//	items.push_back(tempPotion);
 	//}
-
+	menuUI = new UI;
 	gold = 50.00f;
 }
 
@@ -94,12 +94,15 @@ void Inventory::buyItem(string itemNameID, float price)
 	}
 	else
 	{
-		if (itemNameID == "Medkit")
+		if (itemNameID == "HealthPotion")
 		{
-			cout << "What potency of HealthPotion would you like to buy? " << endl;
+	/*		cout << "What potency of HealthPotion would you like to buy? " << endl;
 			cout << "1. Light" << endl << "2. Medium" << endl << "3. Heavy" << endl << "4. Holy";
 			cin >> playerChoice;
 			Potion* tempPotion = new Medkit(playerChoice);
+			items.push_back(tempPotion);*/
+
+			Potion* tempPotion = new Medkit(1);
 			items.push_back(tempPotion);
 
 			//gold = -12; 
@@ -167,10 +170,7 @@ void Inventory::buyItem(string itemNameID, float price)
 
 //
 
-void Inventory::openShop()
-{
 
-}
 
 
 void Inventory::sellItem(string itemNameID, float price)
