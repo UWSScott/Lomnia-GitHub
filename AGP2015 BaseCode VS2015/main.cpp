@@ -586,7 +586,7 @@ void update(void) {
 		}
 
 
-		//REMOVE!!!!!!
+		//REMOVE!!!!!!5
 		for (int j = 0; j < Game_Hub_Characters.size(); j++)
 		{
 			Game_Hub_Characters[j]->detector->CollisionCircles((GLfloat)Game_Hub_Characters[j]->position.x, (GLfloat)Game_Hub_Characters[j]->position.z, 20);
