@@ -567,7 +567,7 @@ void update(void) {
 
 			}
 		}
-
+		//
 		character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
 
 		for (int i = 0; i < Game_Hub_Characters.size(); i++)
