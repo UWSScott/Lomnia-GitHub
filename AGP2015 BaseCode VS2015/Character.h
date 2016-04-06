@@ -11,8 +11,6 @@
 #define HURT_3	5
 #define DEAD 17
 
-
-
 //#define MD2_STAND	0
 //#define MD2_RUN		1
 //#define MD2_ATTACK	2
@@ -35,8 +33,6 @@
 //#define MD2_DEATH3	19
 
 
-
-
 //#include <iostream>
 //#include <string>
 #include <list>
@@ -56,12 +52,12 @@ class Character : public Gameobject
 private:
 	float peviousTime = 0;
 
-
 public:
 	//int DoIt(float a, char b, char c) { cout << "TMyClass::DoIt" << endl; return 1; };
 
 	string characterName = "";
 	string ID = "";
+	glm::vec3 oldPosition;
 	int health = 10;
 	int max_Health = 100;
 	int manaPool = 10;
@@ -75,9 +71,10 @@ public:
 	Quest* currentQuest = new Quest();
 	Weapon* weapon = new Weapon();
 	Inventory* inventory = new Inventory();
+	Collisions* detector = new Collisions();
 	//Armor
 	//Inventory List
-	
+
 	float resistance_Fire = 0;
 	float resistance_Water = 0;
 	float resistance_Air = 0;
@@ -85,8 +82,9 @@ public:
 	int level = 1;
 	int xp = 0;
 	int killXP = 0;
-	bool canDie = true;
 	bool enemy = true;
+	bool canDie = true;
+	bool canMove = true;
 	bool inCombat = false;
 	bool playAnimation = true;
 	int currentAnimation = 0;
@@ -118,6 +116,7 @@ public:
 	virtual void LootEnemy(Character* character);
 	virtual void CheckQuestGoal(Character* character);
 	virtual void Dead();
+	virtual void MoveToPlayer(Character* character);
 
 protected:
 
@@ -142,30 +141,30 @@ protected:
 /*class Character : public Gameobject
 {
 private:
-	float peviousTime = 0;
+float peviousTime = 0;
 public:
-	int health = 10;
-	int manaPool;
-	float refreshTime;
-	int strength;
-	int speed;
-	int defence;
-	bool player; //Only for prototype
-	bool inCombat; //Only for prototype
-	string name = "DEFAULT";
+int health = 10;
+int manaPool;
+float refreshTime;
+int strength;
+int speed;
+int defence;
+bool player; //Only for prototype
+bool inCombat; //Only for prototype
+string name = "DEFAULT";
 
-	float ResSelect(int resType);
-	float physRes;
-	float fireRes;
-	float waterRes;
-	float windRes;
+float ResSelect(int resType);
+float physRes;
+float fireRes;
+float waterRes;
+float windRes;
 
-	Character() {};
-	Character(string s_name, int s_health, int s_mana, int s_def, int s_str, float s_physRes, float s_fireRes, float s_waterRes, float s_windRes, bool s_player);
-	
-	void BeingAttacked(C_Attack s_attack);
-	void Update(float time);
-	void Damage(int damageValue);
+Character() {};
+Character(string s_name, int s_health, int s_mana, int s_def, int s_str, float s_physRes, float s_fireRes, float s_waterRes, float s_windRes, bool s_player);
+
+void BeingAttacked(C_Attack s_attack);
+void Update(float time);
+void Damage(int damageValue);
 };*/
 
 #endif

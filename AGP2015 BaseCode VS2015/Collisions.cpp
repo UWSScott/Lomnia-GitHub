@@ -35,6 +35,24 @@ Collisions Collisions::CollisionCircles(GLfloat ix, GLfloat iz, GLfloat r) {
 
 }
 
+
+
+
+bool Collisions::checkCollision(Collisions* circle, Collisions* circle2) {
+
+
+	int minDist = circle->getRadius() + circle2->getRadius();
+	int distance = sqrt(((circle->getX() - circle2->getX()) * (circle->getX() - circle2->getX())) + (circle->getZ() - circle2->getZ()) *(circle->getZ() - circle2->getZ()));
+	if (minDist >= distance) {
+		return true;
+	}
+	else if ((minDist < distance))
+	{
+		return false;
+	}
+
+}
+
 bool Collisions::checkCollision(const AABB* tBox, const glm::vec3& vecPoint)
 {
 

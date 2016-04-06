@@ -16,17 +16,20 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 		2.0f  // shininess
 	};
 	meshObject = tmpModel.ReadMD2Model(modelName);
-	md2VertCount = tmpModel.getVertDataSize()/3;
+	md2VertCount = tmpModel.getVertDataSize() / 3;
 
 	weapon = new Weapon("Scott's Saber", "Models/Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
 	weapon->setEquiped(true);
 
 	canDie = true;
 	rotation = 0;
-	health = 5;
+	health = 100;
 	manaPool = 10;
 	scale = s_scale;
 	position = s_position;
+	Collider = new Collisions();
+
+	currentQuest = new Quest("Kill Blade", "Blade is a nasty man!", "Blade", 0);
 
 	//Potion* tempPotion = new Medkit(1);
 	inventory->addItem("Health_Potion");
@@ -38,12 +41,12 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 
 /*PlayableCharacter::PlayableCharacter(string setName, int setHealth, int setStrength)
 {
-	rotation = 0;
-	characterName = setName;
-	health = setHealth;
-	strength = setStrength;
+rotation = 0;
+characterName = setName;
+health = setHealth;
+strength = setStrength;
 
-	cout << " name: " << weapon->collisionName;
+cout << " name: " << weapon->collisionName;
 }*/
 
 void PlayableCharacter::Dead()
@@ -60,12 +63,16 @@ void PlayableCharacter::Input()
 	if (combatInstance == NULL && !isDead())
 	{
 		characterState = IDLE;
+		if (canMove == false)
+			return;
+
 		if (keys[SDL_SCANCODE_A]) { characterState = IDLE;  rotation -= 1.0f; }
 		if (keys[SDL_SCANCODE_D]) { characterState = IDLE;  rotation += 1.0f; }
 		if (keys[SDL_SCANCODE_W]) { characterState = WALKING;  position = MoveForward(position, rotation, 0.1f); }
 		if (keys[SDL_SCANCODE_S]) { characterState = WALKING;  position = MoveForward(position, rotation, -0.1f); }
 		if (keys[SDL_SCANCODE_X]) { characterState = ATTACKING; }
-	} else if(combatInstance != NULL){
+	}
+	else if (combatInstance != NULL) {
 		combatInstance->Update();
 		//BlockAttack();
 		CombatAttacks();
@@ -99,7 +106,7 @@ void PlayableCharacter::draw(glm::mat4 object)
 	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
 
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
-	rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
+	rt3d::drawMesh(meshObject, md2VertCount / 3, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 
 	if (weapon != NULL && weapon->getEquiped())
@@ -129,11 +136,11 @@ void PlayableCharacter::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 		weapon->draw(object, position, currentAnimation, rotation, s_shaderUsed, depthMapTexture, pass);
 }
 
-void PlayableCharacter::CheckQuestGoal(Character *character)
-{
-	//Ian do quest checking etc here - Scott.
-	cout << " PLAYER CLASS" << endl;
-}
+//void PlayableCharacter::CheckQuestGoal(Character *character)
+//{
+//	//Ian do quest checking etc here - Scott.
+//	cout << " PLAYER CLASS" << endl;
+//}
 
 void PlayableCharacter::CombatAttacks()
 {

@@ -12,15 +12,38 @@ Quest::Quest(string s_name, string s_description, string s_ID, int s_status)
 
 void Quest::Conditions(Character* enemy)
 {
-	if (enemy->ID == ID)
+	if (status != 0)
 	{
-		cout << endl << "Target confirmed";
-		//status = 1 or 2
+		cout << endl << "QUEST ALREADY FINISHED" << endl;
+		return;
 	}
 	else
 	{
-		cout << endl << "Not the right m8, m8" << endl;
-		return;
+		if (enemy->characterName == ID)
+		{
+			cout << endl << "STATUS: QUEST COMPLETE" << endl;
+			status = 1;
+		}
+		else
+		{
+			cout << endl << "STATUS: INCORRECT TARGET" << endl;
+		}
+	}
+}
+
+void Quest::Completion()
+{
+	if (status == 0)
+	{
+		cout << endl << "Quest is not complete! You are a cheat!" << endl;
+	}
+	if (status == 1)
+	{
+		cout << endl << "Dead Man: High Pay" << endl;
+	}
+	if (status == 2)
+	{
+		cout << endl << "Live Man: Low Pay" << endl;
 	}
 }
 

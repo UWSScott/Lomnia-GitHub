@@ -18,7 +18,7 @@ public:
 	virtual void Update(Camera* camera = NULL);
 	virtual void CombatAttacks();
 	virtual void BlockAttack();
-	virtual void CheckQuestGoal(Character *character);
+	//virtual void CheckQuestGoal(Character *character);
 	virtual void Dead();
 	void Input();
 

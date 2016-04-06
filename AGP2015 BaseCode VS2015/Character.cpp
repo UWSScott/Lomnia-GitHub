@@ -45,7 +45,10 @@ Character::Character(string s_characterName, char *modelName, char *textureName,
 
 Character::Character(string s_characterName, MD2Holder* modelInfo, TextureHolder* textureInfo, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram)
 {
-	//Collider = new Collisions();
+	Collider = new Collisions();
+	detector = new Collisions();
+	detector->radius = 1;
+
 	characterName = s_characterName;
 	shaderProgram = s_shaderprogram;
 	material =
@@ -96,7 +99,7 @@ void Character::LootEnemy(Character* character)
 	xp += character->killXP;
 	inventory->AddRandomItem(); // Loot random reward
 
-	//All other transferable stats should go here.
+								//All other transferable stats should go here.
 }
 
 bool Character::isDead()
@@ -120,6 +123,7 @@ void Character::EnterCombat(Character* opponent)
 {
 	status = STATE_COMBAT;
 	combatInstance = new CombatInstance(this, opponent);
+	canMove = false;
 }
 
 void Character::LeaveCombat()
@@ -127,6 +131,7 @@ void Character::LeaveCombat()
 	status = STATE_NORMAL;
 	delete combatInstance;
 	combatInstance = NULL;
+	canMove = true;
 
 	if (isDead())
 	{
@@ -149,7 +154,7 @@ void Character::draw(glm::mat4 object)
 	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
 
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(object));
-	rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
+	rt3d::drawMesh(meshObject, md2VertCount / 3, GL_TRIANGLES);
 	//rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
 	glCullFace(GL_BACK);
 
@@ -174,7 +179,7 @@ void Character::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
 
 	rt3d::setUniformMatrix4fv(s_shaderUsed, "modelview", glm::value_ptr(object));
-	rt3d::drawMesh(meshObject, md2VertCount/3, GL_TRIANGLES);
+	rt3d::drawMesh(meshObject, md2VertCount / 3, GL_TRIANGLES);
 
 	if (weapon != NULL && weapon->getEquiped())
 		weapon->draw(object, position, currentAnimation, rotation);
@@ -210,10 +215,10 @@ void Character::CombatAttacks()
 
 	//Close to death, final gamble!
 	//TODO check if character has health potion first!
-	if (max_damage.GetPossibleDamage() >= combatInstance->opponent->health){ combatInstance->queuedAttacks.push_back(max_damage); return; }
+	if (max_damage.GetPossibleDamage() >= combatInstance->opponent->health) { combatInstance->queuedAttacks.push_back(max_damage); return; }
 	if (health <= rand() % 15 && max_damage.GetPossibleDamage() < combatInstance->opponent->health && inventory->getCount("Health_Potion") > 0) { combatInstance->queuedAttacks.push_back(ItemUse(inventory->GetItem("Health_Potion"))); return; }
 	else if (health <= rand() % 15 && max_damage.GetPossibleDamage() < combatInstance->opponent->health) { combatInstance->queuedAttacks.push_back(Flee()); return; }
-	
+
 	int randomAttack = rand() % 3 + 1;
 	switch (randomAttack)
 	{
@@ -227,27 +232,37 @@ void Character::CombatAttacks()
 		combatInstance->queuedAttacks.push_back(efficent_Attack); return;
 	default:
 		int randomPossibleAttack = rand() % possibleAttacks.size();
-		combatInstance->queuedAttacks.push_back(possibleAttacks[randomPossibleAttack-1]); return;
+		combatInstance->queuedAttacks.push_back(possibleAttacks[randomPossibleAttack - 1]); return;
 		break;
 	}
 
 }
 
-void Character::InitalStats(GLuint setShaderProgram){}
+void Character::InitalStats(GLuint setShaderProgram) {}
 
 void Character::CheckCollision(Gameobject* s_gameobject, string idType)
 {
+
+
 	cout << " idType : " << idType << endl;
 	//(Character)s_gameobject->
 	//cout << dynamic_cast <Prefab*>(s_gameobject)->position.x << endl;
+	if (status == STATE_COMBAT || combatInstance != NULL)
+		return;
+
 
 	if (Character* d = dynamic_cast<Character*>(s_gameobject))
 	{
-		if (!d->enemy)
-			return;
 
-		cout << d->characterName << endl;
-		this->EnterCombat(d);
+
+		if (d->enemy)
+		{
+			EnterCombat(d);
+			d->EnterCombat(this);
+		}
+
+		cout << " ****** ENEMY NAME IS " << d->characterName << " " << status << " " << canMove << " " << endl;
+
 	}
 
 	//if (objectID == "ENEMY")
@@ -261,7 +276,7 @@ void Character::Animate()
 	if (!playAnimation)
 		return;
 
-	if(combatInstance != NULL)
+	if (combatInstance != NULL)
 		characterState = ATTACKING;
 	if (isDead())
 		characterState = DEAD;
@@ -285,27 +300,27 @@ void Character::Update()
 	}
 
 	characterState = IDLE;
-	//if (!isDead())
-	//{
-	//	currentAnimation = 0;
-	//	if (keys[SDL_SCANCODE_W])
-	//	{
-	//		characterState = WALKING;
-	//		position = MoveForward(position, rotation, 0.1f);
-	//	}
-	//	else {
-	//		//currentAnim = 0;
-	//	}
-	//	if (keys[SDL_SCANCODE_S])
-	//	{
-	//		characterState = WALKING;
-	//		position = MoveForward(position, rotation, -0.1f);
-	//	}
+	/*if (!isDead())
+	{
+		currentAnimation = 0;
+		if (keys[SDL_SCANCODE_W])
+		{
+			characterState = WALKING;
+			position = MoveForward(position, rotation, 0.1f);
+		}
+		else {
+			//currentAnim = 0;
+		}
+		if (keys[SDL_SCANCODE_S])
+		{
+			characterState = WALKING;
+			position = MoveForward(position, rotation, -0.1f);
+		}
 
-	//	if (keys[SDL_SCANCODE_A]) rotation -= 2.0f;
-	//	if (keys[SDL_SCANCODE_D]) rotation += 2.0f;
-	//	if (keys[SDL_SCANCODE_M]) characterState = ATTACKING;
-	//}
+		if (keys[SDL_SCANCODE_A]) rotation -= 2.0f;
+		if (keys[SDL_SCANCODE_D]) rotation += 2.0f;
+		if (keys[SDL_SCANCODE_M]) characterState = ATTACKING;
+	}*/
 
 	Animate();
 	//if (combatInstance == NULL)
@@ -340,6 +355,16 @@ void Character::BlockAttack()
 	}
 }
 
+void Character::MoveToPlayer(Character* character)
+{
+	glm::vec3 MoveEye;
+	MoveEye.x = character->position.x - this->position.x;
+	MoveEye.z = character->position.z - this->position.z;
+
+	this->position.x += MoveEye.x*0.01f;
+	this->position.z += MoveEye.z*0.01f;
+}
+
 
 
 //bool Character::getHighestDamage(C_Attack attack_1, C_Attack attack_2) { return true; }// (attack_1.damageCalc(*this, *combatInstance->opponent) > attack_2.damageCalc(*this, *combatInstance->opponent)); };
@@ -357,32 +382,32 @@ void Character::BlockAttack()
 
 void LimitVariable(float &variable, float minValue, float maxValue)
 {
-	if (variable > maxValue)
-		variable = maxValue;
-	else if (variable < minValue)
-		variable = minValue;
+if (variable > maxValue)
+variable = maxValue;
+else if (variable < minValue)
+variable = minValue;
 }
 
 void LimitVariable(int &variable, int minValue, int maxValue)
 {
-	if (variable > maxValue)
-		variable = maxValue;
-	else if (variable < minValue)
-		variable = minValue;
+if (variable > maxValue)
+variable = maxValue;
+else if (variable < minValue)
+variable = minValue;
 }
 
 Character::Character(string s_name, int s_health, int s_mana, int s_def,int s_str, float s_physRes, float s_fireRes, float s_waterRes, float s_windRes, bool s_player)
 {
-	name = s_name;
-	health = s_health;
-	manaPool = s_mana;
-	defence = s_def;
-	strength = s_str;
-	physRes = s_physRes;
-	fireRes = s_fireRes;
-	waterRes = s_waterRes;
-	windRes = s_windRes;
-	player = s_player; 
+name = s_name;
+health = s_health;
+manaPool = s_mana;
+defence = s_def;
+strength = s_str;
+physRes = s_physRes;
+fireRes = s_fireRes;
+waterRes = s_waterRes;
+windRes = s_windRes;
+player = s_player;
 
 }
 
@@ -391,68 +416,68 @@ Character::Character(string s_name, int s_health, int s_mana, int s_def,int s_st
 
 void Character::Update(float time)
 {
-	float timeDifference = (time - peviousTime);
-	refreshTime -= timeDifference;
-	peviousTime = time;
-	LimitVariable(refreshTime, 0, 999);
+float timeDifference = (time - peviousTime);
+refreshTime -= timeDifference;
+peviousTime = time;
+LimitVariable(refreshTime, 0, 999);
 
-	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	if (inCombat)
-	{
-		if (player)
-		{
-			if (opponentAttack.blockingTime >= 0 && opponentAttack.attackCompleted == false)
-			{
-				opponentAttack.blockingTime -= timeDifference;
-				if (keys[SDL_SCANCODE_UP] || keys[SDL_SCANCODE_DOWN] || keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT]) // shouldn't these be 1, 2, 3 and 4 according to the output??
-				{
-					switch (opponentAttack.blockingButton)
-					{
-					case 1:
-						if (keys[SDL_SCANCODE_UP])
-							opponentAttack.BlockedAttack(*this, *this);
-						else
-							opponentAttack.FailedBlockedAttack(*this, *this);
-						break;
-					case 2:
-						if (keys[SDL_SCANCODE_DOWN])
-							opponentAttack.BlockedAttack(*this, *this);
-						else
-							opponentAttack.FailedBlockedAttack(*this, *this);
-						break;
-					case 3:
-						if (keys[SDL_SCANCODE_LEFT])
-							opponentAttack.BlockedAttack(*this, *this);
-						else
-							opponentAttack.FailedBlockedAttack(*this, *this);
-						break;
-					case 4:
-						if (keys[SDL_SCANCODE_RIGHT])
-							opponentAttack.BlockedAttack(*this, *this);
-						else
-							opponentAttack.FailedBlockedAttack(*this, *this);
-						break;
-					default:
-						break;
-					}
-				}
-			} else {
-				if (opponentAttack.blockingTime <= 0 && opponentAttack.attackCompleted == false && inCombat == true && player == true)
-				{
-					opponentAttack.FailedBlockedAttack(*this, *this);
-				}
-			}
-		} else {
-			if (opponentAttack.blockingTime >= 0 && opponentAttack.attackCompleted == false)
-			{
-				if(rand() % 100 >= 70)
-					opponentAttack.BlockedAttack(*this, *this);
-				else
-					opponentAttack.FailedBlockedAttack(*this, *this);
-			}
-		}
-	}
+const Uint8 *keys = SDL_GetKeyboardState(NULL);
+if (inCombat)
+{
+if (player)
+{
+if (opponentAttack.blockingTime >= 0 && opponentAttack.attackCompleted == false)
+{
+opponentAttack.blockingTime -= timeDifference;
+if (keys[SDL_SCANCODE_UP] || keys[SDL_SCANCODE_DOWN] || keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_RIGHT]) // shouldn't these be 1, 2, 3 and 4 according to the output??
+{
+switch (opponentAttack.blockingButton)
+{
+case 1:
+if (keys[SDL_SCANCODE_UP])
+opponentAttack.BlockedAttack(*this, *this);
+else
+opponentAttack.FailedBlockedAttack(*this, *this);
+break;
+case 2:
+if (keys[SDL_SCANCODE_DOWN])
+opponentAttack.BlockedAttack(*this, *this);
+else
+opponentAttack.FailedBlockedAttack(*this, *this);
+break;
+case 3:
+if (keys[SDL_SCANCODE_LEFT])
+opponentAttack.BlockedAttack(*this, *this);
+else
+opponentAttack.FailedBlockedAttack(*this, *this);
+break;
+case 4:
+if (keys[SDL_SCANCODE_RIGHT])
+opponentAttack.BlockedAttack(*this, *this);
+else
+opponentAttack.FailedBlockedAttack(*this, *this);
+break;
+default:
+break;
+}
+}
+} else {
+if (opponentAttack.blockingTime <= 0 && opponentAttack.attackCompleted == false && inCombat == true && player == true)
+{
+opponentAttack.FailedBlockedAttack(*this, *this);
+}
+}
+} else {
+if (opponentAttack.blockingTime >= 0 && opponentAttack.attackCompleted == false)
+{
+if(rand() % 100 >= 70)
+opponentAttack.BlockedAttack(*this, *this);
+else
+opponentAttack.FailedBlockedAttack(*this, *this);
+}
+}
+}
 
-	
+
 }
 */
