@@ -591,9 +591,8 @@ void update(void) {
 		{
 			Game_Hub_Characters[j]->detector->CollisionCircles((GLfloat)Game_Hub_Characters[j]->position.x, (GLfloat)Game_Hub_Characters[j]->position.z, 20);
 
-			if (Game_Hub_Characters[j]->detector->checkCollision(Game_Hub_Characters[j]->detector, character->Collider))
+			if (Game_Hub_Characters[j]->detector->checkCollision(Game_Hub_Characters[j]->detector, character->Collider) && character->status != STATE_COMBAT)
 			{
-				cout << " WTF? " << Game_Hub_Characters[j]->characterName << endl;
 				Game_Hub_Characters[j]->MoveToPlayer(character);
 			}
 		}
