@@ -29,6 +29,8 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 	position = s_position;
 	Collider = new Collisions();
 
+	currentQuest = new Quest("Kill Blade", "Blade is a nasty man!", "Blade", 0);
+
 	//Potion* tempPotion = new Medkit(1);
 	inventory->addItem("Health_Potion");
 
@@ -130,11 +132,11 @@ void PlayableCharacter::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 		weapon->draw(object, position, currentAnimation, rotation, s_shaderUsed, depthMapTexture, pass);
 }
 
-void PlayableCharacter::CheckQuestGoal(Character *character)
-{
-	//Ian do quest checking etc here - Scott.
-	cout << " PLAYER CLASS" << endl;
-}
+//void PlayableCharacter::CheckQuestGoal(Character *character)
+//{
+//	//Ian do quest checking etc here - Scott.
+//	cout << " PLAYER CLASS" << endl;
+//}
 
 void PlayableCharacter::CombatAttacks()
 {

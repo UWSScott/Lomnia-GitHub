@@ -21,7 +21,9 @@ public:
 	int status = 0; // 0 for incomplete, 1 for mercy, 2 for kill
 
 	void Conditions(Character* enemy);
+	void Completion();
 	void DisplayQuest();
+	
 };
 
 #endif
