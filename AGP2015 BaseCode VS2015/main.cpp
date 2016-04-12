@@ -508,6 +508,7 @@ glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d) {
 glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 	return glm::vec3(pos.x + d*std::cos(r*DEG_TO_RADIAN), pos.y, pos.z + d*std::sin(r*DEG_TO_RADIAN));
 }
+//ttt
 
 void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
