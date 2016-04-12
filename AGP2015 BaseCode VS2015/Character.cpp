@@ -394,7 +394,7 @@ void Character::MoveToPlayer(Character* character)
 	if (MoveEye.x != 0 || MoveEye.z != 0 && inCombat == false)
 		characterState = WALKING;
 	else if (inCombat == false)
-		character == IDLE;
+		characterState == IDLE;
 
 	this->position.x += MoveEye.x*0.01f;
 	this->position.z += MoveEye.z*0.01f;

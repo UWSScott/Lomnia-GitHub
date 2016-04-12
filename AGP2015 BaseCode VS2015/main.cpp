@@ -490,7 +490,7 @@ void init(void)
 	Game_Maze_Characters.push_back(new Minion("MAZE_AI_3", Resource_Managment->LoadMD2("Models/pogo_buny.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
 	Game_Maze_Characters.push_back(new Minion("MAZE_AI_4", Resource_Managment->LoadMD2("Models/quigon.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
 
-	cout << "IS HER DEAD :>DSSAF " << Game_Maze_Characters[0]->isDead() << " health " <<  Game_Maze_Characters[0]->health << "fdjsahfajkshf" << endl;
+
 
 	//NPCs in the hub area
 	//Game_Hub_Characters.push_back(Character("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram));
@@ -529,6 +529,7 @@ void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	Game_Camera.update(character->getModelEye(), character->getRotation());
 	character->Update(&Game_Camera);
+	character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
 
 	if (gameState == HUB)
 	{
@@ -589,7 +590,7 @@ void update(void) {
 			}
 		}
 		//
-		character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
+
 
 		for (int i = 0; i < Game_Hub_Characters.size(); i++)
 		{
@@ -608,7 +609,7 @@ void update(void) {
 
 
 		//REMOVE!!!!!!5
-		for (int j = 0; j < Game_Hub_Characters.size(); j++)
+		/*for (int j = 0; j < Game_Hub_Characters.size(); j++)
 		{
 			Game_Hub_Characters[j]->detector->CollisionCircles((GLfloat)Game_Hub_Characters[j]->position.x, (GLfloat)Game_Hub_Characters[j]->position.z, 20);
 
@@ -616,7 +617,7 @@ void update(void) {
 			{
 				Game_Hub_Characters[j]->MoveToPlayer(character);
 			}
-		}
+		}*/
 		//END!!!!!!!!!!!!
 
 	}
@@ -687,21 +688,21 @@ void update(void) {
 
 		for (int j = 0; j < Game_Maze_Characters.size(); j++)
 		{
-			//if (true)
-			//{
+			if (Game_Maze_Characters[j]->health > 0)
+			{
 				Game_Maze_Characters[j]->detector->CollisionCircles((GLfloat)Game_Maze_Characters[j]->position.x, (GLfloat)Game_Maze_Characters[j]->position.z, 20);
 
 				if (Game_Maze_Characters[j]->detector->checkCollision(Game_Maze_Characters[j]->detector, character->Collider) && character->status != STATE_COMBAT)
 				{
 					Game_Maze_Characters[j]->MoveToPlayer(character);
 				}
-			//}
+			}
 		}
 
 		for (int i = 0; i < Game_Maze_Characters.size(); i++)
 		{
-			//if (true)//Game_Maze_Characters[i]->isDead() == false)
-			//{
+			if (Game_Maze_Characters[i]->health > 0)
+			{
 				Game_Maze_Characters[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Characters[i]->position.x, (GLfloat)Game_Maze_Characters[i]->position.z, 0.5);
 
 				if (character->Collider->checkCollision(character->Collider, Game_Maze_Characters[i]->Collider))
@@ -710,19 +711,20 @@ void update(void) {
 					character->CheckCollision(Game_Maze_Characters[i], typeid(Game_Maze_Characters[i]).name());
 					character->CheckQuestGoal(Game_Maze_Characters[i]);
 				}
-			//}
+			}
 
 		}
 
 		for (int i = 0; i < Game_Maze_Characters.size(); i++)
 		{
-			//if (Game_Maze_Characters[i]->isDead() == false)
+			if (Game_Maze_Characters[i]->health > 0)
 				Game_Maze_Characters[i]->Update();
+			cout << " Fdsafadsfs " << endl;
 		}
 		
 
-		if (character->inCombat)
-			character->LeaveCombat();
+		//if (character->inCombat)
+		//	character->LeaveCombat();
 
 	}
 
@@ -851,7 +853,7 @@ void RenderScene(GLuint refShaderProgram) {
 
 		for (int i = 0; i < Game_Maze_Characters.size(); i++)
 		{
-			//if (!Game_Maze_Characters[i]->isDead())
+			if (Game_Maze_Characters[i]->health > 0)
 				Game_Maze_Characters[i]->draw(mvStack.top(), refShaderProgram, currentPass);
 		}
 
