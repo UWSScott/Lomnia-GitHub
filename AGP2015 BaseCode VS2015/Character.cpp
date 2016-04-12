@@ -329,7 +329,7 @@ void Character::Update()
 		combatInstance->Update();
 	}
 
-	characterState = IDLE;
+	//characterState = IDLE;
 	/*if (!isDead())
 	{
 		currentAnimation = 0;
@@ -390,6 +390,11 @@ void Character::MoveToPlayer(Character* character)
 	glm::vec3 MoveEye;
 	MoveEye.x = character->position.x - this->position.x;
 	MoveEye.z = character->position.z - this->position.z;
+
+	if (MoveEye.x != 0 || MoveEye.z != 0 && inCombat == false)
+		characterState = WALKING;
+	else if (inCombat == false)
+		character == IDLE;
 
 	this->position.x += MoveEye.x*0.01f;
 	this->position.z += MoveEye.z*0.01f;

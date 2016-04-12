@@ -8,10 +8,30 @@ void MazeGenerator::draw(glm::mat4 object,  GLuint s_shaderProgram, int pass)
 		for (int j = 0; j<SIZE; j++) 
 		{
 			//cout << " position: " << Maze_Tiles[i][j]->position.x << " y: " << Maze_Tiles[i][j]->position.y << " z: " << Maze_Tiles[i][j]->position.z << endl;
-			Maze_Tiles[i][j]->position.x = i;
+			//Maze_Tiles[i][j]->position.x = i;
 			Maze_Tiles[i][j]->draw(object, s_shaderProgram, pass);
 		}
 	}
+}
+
+void MazeGenerator::SpawnCharacter(Character* character)
+{
+	int xPos = rand() % SIZE;
+	int yPos = rand() % SIZE;
+	glm::vec3 newPosition = Maze_Tiles[xPos][yPos]->testPosition;
+	//while (newPosition.y != CUBE_DOWN)
+	do
+	{
+		xPos = rand() % SIZE;
+		yPos = rand() % SIZE;
+		newPosition = Maze_Tiles[xPos][yPos]->testPosition;
+		//cout << "CUBE DOWN IS: " << CUBE_DOWN << " xPos: " << xPos << " yPos: " << yPos << 
+		//	endl << " maze position: " << newPosition.x << " current cube is: " << newPosition.y << " " << newPosition.z << endl << endl;
+	} while (newPosition.y == 0.5);//Maze_Tiles[xPos][yPos]->testPosition.y != CUBE_DOWN);
+
+	//system("pause");
+	character->position.x = newPosition.x;
+	character->position.z = newPosition.z;
 }
 
 // INITIALIZE MAZE
@@ -43,7 +63,6 @@ void MazeGenerator::Initialize(Cell Level[][SIZE], GLuint shaderProgram)
 	}
 	GenerateMaze(Level, posX, posY, goalX, goalY);
 }
-
 
 void MazeGenerator::GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &goalX, int &goalY) {
 	srand((unsigned)time(NULL));                                                                            // Pick random start cell

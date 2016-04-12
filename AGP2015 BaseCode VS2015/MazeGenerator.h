@@ -5,8 +5,11 @@
 using namespace std;
 #include "MazePrefab.h"
 #include "FileLoader.h"
+#include "Character.h"
 #include <ctime>
 #include <vector>
+
+class Character;
 
 #define SIZE 17
 // CELL STRUCTURE
@@ -41,6 +44,7 @@ public:
 	void GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &goalX, int &goalY);
 	void SaveMaze();
 	void LoadMaze();
+	void SpawnCharacter(Character* character);
 	virtual void SetDepthMap(GLuint s_depthMap);// { depthMapTexture = s_depthMap; };
 	virtual void draw(glm::mat4 object, GLuint s_shaderProgram, int pass);
 	GLuint baseShaderProgram; 
