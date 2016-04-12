@@ -73,6 +73,36 @@ Character::Character(string s_characterName, MD2Holder* modelInfo, TextureHolder
 	//delete fileLoader;
 }
 
+Character::Character(string s_characterName, MD2Holder* modelInfo, TextureHolder* textureInfo, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram, int s_health, int s_strength, int s_speed, int s_defence)
+{
+	Collider = new Collisions();
+	detector = new Collisions();
+	detector->radius = 1;
+
+	characterName = s_characterName;
+	shaderProgram = s_shaderprogram;
+	material =
+	{
+		{ 0.4f, 0.2f, 0.2f, 1.0f }, // ambient
+		{ 0.8f, 0.5f, 0.5f, 1.0f }, // diffuse
+		{ 1.0f, 0.8f, 0.8f, 1.0f }, // specular
+		2.0f  // shininess
+	};
+
+	tmpModel = modelInfo->md2model;
+	meshObject = modelInfo->model;
+	md2VertCount = modelInfo->md2VertCount;
+	texture = textureInfo->texture;
+
+	health = s_health;
+	strength = s_strength;
+	speed = s_speed;
+	defence = s_defence;
+	scale = s_scale;
+	position = s_position;
+
+}
+
 glm::vec3 Character::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d)
 {
 	return glm::vec3(cam.x + d*std::sin(angle*DEG_TO_RAD), cam.y, cam.z - d*std::cos(angle*DEG_TO_RAD));

@@ -82,7 +82,7 @@ public:
 	int level = 1;
 	int xp = 0;
 	int killXP = 0;
-	bool enemy = true;
+	bool enemy = false;
 	bool canDie = true;
 	bool canMove = true;
 	bool inCombat = false;
@@ -98,6 +98,7 @@ public:
 	Character() {};
 	Character(string s_characterName, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram);
 	Character(string s_characterName, MD2Holder* modelInfo, TextureHolder* textureInfo, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram);
+	Character(string s_characterName, MD2Holder* modelInfo, TextureHolder* textureInfo, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram, int s_health, int s_strength, int s_speed, int s_defence);
 	virtual void Update();
 	virtual void Animate();
 	virtual void Damage(float damageValue) { health -= damageValue; };

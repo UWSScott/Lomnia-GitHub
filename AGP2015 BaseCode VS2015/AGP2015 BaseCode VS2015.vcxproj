@@ -197,6 +197,7 @@
     <ClInclude Include="CombatInstance.h" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="DefencePotion.h" />
+    <ClInclude Include="EnemyType.h" />
     <ClInclude Include="FileLoader.h" />
     <ClInclude Include="Flee.h" />
     <ClInclude Include="Gameobject.h" />
