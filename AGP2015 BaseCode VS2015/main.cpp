@@ -719,7 +719,6 @@ void update(void) {
 		{
 			if (Game_Maze_Characters[i]->health > 0)
 				Game_Maze_Characters[i]->Update();
-			cout << " Fdsafadsfs " << endl;
 		}
 		
 
