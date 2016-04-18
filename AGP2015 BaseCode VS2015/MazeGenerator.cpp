@@ -5,6 +5,8 @@
 void MazeGenerator::draw(glm::mat4 object,  GLuint s_shaderProgram, int pass)
 {
 	//glm::mat4 modelview(1.0);
+	for (auto&& child : Game_Maze_Prefabs) { child->draw(object, s_shaderProgram, pass);}
+	for (auto&& child : Game_Maze_Characters) { child->draw(object, s_shaderProgram, pass); }
 
 	for (int i = 0; i<SIZE; i++) {
 		for (int j = 0; j<SIZE; j++) 
@@ -16,22 +18,32 @@ void MazeGenerator::draw(glm::mat4 object,  GLuint s_shaderProgram, int pass)
 	}
 }
 
-void MazeGenerator::EnterTheMazetrix(Character* playerCharacter)
+void MazeGenerator::EnterTheMazetrix(Character* playerCharacter, ResourceManager* resManager)
 {
 	for (auto&& child : Game_Maze_Characters) { delete child; }
 	for (auto&& child : Game_Maze_Prefabs) { delete child; }
 	Game_Maze_Prefabs.clear();
 	Game_Maze_Characters.clear();
 
-	Game_Maze_Characters.push_back(SpawnCharacter(CreateTarget(playerCharacter->currentQuest)));
+	//CreateTarget(playerCharacter->currentQuest, resManager);
+	Game_Maze_Characters.push_back(SpawnCharacter(CreateTarget(playerCharacter->currentQuest, resManager)));
 	SpawnCharacter(playerCharacter);
 }
 
-Character* MazeGenerator::CreateTarget(Quest* activeQuest)
+Character* MazeGenerator::CreateTarget(Quest* activeQuest, ResourceManager* resManager)
 {
-	return new Overlord();
-	//return(new )
-	return new Character();
+	//return new Character("AI_7", resManager->LoadMD2("Models/centaur.MD2"), resManager->LoadTexture("Models/Textures/Blue_Leather.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 10), TSshaderProgram);
+
+	//return Character(activeQuest->ID, Resource_Managment->LoadMD2(activeQuest->targetModel), Resource_Managment->LoadTexture(activeQuest->targetTexture), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram);
+
+	if(activeQuest->type == "OVERLORD")
+		return new Overlord(activeQuest->ID, resManager->LoadMD2(activeQuest->targetModel), resManager->LoadTexture(activeQuest->targetTexture), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram);
+	else if (activeQuest->type == "MINION")
+		return new Minion(activeQuest->ID, resManager->LoadMD2(activeQuest->targetModel), resManager->LoadTexture(activeQuest->targetTexture), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram);
+	else if (activeQuest->type == "BRUISER")
+		return new Bruiser(activeQuest->ID, resManager->LoadMD2(activeQuest->targetModel), resManager->LoadTexture(activeQuest->targetTexture), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram);
+	else if (activeQuest->type == "GODUS")
+		return new GODUS(activeQuest->ID, resManager->LoadMD2(activeQuest->targetModel), resManager->LoadTexture(activeQuest->targetTexture), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram);
 }
 
 void MazeGenerator::CreateObject(Gameobject* gameObject)
@@ -89,7 +101,7 @@ void MazeGenerator::SpawnGameobject(Gameobject* character)
 // INITIALIZE MAZE
 void MazeGenerator::Initialize(Cell Level[][SIZE], GLuint shaderProgram)
 {
-	//ResourceManager* Resource_Managment = new ResourceManager();
+	ResourceManager* Resource_Managment = new ResourceManager();
 	Prefab prefab = Prefab(shaderProgram, Resource_Managment->LoadObject("cube.obj"), Resource_Managment->LoadTexture("lava_cube.bmp"), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), 0, glm::vec3(-62, 6.8, -35), glm::vec3(-65.5, -1.0, -42));//Prefab(shaderProgram, "Models/House_001.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(0.03, 0.02, 0.03), character->position); Prefab(shaderProgram, "cube.obj", "lava_cube.bmp", glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
 
 	for (int i = 1; i<=SIZE; i++) {

@@ -40,18 +40,19 @@ public:
 	MazePrefab* Maze_Tiles[SIZE][SIZE];
 	vector<Prefab*> Game_Maze_Prefabs = vector<Prefab*>();
 	vector<Character*> Game_Maze_Characters = vector<Character*>();
-	ResourceManager* Resource_Managment = new ResourceManager();
+	//ResourceManager* Resource_Managment = new ResourceManager();
+	GLuint TSshaderProgram;
 
 	MazeGenerator() {};
-	MazeGenerator(GLuint shaderProgram, ResourceManager s_Resource_Managment) { Initialize(Level, shaderProgram); Resource_Managment = &s_Resource_Managment; }
+	MazeGenerator(GLuint shaderProgram, ResourceManager s_Resource_Managment) { Initialize(Level, shaderProgram); TSshaderProgram = shaderProgram; }
 	~MazeGenerator() {};
 	void Initialize(Cell Level[][SIZE], GLuint shaderProgram);
 	void GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &goalX, int &goalY);
 	void SaveMaze();
 	void LoadMaze();
-	void EnterTheMazetrix(Character* playerCharacter);
+	void EnterTheMazetrix(Character* playerCharacter, ResourceManager* resManager);
 	void CreateObject(Gameobject* gameObject);
-	Character* CreateTarget(Quest* activeQuest);
+	Character* CreateTarget(Quest* activeQuest, ResourceManager* resManager);
 	Character* SpawnCharacter(Character* character);
 	void SpawnGameobject(Gameobject* character);
 	virtual void SetDepthMap(GLuint s_depthMap);// { depthMapTexture = s_depthMap; };

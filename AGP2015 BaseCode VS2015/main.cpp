@@ -562,7 +562,7 @@ void update(void) {
 				if (i == 13 && character->currentQuest != NULL && character->currentQuest->status == 0) // if teleporter
 				{
 					gameState = MAZE;
-					maze->EnterTheMazetrix(character);
+					maze->EnterTheMazetrix(character, Resource_Managment);
 					//maze->SpawnCharacter(character);
 					//for (int i = 0; i < Game_Maze_Characters.size(); i++)
 					//{
