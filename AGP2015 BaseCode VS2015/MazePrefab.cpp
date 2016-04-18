@@ -3,6 +3,7 @@
 MazePrefab::MazePrefab(GLuint s_shaderProgram, GLuint s_meshObject, GLuint s_meshIndexCount, GLuint s_texture, glm::vec3 s_scale, glm::vec3 s_position)
 {
 	collisionName = "Maze Object";
+	Collider = new Collisions(glm::vec3(0), glm::vec3(1));
 	shaderProgram = s_shaderProgram;
 	this->position = s_position;
 	testPosition = s_position;

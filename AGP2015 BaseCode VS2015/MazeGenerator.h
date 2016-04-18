@@ -40,7 +40,8 @@ public:
 	MazePrefab* Maze_Tiles[SIZE][SIZE];
 	vector<Prefab*> Game_Maze_Prefabs = vector<Prefab*>();
 	vector<Character*> Game_Maze_Characters = vector<Character*>();
-	//ResourceManager* Resource_Managment = new ResourceManager();
+	vector<MazePrefab*> Game_Maze_Walls = vector<MazePrefab*>();
+
 	GLuint TSshaderProgram;
 
 	MazeGenerator() {};
@@ -56,7 +57,7 @@ public:
 	Character* SpawnCharacter(Character* character);
 	Gameobject* SpawnGameobject(Gameobject* character);
 	virtual void SetDepthMap(GLuint s_depthMap);// { depthMapTexture = s_depthMap; };
-	virtual void Update() {};
+	virtual void Update(Character* character, int &gameState);
 	virtual void draw(glm::mat4 object, GLuint s_shaderProgram, int pass);
 	//virtual void ClearMemory<class T>(vector<Character*> &s_ArrList);
 	GLuint baseShaderProgram; 

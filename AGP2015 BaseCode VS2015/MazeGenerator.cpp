@@ -2,9 +2,65 @@
 #include "EnemyType.h"
 #define CUBE_DOWN -2.7
 
-void MazeGenerator::Update()
+void MazeGenerator::Update(Character* character, int &gameState)
 {
+	for (int i = 0; i < Game_Maze_Characters.size(); i++)
+	{
+		Game_Maze_Characters[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Characters[i]->position.x, (GLfloat)Game_Maze_Characters[i]->position.z, 0.5);
 
+		if (character->Collider->checkCollision(character->Collider, Game_Maze_Characters[i]->Collider))
+		{
+			character->position = character->oldPosition;
+			character->CheckCollision(Game_Maze_Characters[i], typeid(Game_Maze_Characters[i]).name());
+			character->CheckQuestGoal(Game_Maze_Characters[i]);
+		}
+	}
+
+	for (int i = 0; i < Game_Maze_Prefabs.size(); i++)
+	{
+		if (character->Collider->checkCollision(Game_Maze_Prefabs[i]->Collider->aabb, character->position))
+		{
+			character->position = character->oldPosition; //oldPlayerPos;
+			character->CheckCollision(Game_Maze_Prefabs[i], typeid(Game_Maze_Prefabs[i]).name());
+
+			if (i == 37) // if item
+			{
+				character->inventory->AddRandomItem();
+				character->inventory->show();
+				Game_Maze_Prefabs.pop_back();
+			}
+		}
+	}
+
+	for (int j = 0; j < Game_Maze_Characters.size(); j++)
+	{
+		if (Game_Maze_Characters[j]->health > 0)
+		{
+			Game_Maze_Characters[j]->Update();
+			Game_Maze_Characters[j]->detector->CollisionCircles((GLfloat)Game_Maze_Characters[j]->position.x, (GLfloat)Game_Maze_Characters[j]->position.z, 20);
+
+			if (Game_Maze_Characters[j]->detector->checkCollision(Game_Maze_Characters[j]->detector, character->Collider) && character->status != STATE_COMBAT)
+			{
+				Game_Maze_Characters[j]->MoveToPlayer(character);
+			}
+		}
+	}
+
+	for (int i = 0; i < Game_Maze_Walls.size(); i++)
+	{
+		for (int j = 0; j < Game_Maze_Characters.size(); j++)
+		{
+			if (Game_Maze_Characters[j]->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, Game_Maze_Characters[j]->position))
+			{
+				Game_Maze_Characters[j]->position = Game_Maze_Characters[j]->oldPosition;
+			}
+		}
+
+		if (character->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, character->position))
+		{
+			character->position = character->oldPosition;
+		}
+	}
 }
 
 void MazeGenerator::draw(glm::mat4 object,  GLuint s_shaderProgram, int pass)
@@ -58,12 +114,12 @@ Character* MazeGenerator::CreateTarget(Quest* activeQuest, ResourceManager* resM
 
 	if(activeQuest->type == "OVERLORD")
 		return new Overlord(activeQuest->ID, resManager->LoadMD2(activeQuest->targetModel), resManager->LoadTexture(activeQuest->targetTexture), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram);
-	else if (activeQuest->type == "MINION")
-		return new Minion(activeQuest->ID, resManager->LoadMD2(activeQuest->targetModel), resManager->LoadTexture(activeQuest->targetTexture), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram);
-	else if (activeQuest->type == "BRUISER")
-		return new Bruiser(activeQuest->ID, resManager->LoadMD2(activeQuest->targetModel), resManager->LoadTexture(activeQuest->targetTexture), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram);
 	else if (activeQuest->type == "GODUS")
 		return new GODUS(activeQuest->ID, resManager->LoadMD2(activeQuest->targetModel), resManager->LoadTexture(activeQuest->targetTexture), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram);
+	else if (activeQuest->type == "BRUISER")
+		return new Bruiser(activeQuest->ID, resManager->LoadMD2(activeQuest->targetModel), resManager->LoadTexture(activeQuest->targetTexture), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram);
+	else// (activeQuest->type == "MINION")
+		return new Minion(activeQuest->ID, resManager->LoadMD2(activeQuest->targetModel), resManager->LoadTexture(activeQuest->targetTexture), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram);
 }
 
 void MazeGenerator::CreateObject(Gameobject* gameObject)
@@ -134,6 +190,7 @@ void MazeGenerator::Initialize(Cell Level[][SIZE], GLuint shaderProgram)
 			Level[i-1][j-1].left_wall = true;
 			Level[i-1][j-1].right_wall = true;
 			Maze_Tiles[i-1][j-1] = new MazePrefab(shaderProgram, prefab.getObject(), prefab.meshIndexCount, prefab.texture, glm::vec3(3, 1.6, 3), glm::vec3(i * 6, 0.5, j * 6));
+			Game_Maze_Walls.push_back(Maze_Tiles[i - 1][j - 1]);
 		}
 	}
 

@@ -74,6 +74,7 @@ GLuint skyboxProgram;
 
 enum GameStates { COMBAT, HUB, MAZE }; // Game states
 GameStates gameState;
+int gameStateInt = 0;
 
 glm::vec2 enemyMove;
 
@@ -484,11 +485,11 @@ void init(void)
 	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/zf19.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(15, 1.2, -10), shaderProgram));
 	Game_Hub_Characters[7]->enemy = false;
 
-	Game_Maze_Characters.push_back(new Minion("MAZE_AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
-	Game_Maze_Characters.push_back(new Minion("MAZE_AI_2", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
-	Game_Maze_Characters.push_back(new Minion("MAZE_AI_3", Resource_Managment->LoadMD2("Models/pogo_buny.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
-	Game_Maze_Characters.push_back(new Minion("MAZE_AI_4", Resource_Managment->LoadMD2("Models/quigon.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
 
+	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
+	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_2", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
+	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_3", Resource_Managment->LoadMD2("Models/pogo_buny.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
+	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_4", Resource_Managment->LoadMD2("Models/quigon.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
 
 
 	//NPCs in the hub area
@@ -525,6 +526,8 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 //ttt
 
 void update(void) {
+	gameStateInt = gameState;
+
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	Game_Camera.update(character->getModelEye(), character->getRotation());
 	character->Update(&Game_Camera);
@@ -548,9 +551,6 @@ void update(void) {
 			}
 		}
 
-
-
-
 		for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
 		{
 			if (character->Collider->checkCollision(Game_Hub_Prefabs[i].Collider->aabb, character->position))
@@ -562,7 +562,9 @@ void update(void) {
 				if (i == 13 && character->currentQuest != NULL && character->currentQuest->status == 0) // if teleporter
 				{
 					gameState = MAZE;
+					gameStateInt = gameState;
 					maze->EnterTheMazetrix(character, Resource_Managment);
+					return;
 					//maze->SpawnCharacter(character);
 					//for (int i = 0; i < Game_Maze_Characters.size(); i++)
 					//{
@@ -677,8 +679,7 @@ void update(void) {
 	}
 	else if (gameState == MAZE)
 	{
-
-		for (int j = 0; j < Game_Hub_Characters.size(); j++)
+	/*	for (int j = 0; j < Game_Hub_Characters.size(); j++)
 		{
 			if (Game_Hub_Characters[j]->detector->checkCollision(Game_Hub_Characters[j]->detector, character->detector))
 			{
@@ -719,12 +720,17 @@ void update(void) {
 		{
 			if (Game_Maze_Characters[i]->health > 0)
 				Game_Maze_Characters[i]->Update();
-		}
-		
-
-		//if (character->inCombat)
-		//	character->LeaveCombat();
-
+		}*/
+		gameStateInt = gameState;
+		cout << " game state before: " << gameStateInt << endl;
+		maze->Update(character, gameStateInt);
+		cout << " game state after: " << gameStateInt << endl;
+		if (gameStateInt == 1)
+			gameState = HUB;
+		else if(gameStateInt == 2)
+			gameState = MAZE;
+		else
+			gameState = COMBAT;
 	}
 
 	character->oldPosition = character->position;
@@ -742,7 +748,9 @@ void update(void) {
 	if (keys[SDL_SCANCODE_L]) lightPos.z -= 0.1f;
 	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
 	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
+
 	//if (keys[SDL_SCANCODE_Z]) character->Damage(100);//Kill butten 
+
 	if (keys[SDL_SCANCODE_C])
 	{
 		gameState = COMBAT;
