@@ -51,6 +51,8 @@ void Camera::Sound(HCHANNEL &channel, int soundFile)
 	if (!BASS_ChannelPlay(channel, FALSE))
 		std::cout << "Can't play sample" << std::endl;
 
+
+	std::cout << "song int: " << soundFile << std::endl; 
 }
 
 void Camera::TranslateTo(float &currentPosition, float &newPosition)
@@ -304,18 +306,29 @@ void Camera::SetPlayerStatus(int status, PlayableCharacter* character)
 	if (status == STATE_DEATH && camera_Type == FREE_VIEW)
 		return;
 
+
 	int tempholder = camera_Type;
 	if (camera_Type != status)
 	{
 		if (camera_Type < 4)
 		{
+			
+			
 			camera_Type = status;
+		
 			//cout << "NEW CAMERA STATUS: " << status;
 		}
 
 		Sound(ch, status);
 		if(status == STATE_DEATH)
 			camera_Type = FREE_VIEW;
+
+		
 		//cout << "NEW CAMERA STATUS: " << status;
 	}
+}
+
+int Camera::GetCameraType()
+{
+	return camera_Type;
 }

@@ -4,8 +4,9 @@
 #define FIRST_PERSON 0
 #define THIRD_PERSON 1
 #define COMBAT_CINEMATIC 2
-#define FREE_VIEW 3
+#define FREE_VIEW 5
 #define DEATH_CINEMATIC 4
+
 
 #include "rt3d.h"
 #include "rt3dObjLoader.h"
@@ -37,6 +38,8 @@ public:
 	glm::vec3 MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d);
 	glm::vec3 MoveRight(glm::vec3 pos, GLfloat angle, GLfloat d);
 	float rotation;
+
+	int GetCameraType();
 
 	glm::vec3 cinematicLookAt;
 	glm::vec3 eye;

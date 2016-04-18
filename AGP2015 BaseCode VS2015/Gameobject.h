@@ -19,9 +19,8 @@ using namespace std;
 #define STATE_LOADING 0
 #define STATE_NORMAL 1
 #define STATE_COMBAT 2
-#define STATE_SHOP 3
 #define STATE_DEATH 4
-
+#define STATE_SHOP 3
 
 
 class Gameobject
