@@ -374,7 +374,6 @@ void init(void)
 	glUniform1i(glGetUniformLocation(normalShadowProgram, "diffuseTexture"), 1);
 	glUniform1i(glGetUniformLocation(normalShadowProgram, "shadowMap"), 0);
 	simpleDepthShader = rt3d::initShaders("shadow.vert", "shadow.frag");
-
 	ui = new UI;
 
 	if (TTF_Init() == -1)
@@ -412,7 +411,7 @@ void init(void)
 	static_character[12] = new Character("Arnold", "Models/quigon.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(28, 0, 0), shaderProgram);*/
 
 	skyboxTest = new Skybox(skyboxFiles);
-	maze = new MazeGenerator(shaderProgram);
+	maze = new MazeGenerator(shaderProgram, *Resource_Managment);
 	character = new PlayableCharacter("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(10, 1.2, 10), shaderProgram);
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
@@ -560,14 +559,15 @@ void update(void) {
 				character->CheckCollision(&Game_Hub_Prefabs[i], typeid(Game_Hub_Prefabs[i]).name());
 				cout << "collision with " << i << endl;
 
-				if (i == 13) // if teleporter
+				if (i == 13 && character->currentQuest != NULL && character->currentQuest->status == 0) // if teleporter
 				{
 					gameState = MAZE;
-					maze->SpawnCharacter(character);
-					for (int i = 0; i < Game_Maze_Characters.size(); i++)
-					{
-						maze->SpawnCharacter(Game_Maze_Characters[i]);
-					}
+					maze->EnterTheMazetrix(character);
+					//maze->SpawnCharacter(character);
+					//for (int i = 0; i < Game_Maze_Characters.size(); i++)
+					//{
+					//	maze->SpawnCharacter(Game_Maze_Characters[i]);
+					//}
 
 				}
 				if (i == 37) // if item

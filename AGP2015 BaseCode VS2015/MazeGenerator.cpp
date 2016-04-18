@@ -1,5 +1,7 @@
 #include "MazeGenerator.h"
+#include "EnemyType.h"
 #define CUBE_DOWN -2.7
+
 void MazeGenerator::draw(glm::mat4 object,  GLuint s_shaderProgram, int pass)
 {
 	//glm::mat4 modelview(1.0);
@@ -14,7 +16,37 @@ void MazeGenerator::draw(glm::mat4 object,  GLuint s_shaderProgram, int pass)
 	}
 }
 
-void MazeGenerator::SpawnCharacter(Character* character)
+void MazeGenerator::EnterTheMazetrix(Character* playerCharacter)
+{
+	for (auto&& child : Game_Maze_Characters) { delete child; }
+	for (auto&& child : Game_Maze_Prefabs) { delete child; }
+	Game_Maze_Prefabs.clear();
+	Game_Maze_Characters.clear();
+
+	Game_Maze_Characters.push_back(SpawnCharacter(CreateTarget(playerCharacter->currentQuest)));
+	SpawnCharacter(playerCharacter);
+}
+
+Character* MazeGenerator::CreateTarget(Quest* activeQuest)
+{
+	return new Overlord();
+	//return(new )
+	return new Character();
+}
+
+void MazeGenerator::CreateObject(Gameobject* gameObject)
+{
+	if (Character* d = dynamic_cast<Character*>(gameObject))
+	{
+		SpawnCharacter(d);
+		Game_Maze_Characters.push_back(d);
+	} else 	if (Prefab* castPrefab = dynamic_cast<Prefab*>(gameObject)) {
+		SpawnGameobject(castPrefab);
+		Game_Maze_Prefabs.push_back(castPrefab);
+	}
+}
+
+Character* MazeGenerator::SpawnCharacter(Character* character)
 {
 	int xPos = rand() % SIZE;
 	int yPos = rand() % SIZE;
@@ -29,15 +61,35 @@ void MazeGenerator::SpawnCharacter(Character* character)
 		//	endl << " maze position: " << newPosition.x << " current cube is: " << newPosition.y << " " << newPosition.z << endl << endl;
 	} while (newPosition.y == 0.5);//Maze_Tiles[xPos][yPos]->testPosition.y != CUBE_DOWN);
 
-	//system("pause");
+	character->position.x = newPosition.x;
+	character->position.z = newPosition.z;
+	return character;
+}
+
+void MazeGenerator::SpawnGameobject(Gameobject* character)
+{
+	int xPos = rand() % SIZE;
+	int yPos = rand() % SIZE;
+	glm::vec3 newPosition = Maze_Tiles[xPos][yPos]->testPosition;
+	//while (newPosition.y != CUBE_DOWN)
+	do
+	{
+		xPos = rand() % SIZE;
+		yPos = rand() % SIZE;
+		newPosition = Maze_Tiles[xPos][yPos]->testPosition;
+		//cout << "CUBE DOWN IS: " << CUBE_DOWN << " xPos: " << xPos << " yPos: " << yPos << 
+		//	endl << " maze position: " << newPosition.x << " current cube is: " << newPosition.y << " " << newPosition.z << endl << endl;
+	} while (newPosition.y == 0.5);//Maze_Tiles[xPos][yPos]->testPosition.y != CUBE_DOWN);
+
+								   //system("pause");
 	character->position.x = newPosition.x;
 	character->position.z = newPosition.z;
 }
 
 // INITIALIZE MAZE
-void MazeGenerator::Initialize(Cell Level[][SIZE], GLuint shaderProgram) 
+void MazeGenerator::Initialize(Cell Level[][SIZE], GLuint shaderProgram)
 {
-	ResourceManager* Resource_Managment = new ResourceManager();
+	//ResourceManager* Resource_Managment = new ResourceManager();
 	Prefab prefab = Prefab(shaderProgram, Resource_Managment->LoadObject("cube.obj"), Resource_Managment->LoadTexture("lava_cube.bmp"), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), 0, glm::vec3(-62, 6.8, -35), glm::vec3(-65.5, -1.0, -42));//Prefab(shaderProgram, "Models/House_001.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(0.03, 0.02, 0.03), character->position); Prefab(shaderProgram, "cube.obj", "lava_cube.bmp", glm::vec3(1, 1, 1), glm::vec3(1, 1, 1));
 
 	for (int i = 1; i<=SIZE; i++) {

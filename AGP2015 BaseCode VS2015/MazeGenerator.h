@@ -8,6 +8,7 @@ using namespace std;
 #include "Character.h"
 #include <ctime>
 #include <vector>
+//template<typename T>
 
 class Character;
 
@@ -23,6 +24,8 @@ struct Cell
 	char display;
 };
 
+class Character;
+
 class MazeGenerator
 {
 public:
@@ -35,18 +38,26 @@ public:
 
 	Cell Level[SIZE][SIZE];
 	MazePrefab* Maze_Tiles[SIZE][SIZE];
-	//vector<Prefab> Maze_Tiles;
+	vector<Prefab*> Game_Maze_Prefabs = vector<Prefab*>();
+	vector<Character*> Game_Maze_Characters = vector<Character*>();
+	ResourceManager* Resource_Managment = new ResourceManager();
 
 	MazeGenerator() {};
-	MazeGenerator(GLuint shaderProgram) { Initialize(Level, shaderProgram); }
+	MazeGenerator(GLuint shaderProgram, ResourceManager s_Resource_Managment) { Initialize(Level, shaderProgram); Resource_Managment = &s_Resource_Managment; }
 	~MazeGenerator() {};
 	void Initialize(Cell Level[][SIZE], GLuint shaderProgram);
 	void GenerateMaze(Cell Level[][SIZE], int &posX, int &posY, int &goalX, int &goalY);
 	void SaveMaze();
 	void LoadMaze();
-	void SpawnCharacter(Character* character);
+	void EnterTheMazetrix(Character* playerCharacter);
+	void CreateObject(Gameobject* gameObject);
+	Character* CreateTarget(Quest* activeQuest);
+	Character* SpawnCharacter(Character* character);
+	void SpawnGameobject(Gameobject* character);
 	virtual void SetDepthMap(GLuint s_depthMap);// { depthMapTexture = s_depthMap; };
+	virtual void Update() {};
 	virtual void draw(glm::mat4 object, GLuint s_shaderProgram, int pass);
+	//virtual void ClearMemory<class T>(vector<Character*> &s_ArrList);
 	GLuint baseShaderProgram; 
 };
 
