@@ -54,7 +54,7 @@ public:
 	void CreateObject(Gameobject* gameObject);
 	Character* CreateTarget(Quest* activeQuest, ResourceManager* resManager);
 	Character* SpawnCharacter(Character* character);
-	void SpawnGameobject(Gameobject* character);
+	Gameobject* SpawnGameobject(Gameobject* character);
 	virtual void SetDepthMap(GLuint s_depthMap);// { depthMapTexture = s_depthMap; };
 	virtual void Update() {};
 	virtual void draw(glm::mat4 object, GLuint s_shaderProgram, int pass);

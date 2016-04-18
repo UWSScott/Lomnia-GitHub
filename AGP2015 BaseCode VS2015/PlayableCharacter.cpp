@@ -75,8 +75,6 @@ void PlayableCharacter::Input()
 		combatInstance->Update();
 		//BlockAttack();
 		CombatAttacks();
-		if (combatInstance == NULL)
-			cout << " FSAFAS HIHIHIH ";
 	}
 }
 

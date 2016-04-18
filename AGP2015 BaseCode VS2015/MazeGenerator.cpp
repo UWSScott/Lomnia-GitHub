@@ -2,6 +2,11 @@
 #include "EnemyType.h"
 #define CUBE_DOWN -2.7
 
+void MazeGenerator::Update()
+{
+
+}
+
 void MazeGenerator::draw(glm::mat4 object,  GLuint s_shaderProgram, int pass)
 {
 	//glm::mat4 modelview(1.0);
@@ -28,6 +33,21 @@ void MazeGenerator::EnterTheMazetrix(Character* playerCharacter, ResourceManager
 	//CreateTarget(playerCharacter->currentQuest, resManager);
 	Game_Maze_Characters.push_back(SpawnCharacter(CreateTarget(playerCharacter->currentQuest, resManager)));
 	SpawnCharacter(playerCharacter);
+	Game_Maze_Characters.push_back(SpawnCharacter(new Minion("MAZE_AI_1", resManager->LoadMD2("Models/ripper.MD2"), resManager->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram)));
+	Game_Maze_Characters.push_back(SpawnCharacter(new Minion("MAZE_AI_2", resManager->LoadMD2("Models/ripper.MD2"), resManager->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram)));
+	Game_Maze_Characters.push_back(SpawnCharacter(new Minion("MAZE_AI_3", resManager->LoadMD2("Models/ripper.MD2"), resManager->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram)));
+	Game_Maze_Characters.push_back(SpawnCharacter(new Minion("MAZE_AI_4", resManager->LoadMD2("Models/ripper.MD2"), resManager->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram)));
+	Game_Maze_Prefabs.push_back(dynamic_cast<Prefab*>(SpawnGameobject(new Prefab(TSshaderProgram, resManager->LoadObject("Models/Teleporter.obj"), resManager->LoadTexture("Models/Textures/Well.bmp"), glm::vec3(0.4, 0.4, 0.4), glm::vec3(39, 0.36, 0), 0, glm::vec3(37.4, 2.0, 2.4), glm::vec3(34.4, -1.0, -2.5)))));
+	Game_Maze_Prefabs[0]->position = playerCharacter->position;
+	Game_Maze_Prefabs[0]->position.x += 5;
+	Game_Maze_Prefabs[0]->position.y -= 1.5;
+	Game_Maze_Prefabs.push_back(dynamic_cast<Prefab*>(SpawnGameobject(new Prefab(TSshaderProgram, resManager->LoadObject("Models/Loot_Drop_001.obj"), resManager->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(0.01, 0.01, 0.01), glm::vec3(13, 0.36, 0), 0, glm::vec3(15, 5, 3), glm::vec3(5, -3, -3)))));
+	Game_Maze_Prefabs.push_back(dynamic_cast<Prefab*>(SpawnGameobject(new Prefab(TSshaderProgram, resManager->LoadObject("Models/Loot_Drop_001.obj"), resManager->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(0.01, 0.01, 0.01), glm::vec3(13, 0.36, 0), 0, glm::vec3(15, 5, 3), glm::vec3(5, -3, -3)))));
+	Game_Maze_Prefabs.push_back(dynamic_cast<Prefab*>(SpawnGameobject(new Prefab(TSshaderProgram, resManager->LoadObject("Models/Loot_Drop_001.obj"), resManager->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(0.01, 0.01, 0.01), glm::vec3(13, 0.36, 0), 0, glm::vec3(15, 5, 3), glm::vec3(5, -3, -3)))));
+
+	//Game_Maze_Prefabs[0]->position.z += 3;
+	//Game_Maze_Prefabs.push_back(SpawnCharacter(new Minion("MAZE_AI_4", resManager->LoadMD2("Models/ripper.MD2"), resManager->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram)));
+
 }
 
 Character* MazeGenerator::CreateTarget(Quest* activeQuest, ResourceManager* resManager)
@@ -78,7 +98,7 @@ Character* MazeGenerator::SpawnCharacter(Character* character)
 	return character;
 }
 
-void MazeGenerator::SpawnGameobject(Gameobject* character)
+Gameobject* MazeGenerator::SpawnGameobject(Gameobject* character)
 {
 	int xPos = rand() % SIZE;
 	int yPos = rand() % SIZE;
@@ -96,6 +116,7 @@ void MazeGenerator::SpawnGameobject(Gameobject* character)
 								   //system("pause");
 	character->position.x = newPosition.x;
 	character->position.z = newPosition.z;
+	return character;
 }
 
 // INITIALIZE MAZE
