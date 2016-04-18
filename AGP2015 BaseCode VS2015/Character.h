@@ -11,6 +11,7 @@
 #define HURT_3	5
 #define DEAD 17
 
+
 //#define MD2_STAND	0
 //#define MD2_RUN		1
 //#define MD2_ATTACK	2

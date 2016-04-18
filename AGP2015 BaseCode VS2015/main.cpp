@@ -91,6 +91,8 @@ GLuint textures[7];
 GLuint skybox[5];
 GLuint labels[5];
 
+bool shopMusicPlaying = false; 
+
 rt3d::lightStruct light0 = {
 	{ 0.3f, 0.3f, 0.3f, 0.3f }, // ambient
 	{ 1.0f, 1.0f, 1.0f, 1.0f }, // diffuse
@@ -624,6 +626,15 @@ void update(void) {
 
 	if (openShop)
 	{
+		if (shopMusicPlaying==false)
+		{
+			Game_Camera.SetPlayerStatus(3, character); 
+			character->status = STATE_SHOP;
+			shopMusicPlaying = true;
+		}
+
+		
+
 
 		text[2] = ui->createTexture("1. Health Potion 2. Mana Potion 3. Sword 4.Axe 5.Knives", textFont);
 
@@ -632,7 +643,6 @@ void update(void) {
 
 			character->inventory->buyItem("HealthPotion", 5);
 			character->inventory->show();
-
 			openShop = false;
 		}
 		else if (keys[SDL_SCANCODE_2]) // if mana potion
@@ -640,31 +650,32 @@ void update(void) {
 
 			character->inventory->buyItem("ManaPotion", 5);
 			character->inventory->show();
-
 			openShop = false;
 		}
 		else if (keys[SDL_SCANCODE_3])
 		{
 			character->inventory->buyItem("Sword", 5);
 			character->inventory->show();
-
 			openShop = false;
 		}
 		else if (keys[SDL_SCANCODE_4])
 		{
 			character->inventory->buyItem("Axe", 5);
 			character->inventory->show();
-
 			openShop = false;
 		}
 		else if (keys[SDL_SCANCODE_5])
 		{
 			character->inventory->buyItem("Knives", 5);
 			character->inventory->show();
-
 			openShop = false;
 		}
 
+		if (openShop == false) // if shop closed, stop music and return camera to normal 
+		{
+			character->status = STATE_NORMAL;
+			shopMusicPlaying = false;
+		}
 
 	}
 	else if (gameState == COMBAT)

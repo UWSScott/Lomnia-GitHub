@@ -2,10 +2,6 @@
 #include "EnemyType.h"
 #define CUBE_DOWN -2.7
 
-void MazeGenerator::Update()
-{
-
-}
 
 void MazeGenerator::draw(glm::mat4 object,  GLuint s_shaderProgram, int pass)
 {
