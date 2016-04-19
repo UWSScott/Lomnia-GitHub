@@ -22,5 +22,3 @@ namespace rt3d {
 }
 
 #endif
-
-// hello 
