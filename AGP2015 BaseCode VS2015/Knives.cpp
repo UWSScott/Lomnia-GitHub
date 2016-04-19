@@ -25,3 +25,4 @@ Knives::Knives(int rarity)
 		speed = 30;
 		break;
 	}
+}
