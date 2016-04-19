@@ -100,7 +100,6 @@ Character::Character(string s_characterName, MD2Holder* modelInfo, TextureHolder
 	defence = s_defence;
 	scale = s_scale;
 	position = s_position;
-
 }
 
 glm::vec3 Character::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d)

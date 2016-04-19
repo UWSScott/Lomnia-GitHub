@@ -30,6 +30,26 @@ Prefab::Prefab(GLuint s_shaderProgram, OBJHolder* modelInfo, TextureHolder* text
 	//delete fileLoader;
 }
 
+
+Prefab::Prefab(string ItemID, GLuint s_shaderProgram, OBJHolder* modelInfo, TextureHolder* textureInfo, glm::vec3 s_scale, glm::vec3 s_position, float s_rotation, glm::vec3 s_maxVec, glm::vec3 s_minVec)
+{
+	objectName = ItemID;
+	Collider = new Collisions(s_minVec, s_maxVec);
+	collisionName = "STATIC_PREFAB";
+	shaderProgram = s_shaderProgram;
+	position = s_position;
+	scale = s_scale;
+	rotation = s_rotation;
+	meshObject = modelInfo->model;
+	meshIndexCount = modelInfo->meshCount;
+	texture = textureInfo->texture;
+	GetEdge(position);
+
+	//FileLoader* fileLoader = new FileLoader;
+	//texture = fileLoader->loadBitmap(textureName);
+	//delete fileLoader;
+}
+
 void Prefab::draw(glm::mat4 object)
 {
 	glUseProgram(shaderProgram);
@@ -60,4 +80,19 @@ void Prefab::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 	object = glm::rotate(object, float(rotation*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
 	rt3d::setUniformMatrix4fv(s_shaderUsed, "modelview", glm::value_ptr(object));
 	rt3d::drawIndexedMesh(meshObject, meshIndexCount, GL_TRIANGLES);
+}
+
+void Prefab::GetEdge(glm::vec3 currentPosition)
+{
+	glm::vec3 topRight;
+	glm::vec3 bottomLeft;
+
+	topRight.x = (currentPosition.x + (scale.x / 2));
+	topRight.y = (currentPosition.y + (scale.y / 2));
+	topRight.z = (currentPosition.z + (scale.z / 2));
+
+	bottomLeft.x = (currentPosition.x - (scale.x / 2));
+	bottomLeft.y = (currentPosition.y - (scale.y / 2));
+	bottomLeft.z = (currentPosition.z - (scale.z / 2));
+	Collider = new Collisions(glm::vec3(topRight), glm::vec3(bottomLeft));
 }

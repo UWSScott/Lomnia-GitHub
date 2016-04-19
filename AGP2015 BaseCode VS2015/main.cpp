@@ -733,9 +733,9 @@ void update(void) {
 				Game_Maze_Characters[i]->Update();
 		}*/
 		gameStateInt = gameState;
-		cout << " game state before: " << gameStateInt << endl;
+		//cout << " game state before: " << gameStateInt << endl;
 		maze->Update(character, gameStateInt);
-		cout << " game state after: " << gameStateInt << endl;
+		//cout << " game state after: " << gameStateInt << endl;
 		if (gameStateInt == 1)
 			gameState = HUB;
 		else if(gameStateInt == 2)
@@ -869,11 +869,11 @@ void RenderScene(GLuint refShaderProgram) {
 			terrain->draw(mvStack.top(), refShaderProgram, currentPass);
 		maze->draw(mvStack.top(), refShaderProgram, currentPass);
 
-		for (int i = 0; i < Game_Maze_Characters.size(); i++)
+		/*for (int i = 0; i < Game_Maze_Characters.size(); i++)
 		{
 			if (Game_Maze_Characters[i]->health > 0)
 				Game_Maze_Characters[i]->draw(mvStack.top(), refShaderProgram, currentPass);
-		}
+		}*/
 
 	}
 	//ui->textBox(text[0], skyboxProgram, -0.55, textures[2], true, names[0]);

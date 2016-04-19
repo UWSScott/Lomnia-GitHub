@@ -4,6 +4,18 @@
 
 void MazeGenerator::Update(Character* character, int &gameState)
 {
+	character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
+
+	for (int i = 0; i < Game_Maze_Prefabs.size(); i++)
+	{
+		if (character->Collider->checkCollision(Game_Maze_Prefabs[i]->Collider->aabb, character->position))
+		{
+			character->position = character->oldPosition; //oldPlayerPos;
+			character->CheckCollision(Game_Maze_Prefabs[i], typeid(Game_Maze_Prefabs[i]).name());
+			std::cout << "collision with " << i << endl;
+		}
+	}
+
 	for (int i = 0; i < Game_Maze_Characters.size(); i++)
 	{
 		Game_Maze_Characters[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Characters[i]->position.x, (GLfloat)Game_Maze_Characters[i]->position.z, 0.5);
@@ -15,25 +27,33 @@ void MazeGenerator::Update(Character* character, int &gameState)
 			character->CheckQuestGoal(Game_Maze_Characters[i]);
 		}
 	}
-
 	for (int i = 0; i < Game_Maze_Prefabs.size(); i++)
 	{
-		if (character->Collider->checkCollision(Game_Maze_Prefabs[i]->Collider->aabb, character->position))
+		Game_Maze_Prefabs[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Prefabs[i]->position.x, (GLfloat)Game_Maze_Prefabs[i]->position.z, 0.5);
+
+		//if (Game_Maze_Prefabs[i]->Collider->checkCollision(Game_Maze_Prefabs[i]->Collider->aabb, character->position))
+		if (character->Collider->checkCollision(character->Collider, Game_Maze_Prefabs[i]->Collider))
 		{
+			cout << " COLLISION!!!!!!" << endl;
 			character->position = character->oldPosition; //oldPlayerPos;
 			character->CheckCollision(Game_Maze_Prefabs[i], typeid(Game_Maze_Prefabs[i]).name());
 
-			if (i == 37) // if item
+			if (Game_Maze_Prefabs[i]->objectName == "Loot_Drop")
 			{
 				character->inventory->AddRandomItem();
 				character->inventory->show();
 				Game_Maze_Prefabs.pop_back();
+			} else if (Game_Maze_Prefabs[i]->objectName == "Teleporter" && character->currentQuest->status == 1) {
+				gameState = 1;
+				character->position = glm::vec3(10, 1.2, 10);
+				return;
 			}
 		}
 	}
 
 	for (int j = 0; j < Game_Maze_Characters.size(); j++)
 	{
+		Game_Maze_Characters[j]->Collider->CollisionCircles((GLfloat)Game_Maze_Characters[j]->position.x, (GLfloat)Game_Maze_Characters[j]->position.z, 0.5);
 		if (Game_Maze_Characters[j]->health > 0)
 		{
 			Game_Maze_Characters[j]->Update();
@@ -48,19 +68,24 @@ void MazeGenerator::Update(Character* character, int &gameState)
 
 	for (int i = 0; i < Game_Maze_Walls.size(); i++)
 	{
+		/*Game_Maze_Walls[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Walls[i]->position.x, (GLfloat)Game_Maze_Walls[i]->position.z, 0.5);
 		for (int j = 0; j < Game_Maze_Characters.size(); j++)
 		{
-			if (Game_Maze_Characters[j]->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, Game_Maze_Characters[j]->position))
+			//if (Game_Maze_Characters[j]->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, Game_Maze_Characters[j]->position))
+			if (Game_Maze_Characters[j]->Collider->checkCollision(character->Collider, Game_Maze_Characters[j]->Collider))
 			{
 				Game_Maze_Characters[j]->position = Game_Maze_Characters[j]->oldPosition;
 			}
 		}
 
-		if (character->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, character->position))
+		//if (Game_Maze_Walls[i]->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, character->position))
+		if (character->Collider->checkCollision(character->Collider, Game_Maze_Walls[i]->Collider))
 		{
 			character->position = character->oldPosition;
-		}
+		}*/
 	}
+
+	character->oldPosition = character->position;
 }
 
 void MazeGenerator::draw(glm::mat4 object,  GLuint s_shaderProgram, int pass)
@@ -93,13 +118,13 @@ void MazeGenerator::EnterTheMazetrix(Character* playerCharacter, ResourceManager
 	Game_Maze_Characters.push_back(SpawnCharacter(new Minion("MAZE_AI_2", resManager->LoadMD2("Models/ripper.MD2"), resManager->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram)));
 	Game_Maze_Characters.push_back(SpawnCharacter(new Minion("MAZE_AI_3", resManager->LoadMD2("Models/ripper.MD2"), resManager->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram)));
 	Game_Maze_Characters.push_back(SpawnCharacter(new Minion("MAZE_AI_4", resManager->LoadMD2("Models/ripper.MD2"), resManager->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram)));
-	Game_Maze_Prefabs.push_back(dynamic_cast<Prefab*>(SpawnGameobject(new Prefab(TSshaderProgram, resManager->LoadObject("Models/Teleporter.obj"), resManager->LoadTexture("Models/Textures/Well.bmp"), glm::vec3(0.4, 0.4, 0.4), glm::vec3(39, 0.36, 0), 0, glm::vec3(37.4, 2.0, 2.4), glm::vec3(34.4, -1.0, -2.5)))));
+	Game_Maze_Prefabs.push_back(dynamic_cast<Prefab*>(SpawnGameobject(new Prefab("Teleporter", TSshaderProgram, resManager->LoadObject("Models/Teleporter.obj"), resManager->LoadTexture("Models/Textures/Well.bmp"), glm::vec3(0.4, 0.4, 0.4), glm::vec3(39, 0.36, 0), 0, glm::vec3(37.4, 2.0, 2.4), glm::vec3(34.4, -1.0, -2.5)))));
 	Game_Maze_Prefabs[0]->position = playerCharacter->position;
 	Game_Maze_Prefabs[0]->position.x += 5;
 	Game_Maze_Prefabs[0]->position.y -= 1.5;
-	Game_Maze_Prefabs.push_back(dynamic_cast<Prefab*>(SpawnGameobject(new Prefab(TSshaderProgram, resManager->LoadObject("Models/Loot_Drop_001.obj"), resManager->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(0.01, 0.01, 0.01), glm::vec3(13, 0.36, 0), 0, glm::vec3(15, 5, 3), glm::vec3(5, -3, -3)))));
-	Game_Maze_Prefabs.push_back(dynamic_cast<Prefab*>(SpawnGameobject(new Prefab(TSshaderProgram, resManager->LoadObject("Models/Loot_Drop_001.obj"), resManager->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(0.01, 0.01, 0.01), glm::vec3(13, 0.36, 0), 0, glm::vec3(15, 5, 3), glm::vec3(5, -3, -3)))));
-	Game_Maze_Prefabs.push_back(dynamic_cast<Prefab*>(SpawnGameobject(new Prefab(TSshaderProgram, resManager->LoadObject("Models/Loot_Drop_001.obj"), resManager->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(0.01, 0.01, 0.01), glm::vec3(13, 0.36, 0), 0, glm::vec3(15, 5, 3), glm::vec3(5, -3, -3)))));
+	Game_Maze_Prefabs.push_back(dynamic_cast<Prefab*>(SpawnGameobject(new Prefab("Loot_Drop", TSshaderProgram, resManager->LoadObject("Models/Loot_Drop_001.obj"), resManager->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(0.01, 0.01, 0.01), glm::vec3(13, 0.36, 0), 0, glm::vec3(15, 5, 3), glm::vec3(5, -3, -3)))));
+	Game_Maze_Prefabs.push_back(dynamic_cast<Prefab*>(SpawnGameobject(new Prefab("Loot_Drop", TSshaderProgram, resManager->LoadObject("Models/Loot_Drop_001.obj"), resManager->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(0.01, 0.01, 0.01), glm::vec3(13, 0.36, 0), 0, glm::vec3(15, 5, 3), glm::vec3(5, -3, -3)))));
+	Game_Maze_Prefabs.push_back(dynamic_cast<Prefab*>(SpawnGameobject(new Prefab("Loot_Drop", TSshaderProgram, resManager->LoadObject("Models/Loot_Drop_001.obj"), resManager->LoadTexture("Models/Textures/Texture1.bmp"), glm::vec3(0.01, 0.01, 0.01), glm::vec3(13, 0.36, 0), 0, glm::vec3(15, 5, 3), glm::vec3(5, -3, -3)))));
 
 	//Game_Maze_Prefabs[0]->position.z += 3;
 	//Game_Maze_Prefabs.push_back(SpawnCharacter(new Minion("MAZE_AI_4", resManager->LoadMD2("Models/ripper.MD2"), resManager->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), TSshaderProgram)));
