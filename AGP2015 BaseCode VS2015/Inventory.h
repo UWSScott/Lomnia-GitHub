@@ -22,6 +22,17 @@ using namespace std;
 
 class Character;
 
+
+#define BRONZE_WEAPON_PRICE 100
+#define SILVER_WEAPON_PRICE 500
+#define GOLD_WEAPON_PRICE 1000
+#define LIGHT_POTION_PRICE 12
+#define MEDIUM_POTION_PRICE 20
+#define STRONG_POTION_PRICE 30
+#define POTION_POTENCY_LIGHT 4
+#define POTION_POTENCY_MEDIUM 5
+#define POTION_POTENCY_STRONG 6
+
 class Inventory
 {
 private:
@@ -30,8 +41,8 @@ private:
 public:
 	void show();
 	void sellItem(string itemNameID, float price);
-	void buyItem(string itemNameID, float price);
-	void addItem(string itemNameID);
+	void buyItem(string itemNameID, int rarityOrPotency);
+	void addItem(string itemNameID, int rarityOrPotency);
 	Item* FindItem(string itemNameID);
 	Item* GetItem(string itemNameID);
 	void AddRandomItem(); // To be called after item pick up / generate random quest reward

@@ -4,58 +4,42 @@
 
 Medkit::Medkit(int potency)
 {
-	// could have different constructor for 'randomly generated' medkit picked up that randomizes which potency is recieved?
-
 	name = "HealthPotion";
-	switch (potency)
+	switch (potency) 
 	{
-	case 1:
-		objectName = "Light HealthPotion"; // need to include potency
-		price = 12.00f;
+	case POTION_POTENCY_LIGHT:
+		restoreValue = 30;
+		std::cout << "made light potion" << std::endl;
 		break;
-	case 2:
-		objectName = "Medium HealthPotion";
-		price = 20.00f;
+	case POTION_POTENCY_MEDIUM:
+		restoreValue = 50;
+		std::cout << "made medium potion" << std::endl;
 		break;
-	case 3:
-		objectName = "Strong HealthPotion";
-		price = 30.00f;
-		break;
-	case 4:
-		objectName = "Holy HealthPotion";
-		price = 50.00f;
+	case POTION_POTENCY_STRONG:
+		restoreValue = 80;
+		std::cout << "made strong potion" << std::endl;
 		break;
 	default:
+		restoreValue = 30;
+		std::cout << "made light potion" << std::endl;
 		break;
-
 	}
+
+	objectName = "HealthPotion";
+	price = 12.00f;
+
 }
 
 void Medkit::Use(Character* character)
 {
-	cout << " Restoring health to player." << endl;
+	
+	Restore(restoreValue, character);
 
-	if (objectName == "Light HealthPotion")
-	{
-		//add 30hp to player
-		Restore(30, character);
-	}
-	else if (objectName == "Medium HealthPotion")
-	{
-		//add 50hp to player
-		character->health += 50;
-	}
-	else if (objectName == "Strong HealthPotion")
-	{
-		//add 80hp to player
-		Restore(30, character);
-
-	}
-	else if (objectName == "Holy HealthPotion")
-	{
-		//restores all health to player
-		character->health = character->max_Health;
-	}
+	//else if (objectName == "Holy HealthPotion")
+	//{
+	//	//restores all health to player
+	//	character->health = character->max_Health;
+	//}
 
 }
 
