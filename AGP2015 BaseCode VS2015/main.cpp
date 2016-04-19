@@ -25,10 +25,8 @@
 #include <SDL_ttf.h>
 
 #include <vector>
-#include <ctime>
 #include <iostream>
 #include <windows.h>
-#include <conio.h>
 #include <fstream>
 #include "stdafx.h" //http://sourceforge.net/p/wpbdc/website/ci/master/tree/Judge/StdAfx.h
 #include <list>
@@ -343,6 +341,20 @@ GLuint loadBitmap(char *fname) {
 	return texID;	// return value of texture ID
 }
 
+void CalculateFrameRate()
+{
+	static float framesPerSecond = 0.0f;       // This will store our fps
+	static float lastTime = 0.0f;       // This will hold the time from the last frame
+	float currentTime = GetTickCount() * 0.001f;
+	++framesPerSecond;
+	if (currentTime - lastTime > 1.0f)
+	{
+		lastTime = currentTime;
+		if (1 == 1) fprintf(stderr, "\nCurrent Frames Per Second: %d\n\n", (int)framesPerSecond);
+		framesPerSecond = 0;
+	}
+}
+
 void init(void)
 {
 	glGenFramebuffers(1, &depthMapFBO);
@@ -534,6 +546,7 @@ void update(void) {
 	Game_Camera.update(character->getModelEye(), character->getRotation());
 	character->Update(&Game_Camera);
 	character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
+	CalculateFrameRate();
 
 	if (gameState == HUB)
 	{
