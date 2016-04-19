@@ -90,8 +90,11 @@ GLuint textures[7];
 GLuint skybox[5];
 GLuint labels[5];
 
+
+//shop interface variables
 bool shopMusicPlaying = false; 
 bool bronzeSilverGoldOption = false; 
+bool lightMediumStrongOption = false; 
 string item;
 
 rt3d::lightStruct light0 = {
@@ -655,7 +658,7 @@ void update(void) {
 
 			text[2] = ui->createTexture("1. Bronze 2. Silver 3. Gold ", textFont);
 			
-
+			
 			if (keys[SDL_SCANCODE_1]) // if bronze
 			{
 				character->inventory->buyItem(item, RARITY_BRONZE);
@@ -684,21 +687,62 @@ void update(void) {
 			}
 		}
 
+		if (lightMediumStrongOption)
+		{
+
+			text[2] = ui->createTexture("1. Light 2. Medium 3. Strong", textFont);
+			if (keys[SDL_SCANCODE_1]) // if light
+			{
+				character->inventory->buyItem(item, POTION_POTENCY_LIGHT);
+
+				openShop = false;
+			}
+			else if (keys[SDL_SCANCODE_2]) // if medium
+			{
+				character->inventory->buyItem(item, POTION_POTENCY_MEDIUM);
+
+				openShop = false;
+			}
+			else if (keys[SDL_SCANCODE_3]) // if strong
+			{
+				character->inventory->buyItem(item, POTION_POTENCY_STRONG);
+
+				openShop = false;
+			}
+
+			if (openShop == false) // if shop closed, stop music and return camera to normal 
+			{
+				character->status = STATE_NORMAL;
+				shopMusicPlaying = false;
+				lightMediumStrongOption = false;
+				character->inventory->show();
+			}
+
+		}
+
 		if (openShop)
 		{
-			if (!bronzeSilverGoldOption)
+			if (!bronzeSilverGoldOption && !lightMediumStrongOption)
 			{
 				text[2] = ui->createTexture("1. Health Potion 2. Mana Potion 3. Sword 4.Axe 5.Knives", textFont);
 
 				if (keys[SDL_SCANCODE_1]) // if health potion
 				{
-					character->inventory->buyItem("HealthPotion", 1); // price currently not correct for potions, working out with potency
-					openShop = false;
+				
+					//character->inventory->buyItem("HealthPotion", 1); // price currently not correct for potions, working out with potency
+					//openShop = false;
+
+					lightMediumStrongOption = true;
+					item = "HealthPotion";
 				}
 				else if (keys[SDL_SCANCODE_2]) // if mana potion
 				{
-					character->inventory->buyItem("ManaPotion", 1);
-					openShop = false;
+					/*character->inventory->buyItem("ManaPotion", 1);
+					openShop = false;*/
+
+					lightMediumStrongOption = true;
+					item = "ManaPotion"; 
+				
 				}
 				else if (keys[SDL_SCANCODE_3]) // if sword
 				{

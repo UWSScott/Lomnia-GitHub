@@ -23,7 +23,7 @@ void Inventory::addItem(string itemNameID)
 	}
 	else if (itemNameID == "ManaPotion")
 	{
-		Potion* tempPotion = new ManaPotion();
+		Potion* tempPotion = new ManaPotion(1);
 		items.push_back(tempPotion);
 	}
 	else if (itemNameID == "BonusArmourPotion")
@@ -84,27 +84,37 @@ void Inventory::removeItem(string itemNameID)
 	}
 }
 
-void Inventory::buyItem(string itemNameID, int rarity)
+void Inventory::buyItem(string itemNameID, int rarityOrPotency)
 {
 	int playerChoice;
 	int price; 
 
-	switch (rarity)
-	{
-	case 1: 
-		//bronze weapon price
-		price = BRONZE_WEAPON_PRICE;
-		break;
-	case 2: 
-		//silver
-		price = SILVER_WEAPON_PRICE;
-		break; 
-	case 3: 
-		price = GOLD_WEAPON_PRICE;
-		//gold
-		break; 
-	}
+		switch (rarityOrPotency)
+		{
+		case 1:
+			//bronze weapon price
+			price = BRONZE_WEAPON_PRICE;
+			break;
+		case 2:
+			//silver
+			price = SILVER_WEAPON_PRICE;
+			break;
+		case 3:
+			price = GOLD_WEAPON_PRICE;
+			//gold
+			break;
+		case 4: 
+			price = LIGHT_POTION_PRICE;
+			break; 
+		case 5:
+			price = MEDIUM_POTION_PRICE; 
+			break; 
+		case 6: 
+			price = STRONG_POTION_PRICE; 
+			break; 
+		}
 
+	
 	if (price > gold)
 	{
 		cout << "Sorry, you don't have enough gold to buy a " << itemNameID << endl;
@@ -113,18 +123,12 @@ void Inventory::buyItem(string itemNameID, int rarity)
 	{
 		if (itemNameID == "HealthPotion")
 		{
-	/*		cout << "What potency of HealthPotion would you like to buy? " << endl;
-			cout << "1. Light" << endl << "2. Medium" << endl << "3. Heavy" << endl << "4. Holy";
-			cin >> playerChoice;
-			Potion* tempPotion = new Medkit(playerChoice);
-			items.push_back(tempPotion);*/
-
-			Potion* tempPotion = new Medkit(1);
+			Potion* tempPotion = new Medkit(rarityOrPotency);
 			items.push_back(tempPotion);
 		}
 		else if (itemNameID == "ManaPotion")
 		{
-			Potion* tempPotion = new ManaPotion();
+			Potion* tempPotion = new ManaPotion(rarityOrPotency);
 			items.push_back(tempPotion);
 		}
 		else if (itemNameID == "BonusArmourPotion")
@@ -149,44 +153,36 @@ void Inventory::buyItem(string itemNameID, int rarity)
 		}
 		else if (itemNameID == "Sword")
 		{
-			Sword* tempSword = new Sword(rarity);
+			Sword* tempSword = new Sword(rarityOrPotency);
 			items.push_back(tempSword);
 		}
 		else if (itemNameID == "Axe")
 		{
-			Axe* tempAxe = new Axe(rarity);
+			Axe* tempAxe = new Axe(rarityOrPotency);
 			items.push_back(tempAxe);
 		}
 		else if (itemNameID == "Knives")
 		{
-			Knives* tempKnives = new Knives(rarity);
+			Knives* tempKnives = new Knives(rarityOrPotency);
 			items.push_back(tempKnives);
 
 		}
 
-
-		show(); 
 		gold -= price; 
+		show();
 
 	}
 
 }
 
 
-
-
-
-
 void Inventory::sellItem(string itemNameID, float price)
 {
-	
-
 	bool itemFound = false;
 	for (iter = items.begin(); iter != items.end(); iter++)
 	{
 		if ((**iter).name == itemNameID)
 		{
-			//gold += (*iter).price; **** If want price inside Medkit ***** 
 			gold += price;
 			items.erase(iter);
 			itemFound = true;
@@ -217,7 +213,6 @@ Item* Inventory::FindItem(string itemNameID)
 			break;
 		}
 
-
 	}
 	cout << "Didn't find item";
 	return NULL;
@@ -246,7 +241,10 @@ void Inventory::AddRandomItem()
 	// pick a random reward based on that number 
 
 	srand(time(0));
-	int randomNumber = rand() % 100 + 1;
+	int randomNumber = rand() % 101 + 1;
+
+	gold += rand() % 51 + 25; // gold with item 
+	
 
 	if (randomNumber < 70) //70% chance on getting a potion. 
 	{
@@ -277,6 +275,8 @@ void Inventory::AddRandomItem()
 		if ((randomNumber>90) && (randomNumber <= 100))
 			addItem("Knives");
 	}
+
+
 
 }
 

@@ -9,6 +9,7 @@ public:
 	Medkit(int potency);
 	void virtual Use(Character* character);
 	void virtual Restore(int restoreValue, Character* character);
+	int restoreValue; 
 };
 
 #endif

@@ -1,17 +1,35 @@
 #include "ManaPotion.h"
 #include "Character.h"
 
-ManaPotion::ManaPotion()
+ManaPotion::ManaPotion(int potency)
 {
 	name = "ManaPotion";
 
 
-
+	switch (potency) // set prices here for different rarities when set up shop again
+	{
+	case POTION_POTENCY_LIGHT:
+		restoreValue = 30; 
+		std::cout << "made light potion" << std::endl;
+		break;
+	case POTION_POTENCY_MEDIUM:
+		restoreValue = 50;
+		std::cout << "made medium potion" << std::endl;
+		break;
+	case POTION_POTENCY_STRONG:
+		restoreValue = 80; 
+		std::cout << "made strong potion" << std::endl;
+		break;
+	default:
+		restoreValue = 30;
+		std::cout << "made light potion" << std::endl;
+		break;
+	}
 
 	// for now setting all potions to light until i set up potency / rarity for all items. Will be changed :)
 
 
-	objectName = "Light ManaPotion";
+	objectName = "ManaPotion";
 	price = 12.00f;
 
 
@@ -25,30 +43,8 @@ void ManaPotion::Use(Character* character)
 	// Strong = restores 80 MP
 	// Checks while adding not to go over max. 
 	//************************************************
-
-	cout << " Restoring Mana to player." << endl;
-
-	if (objectName == "Light ManaPotion")
-	{
-		//add 30mp to player
-		Restore(30, character);
-	}
-	else if (objectName == "Medium ManaPotion")
-	{
-		//add 50mp to player
-		Restore(50, character);
-	}
-	else if (objectName == "Strong ManaPotion")
-	{
-		//add 80mp to player
-		Restore(80, character);
-	}
-	else if (objectName == "Holy ManaPotion")
-	{
-		//restores all mana to player
-		character->manaPool = character->max_Mana;
-	}
-
+	
+	Restore(restoreValue, character);
 
 }
 
@@ -66,7 +62,5 @@ void ManaPotion::Restore(int restoreValue, Character* character)
 	{
 		character->manaPool += restoreValue;
 	}
-
-
 }
 

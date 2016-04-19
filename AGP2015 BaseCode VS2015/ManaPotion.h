@@ -6,10 +6,10 @@
 class ManaPotion : public Potion // hello 
 {
 public:
-	ManaPotion();
+	ManaPotion(int potency);
 	void virtual Use(Character* character);
 	void virtual Restore(int restoreValue, Character* character);
-
+	int restoreValue; 
 };
 
 #endif
