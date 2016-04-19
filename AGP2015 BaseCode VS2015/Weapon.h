@@ -3,6 +3,9 @@
 
 #include "Item.h"
 using namespace std;
+#define RARITY_BRONZE 1
+#define RARITY_SILVER 2
+#define RARITY_GOLD 3
 
 class Weapon : public Item
 {

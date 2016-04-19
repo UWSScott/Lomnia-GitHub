@@ -7,6 +7,28 @@ Sword::Sword(int rarity)
 	attackPower = rand() % 8 + 4; // generates random attack power between 4-7. 
 	objectName = "Sword";
 	speed = 50;
+
+
+	switch (rarity) // set prices here for different rarities when set up shop again
+	{
+	case RARITY_BRONZE:
+		attackPower = rand() % 8 + 4;
+		speed = 50;
+		break;
+	case RARITY_SILVER:
+		attackPower = rand() % 18 + 12;
+		speed = 38;
+		break;
+	case RARITY_GOLD:
+		attackPower = rand() & 31 + 19;
+		speed = 25;
+		break;
+	default:
+		attackPower = rand() % 8 + 4; // default bronze
+		speed = 30;
+		break;
+	}
+
 }
 
 
