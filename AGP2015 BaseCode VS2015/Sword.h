@@ -7,7 +7,7 @@ class Sword : public Weapon
 {
 public:
 
-	Sword();
+	Sword(int rarity);
 
 };
 

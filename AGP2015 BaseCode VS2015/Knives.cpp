@@ -1,6 +1,6 @@
 #include "Knives.h"
 
-Knives::Knives()
+Knives::Knives(int rarity)
 {
 	name = "Knives";
 	//making bronze (rarity not programmed yet)

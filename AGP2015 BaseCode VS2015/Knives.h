@@ -6,7 +6,7 @@
 class Knives : public Weapon
 {
 public:
-	Knives();
+	Knives(int rarity);
 
 };
 

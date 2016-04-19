@@ -48,17 +48,17 @@ void Inventory::addItem(string itemNameID)
 	}
 	else if (itemNameID == "Sword")
 	{
-		Sword* tempSword = new Sword();
+		Sword* tempSword = new Sword(1);
 		items.push_back(tempSword);
 	}
 	else if (itemNameID == "Axe")
 	{
-		Axe* tempAxe = new Axe();
+		Axe* tempAxe = new Axe(1);
 		items.push_back(tempAxe);
 	}
 	else if (itemNameID == "Knives")
 	{
-		Knives* tempKnives = new Knives;
+		Knives* tempKnives = new Knives(1);
 		items.push_back(tempKnives);
 	}
 }
@@ -142,21 +142,21 @@ void Inventory::buyItem(string itemNameID, float price)
 		}
 		else if (itemNameID == "Sword")
 		{
-			Sword* tempSword = new Sword();
+			Sword* tempSword = new Sword(1);
 			items.push_back(tempSword);
 
 			//gold = -100;
 		}
 		else if (itemNameID == "Axe")
 		{
-			Axe* tempAxe = new Axe();
+			Axe* tempAxe = new Axe(1);
 			items.push_back(tempAxe);
 			//	gold = -100;
 
 		}
 		else if (itemNameID == "Knives")
 		{
-			Knives* tempKnives = new Knives();
+			Knives* tempKnives = new Knives(1);
 			items.push_back(tempKnives);
 			//		gold = -100;
 

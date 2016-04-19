@@ -1,6 +1,6 @@
 #include "Sword.h"
 
-Sword::Sword()
+Sword::Sword(int rarity)
 {
 	name = "Sword";
 	//making bronze (rarity not programmed yet)
