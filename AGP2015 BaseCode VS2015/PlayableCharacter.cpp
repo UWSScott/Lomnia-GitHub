@@ -31,7 +31,7 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 	currentQuest = new Quest("Kill Blade", "Blade is a nasty man!", "Blade", "OVERLORD", "Models/quigon.MD2", "Models/Textures/Bronze_Skin.bmp", -500, 0);
 
 	//Potion* tempPotion = new Medkit(1);
-	inventory->addItem("Health_Potion");
+	inventory->addItem("Health_Potion", POTION_POTENCY_MEDIUM);
 
 	FileLoader* fileLoader = new FileLoader;
 	texture = fileLoader->loadBitmap(textureName);

@@ -715,7 +715,7 @@ void update(void) {
 				character->status = STATE_NORMAL;
 				shopMusicPlaying = false;
 				lightMediumStrongOption = false;
-				character->inventory->show();
+		//		character->inventory->show();
 			}
 
 		}
@@ -844,6 +844,7 @@ void update(void) {
 	if (keys[SDL_SCANCODE_L]) lightPos.z -= 0.1f;
 	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
 	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
+	if (keys[SDL_SCANCODE_N]) character->inventory->AddRandomItem();
 
 	//if (keys[SDL_SCANCODE_Z]) character->Damage(100);//Kill butten 
 

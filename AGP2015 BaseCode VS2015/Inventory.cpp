@@ -4,26 +4,21 @@
 
 Inventory::Inventory()
 {
-	//for (int i = 0; i < 5; i++) //Arnould starts with 5 potions
-	//{
-	//	Potion* tempPotion = new Medkit(1);
-	//	items.push_back(tempPotion);
-	//}
-	menuUI = new UI;
-	gold = 500.00f;
+	//menuUI = new UI;
+	gold = 1000.00f; 
 }
 
-void Inventory::addItem(string itemNameID)
+void Inventory::addItem(string itemNameID, int rarityOrPotency)
 {
 	// find out what item to add, create item, push onto inventory
 	if (itemNameID == "HealthPotion")
 	{
-		Potion* tempPotion = new Medkit(1);
+		Potion* tempPotion = new Medkit(rarityOrPotency);
 		items.push_back(tempPotion);
 	}
 	else if (itemNameID == "ManaPotion")
 	{
-		Potion* tempPotion = new ManaPotion(1);
+		Potion* tempPotion = new ManaPotion(rarityOrPotency);
 		items.push_back(tempPotion);
 	}
 	else if (itemNameID == "BonusArmourPotion")
@@ -48,17 +43,17 @@ void Inventory::addItem(string itemNameID)
 	}
 	else if (itemNameID == "Sword")
 	{
-		Sword* tempSword = new Sword(1);
+		Sword* tempSword = new Sword(rarityOrPotency);
 		items.push_back(tempSword);
 	}
 	else if (itemNameID == "Axe")
 	{
-		Axe* tempAxe = new Axe(1);
+		Axe* tempAxe = new Axe(rarityOrPotency);
 		items.push_back(tempAxe);
 	}
 	else if (itemNameID == "Knives")
 	{
-		Knives* tempKnives = new Knives(1);
+		Knives* tempKnives = new Knives(rarityOrPotency);
 		items.push_back(tempKnives);
 	}
 }
@@ -92,16 +87,13 @@ void Inventory::buyItem(string itemNameID, int rarityOrPotency)
 		switch (rarityOrPotency)
 		{
 		case 1:
-			//bronze weapon price
 			price = BRONZE_WEAPON_PRICE;
 			break;
 		case 2:
-			//silver
 			price = SILVER_WEAPON_PRICE;
 			break;
 		case 3:
 			price = GOLD_WEAPON_PRICE;
-			//gold
 			break;
 		case 4: 
 			price = LIGHT_POTION_PRICE;
@@ -170,11 +162,8 @@ void Inventory::buyItem(string itemNameID, int rarityOrPotency)
 
 		gold -= price; 
 		show();
-
 	}
-
 }
-
 
 void Inventory::sellItem(string itemNameID, float price)
 {
@@ -240,43 +229,89 @@ void Inventory::AddRandomItem()
 	// generate a random number
 	// pick a random reward based on that number 
 
+
+	// rand potency or strength
+
+	// 70 % weak, 
+	// 71-90 medium 
+	// 90-100 strong 
+
 	srand(time(0));
 	int randomNumber = rand() % 101 + 1;
-
 	gold += rand() % 51 + 25; // gold with item 
+	int potencyOrRarity; 
+	string item; 
 	
 
 	if (randomNumber < 70) //70% chance on getting a potion. 
 	{
 		cout << "Making Potion";
 
-		//mana and health are most likely  15 
-		if ((randomNumber>0) && (randomNumber <= 15))
-			addItem("HealthPotion");
-		if ((randomNumber>15) && (randomNumber <= 30))
-			addItem("ManaPotion");
+	
+
+		
+
+		//mana and health are most likely  30 
+		if ((randomNumber > 0) && (randomNumber <= 35))
+			item = "HealthPotion"; 
+			
+		if ((randomNumber>35) && (randomNumber <= 70))
+			item = "ManaPotion"; 
+
+		randomNumber = rand() % 101 + 1;
+		int potency;
+		if (randomNumber < 70) //70% chance on getting a potion. 
+		{
+			potency = POTION_POTENCY_LIGHT;
+		}
+		if (randomNumber >= 70 && randomNumber<91) //70% chance on getting a potion. 
+		{
+			potency = POTION_POTENCY_LIGHT;
+		}
+		else if (randomNumber>90 && randomNumber < 101)
+		{
+			potency = POTION_POTENCY_STRONG;
+		}
+
+		addItem(item, potency); 
+
+			/*addItem("ManaPotion", potency);*/
 		//then strength, speed, bonus armour and defence all equally likely (10%)
-		if ((randomNumber>30) && (randomNumber <= 40))
+	/*	if ((randomNumber>30) && (randomNumber <= 40))
 			addItem("DefencePotion");
 		if ((randomNumber>40) && (randomNumber <= 50))
 			addItem("SpeedPotion");
 		if ((randomNumber>50) && (randomNumber <= 60))
 			addItem("BonusArmourPotion");
 		if ((randomNumber>60) && (randomNumber <= 70))
-			addItem("StrengthPotion");
+			addItem("StrengthPotion");*/
 	}
 	else if (randomNumber > 70) //30% chance on getting a weapon. 
 	{
+		int rarity;
+
+		if (randomNumber < 70) //70% chance on getting a potion. 
+		{
+			rarity = RARITY_BRONZE;
+		}
+		if (randomNumber >= 70 && randomNumber<91) //70% chance on getting a potion. 
+		{
+			rarity = RARITY_SILVER;
+		}
+		else if (randomNumber>90 && randomNumber < 101)
+		{
+			rarity = RARITY_GOLD;
+		}
+
+
 		// 10% each. No need to generate extra random number as already between 70-100. 
 		if ((randomNumber>70) && (randomNumber <= 80))
-			addItem("Sword");
+			addItem("Sword", rarity);
 		if ((randomNumber>80) && (randomNumber <= 90))
-			addItem("Axe");
+			addItem("Axe", rarity);
 		if ((randomNumber>90) && (randomNumber <= 100))
-			addItem("Knives");
+			addItem("Knives", rarity);
 	}
-
-
 
 }
 
