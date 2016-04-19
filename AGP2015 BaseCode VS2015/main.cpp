@@ -218,6 +218,12 @@ int currentPass = 0;
 GLuint screenHeight = 600;
 GLuint screenWidth = 800;
 
+void SpawnFinalBoss()
+{
+	Game_Hub_Characters[4]->health = Game_Hub_Characters[4]->max_Health;
+
+}
+
 // textToTexture
 GLuint textToTexture(const char * str, GLuint textID/*, TTF_Font *font, SDL_Color colour, GLuint &w,GLuint &h */) {
 	TTF_Font *font = textFont;
@@ -492,13 +498,15 @@ void init(void)
 	Game_Hub_Characters.push_back(new Character("AI_2", Resource_Managment->LoadMD2("Models/quigon.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chris_Skin.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 20), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_3", Resource_Managment->LoadMD2("Models/pogo_buny.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chain_Link.bmp"), glm::vec3(1), glm::vec3(20, 1.2, 25), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_4", Resource_Managment->LoadMD2("Models/dragon.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(15, 1.2, 20), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("AI_5", Resource_Managment->LoadMD2("Models/faerie.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chain_Link.bmp"), glm::vec3(1), glm::vec3(20, 1.8, 15), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("END_BOSS", Resource_Managment->LoadMD2("Models/faerie.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chain_Link.bmp"), glm::vec3(1), glm::vec3(13, 1.8, -19.7), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_6", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/White_Fur.bmp"), glm::vec3(1), glm::vec3(30, 1.2, -10), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_7", Resource_Managment->LoadMD2("Models/centaur.MD2"), Resource_Managment->LoadTexture("Models/Textures/Blue_Leather.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 10), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("Blade", Resource_Managment->LoadMD2("Models/blade.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(5, 1.2, -10), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/zf19.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(15, 1.2, -10), shaderProgram));
 	Game_Hub_Characters[7]->enemy = false;
-
+	//Game_Hub_Characters[4]->enemy = true;
+	//Game_Hub_Characters[4]->health = -1;
+	Game_Hub_Characters[4]->rotation = 90;
 
 	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
 	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_2", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
@@ -540,6 +548,8 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 //ttt
 
 void update(void) {
+
+	cout << " arn pos: " << character->position.x << "  y: " << character->position.y << " z: " << character->position.z << endl;
 	gameStateInt = gameState;
 
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
@@ -773,14 +783,6 @@ void update(void) {
 	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
 	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
 
-	//if (keys[SDL_SCANCODE_Z]) character->Damage(100);//Kill butten 
-
-	if (keys[SDL_SCANCODE_C])
-	{
-		gameState = COMBAT;
-		character->EnterCombat(Game_Hub_Characters[0]);
-		Game_Hub_Characters[0]->EnterCombat(character);
-	}
 	if (keys[SDL_SCANCODE_7]) gameState = HUB;
 	if (keys[SDL_SCANCODE_Y]) gameState = MAZE;
 }

@@ -62,17 +62,18 @@ int CalculateFrameRate()
 void GetAnimationSpeed()
 {
 	int frameRate = CalculateFrameRate();
+	//std::cout << "Current frameRate: : " << frameRate << std::endl;
 	if (frameRate >= 60)
 	{
-		frameRateModifier = 1.25;
+		frameRateModifier = 1.00;
 	} else if (frameRate >= 45) {
-		frameRateModifier = 1.50;
+		frameRateModifier = 1.40;
 	} else if (frameRate >= 30) {
 		frameRateModifier = 1.75;
 	} else if (frameRate >= 15) {
-		frameRateModifier = 2.00;
+		frameRateModifier = 1.00;
 	} else {
-		frameRateModifier = 2.25;
+		frameRateModifier = 1.75;
 	}
 }
 
