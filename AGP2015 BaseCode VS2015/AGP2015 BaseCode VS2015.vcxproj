@@ -200,6 +200,7 @@
     <ClInclude Include="EnemyType.h" />
     <ClInclude Include="FileLoader.h" />
     <ClInclude Include="Flee.h" />
+    <ClInclude Include="FrameRate.h" />
     <ClInclude Include="Gameobject.h" />
     <ClInclude Include="HeavyAttack.h" />
     <ClInclude Include="HeightMap.h" />
