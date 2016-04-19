@@ -12,14 +12,17 @@ Axe::Axe(int rarity)
 	case RARITY_BRONZE:
 		attackPower = rand() % 10 + 5;
 		speed = 60;
+		std::cout << "made bronze axe" << std::endl;
 		break;
 	case RARITY_SILVER:
 		attackPower = rand() % 20 + 15;
 		speed = 45;
+		std::cout << "made silver axe" << std::endl;
 		break;
 	case RARITY_GOLD:
 		attackPower = rand() & 41 + 22;
 		speed = 32;
+		std::cout << "made gold axe" << std::endl;
 		break;
 	default:
 		attackPower = rand() % 10 + 5; // default bronze

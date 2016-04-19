@@ -22,6 +22,12 @@ using namespace std;
 
 class Character;
 
+
+#define BRONZE_WEAPON_PRICE 100
+#define SILVER_WEAPON_PRICE 500
+#define GOLD_WEAPON_PRICE 1000
+
+
 class Inventory
 {
 private:
@@ -30,7 +36,7 @@ private:
 public:
 	void show();
 	void sellItem(string itemNameID, float price);
-	void buyItem(string itemNameID, float price);
+	void buyItem(string itemNameID, int rarity);
 	void addItem(string itemNameID);
 	Item* FindItem(string itemNameID);
 	Item* GetItem(string itemNameID);

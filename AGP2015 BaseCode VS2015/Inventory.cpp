@@ -10,7 +10,7 @@ Inventory::Inventory()
 	//	items.push_back(tempPotion);
 	//}
 	menuUI = new UI;
-	gold = 50.00f;
+	gold = 500.00f;
 }
 
 void Inventory::addItem(string itemNameID)
@@ -84,9 +84,26 @@ void Inventory::removeItem(string itemNameID)
 	}
 }
 
-void Inventory::buyItem(string itemNameID, float price)
+void Inventory::buyItem(string itemNameID, int rarity)
 {
 	int playerChoice;
+	int price; 
+
+	switch (rarity)
+	{
+	case 1: 
+		//bronze weapon price
+		price = BRONZE_WEAPON_PRICE;
+		break;
+	case 2: 
+		//silver
+		price = SILVER_WEAPON_PRICE;
+		break; 
+	case 3: 
+		price = GOLD_WEAPON_PRICE;
+		//gold
+		break; 
+	}
 
 	if (price > gold)
 	{
@@ -104,22 +121,16 @@ void Inventory::buyItem(string itemNameID, float price)
 
 			Potion* tempPotion = new Medkit(1);
 			items.push_back(tempPotion);
-
-			//gold = -12; 
 		}
 		else if (itemNameID == "ManaPotion")
 		{
 			Potion* tempPotion = new ManaPotion();
 			items.push_back(tempPotion);
-
-			//gold = -12; 
 		}
 		else if (itemNameID == "BonusArmourPotion")
 		{
 			Potion* tempPotion = new BonusArmourPotion();
 			items.push_back(tempPotion);
-
-			//gold = -12;
 		}
 		else if (itemNameID == "DefencePotion")
 		{
@@ -130,52 +141,45 @@ void Inventory::buyItem(string itemNameID, float price)
 		{
 			Potion* tempPotion = new SpeedPotion();
 			items.push_back(tempPotion);
-
-			//	gold = -12;
 		}
 		else if (itemNameID == "StrengthPotion")
 		{
 			Potion* tempPotion = new StrengthPotion();
 			items.push_back(tempPotion);
-
-			//	gold = -12;
 		}
 		else if (itemNameID == "Sword")
 		{
-			Sword* tempSword = new Sword(1);
+			Sword* tempSword = new Sword(rarity);
 			items.push_back(tempSword);
-
-			//gold = -100;
 		}
 		else if (itemNameID == "Axe")
 		{
-			Axe* tempAxe = new Axe(1);
+			Axe* tempAxe = new Axe(rarity);
 			items.push_back(tempAxe);
-			//	gold = -100;
-
 		}
 		else if (itemNameID == "Knives")
 		{
-			Knives* tempKnives = new Knives(1);
+			Knives* tempKnives = new Knives(rarity);
 			items.push_back(tempKnives);
-			//		gold = -100;
 
 		}
 
 
-		gold -= price; // 
+		show(); 
+		gold -= price; 
+
 	}
 
 }
 
-//
+
 
 
 
 
 void Inventory::sellItem(string itemNameID, float price)
 {
-	//I'm going to change this to use prices inside item rather than it being sent in
+	
 
 	bool itemFound = false;
 	for (iter = items.begin(); iter != items.end(); iter++)
