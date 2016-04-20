@@ -39,6 +39,7 @@ private:
 	//vector<string> inventory
 
 public:
+	Inventory();
 	void show();
 	void sellItem(string itemNameID, float price);
 	void buyItem(string itemNameID, int rarityOrPotency);
@@ -50,7 +51,6 @@ public:
 	void removeItem(string itemNameID);
 	int getSize();
 	int getCount(string id);
-	Inventory();
 	UI * menuUI;
 
 	vector<Item*> items;

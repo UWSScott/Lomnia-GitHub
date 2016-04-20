@@ -106,7 +106,7 @@ void Camera::draw(glm::mat4 &object, glm::vec3 modelEye)
 void Camera::CinematicValues(glm::vec3 characterPosition, float playerRotation)
 {
 	//rotation = playerRotation;
-	cinematicLookAt = MoveForward(characterPosition, playerRotation, 4.0f);
+	cinematicLookAt = MoveForward(characterPosition, playerRotation, 2.0f);
 	glm::vec3 combatPosition = characterPosition;// MoveForward(characterPosition, 0, 10.0f);
 	//cout << "character position: X " << combatPosition.x << " Y " << combatPosition.y << " Z " << combatPosition.z << endl;
 	int xMovement = rand() % 5 + 2;// +characterPosition.x;

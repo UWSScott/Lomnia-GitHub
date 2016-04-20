@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <ctime>
 
+
+
 Inventory::Inventory()
 {
 	//menuUI = new UI;

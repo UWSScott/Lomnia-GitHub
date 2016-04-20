@@ -225,7 +225,44 @@ GLuint screenWidth = 800;
 
 void SpawnFinalBoss()
 {
+	character->position = glm::vec3(16.6, 1.2, -19.1);
+	character->rotation = -90;
+
 	Game_Hub_Characters[4]->health = Game_Hub_Characters[4]->max_Health;
+	Game_Hub_Characters[4]->enemy = true;
+
+	if (!character->inCombat)
+	{
+		character->EnterCombat(Game_Hub_Characters[4]);
+		Game_Hub_Characters[4]->EnterCombat(character);
+	}
+
+	Game_Hub_Characters[0]->position = glm::vec3(9.41, 1.2, -10.14);
+	Game_Hub_Characters[0]->rotation = 26;
+	Game_Hub_Characters[1]->position = glm::vec3(19.7, 1.2, -9.6);
+	Game_Hub_Characters[1]->rotation = 2;
+	Game_Hub_Characters[2]->position = glm::vec3(24,1.2,-25);
+	Game_Hub_Characters[2]->rotation = -152;
+	Game_Hub_Characters[3]->position = glm::vec3(15, 1.2, -30);
+	Game_Hub_Characters[3]->rotation = -192;
+	Game_Hub_Characters[5]->position = glm::vec3(4, 1.2, -27);
+	Game_Hub_Characters[5]->rotation = -240;
+	Game_Hub_Characters[6]->position = glm::vec3(3.7,1.2,-18.6);
+	Game_Hub_Characters[6]->rotation = -271;
+	Game_Hub_Characters[7]->position = glm::vec3(23, 1.2, -10);
+	Game_Hub_Characters[7]->rotation = -379;
+	Game_Hub_Characters[8]->position = glm::vec3(29,1.2,-18);
+	Game_Hub_Characters[8]->rotation = -439;
+
+	/*Game_Hub_Characters.push_back(new Character("AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_2", Resource_Managment->LoadMD2("Models/quigon.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chris_Skin.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 20), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_3", Resource_Managment->LoadMD2("Models/pogo_buny.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chain_Link.bmp"), glm::vec3(1), glm::vec3(20, 1.2, 25), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_4", Resource_Managment->LoadMD2("Models/dragon.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(15, 1.2, 20), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("END_BOSS", Resource_Managment->LoadMD2("Models/faerie.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chain_Link.bmp"), glm::vec3(1), glm::vec3(13, 1.8, -19.7), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_6", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/White_Fur.bmp"), glm::vec3(1), glm::vec3(30, 1.2, -10), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_7", Resource_Managment->LoadMD2("Models/centaur.MD2"), Resource_Managment->LoadTexture("Models/Textures/Blue_Leather.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 10), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("Blade", Resource_Managment->LoadMD2("Models/blade.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(5, 1.2, -10), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/zf19.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(15, 1.2, -10), shaderProgram));*/
 
 }
 
@@ -554,7 +591,7 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void update(void) {
 
-	cout << " arn pos: " << character->position.x << "  y: " << character->position.y << " z: " << character->position.z << endl;
+	//cout << " arn pos: " << character->position.x << "  y: " << character->position.y << " z: " << character->position.z << " rotation: " << character->rotation << endl;
 	gameStateInt = gameState;
 
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
@@ -855,6 +892,7 @@ void update(void) {
 	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
 	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
 	if (keys[SDL_SCANCODE_N]) character->inventory->AddRandomItem();
+	if (keys[SDL_SCANCODE_Q]) SpawnFinalBoss();
 
 	if (keys[SDL_SCANCODE_7]) gameState = HUB;
 	if (keys[SDL_SCANCODE_Y]) gameState = MAZE;
