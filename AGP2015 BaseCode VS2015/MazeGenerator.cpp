@@ -6,69 +6,78 @@ void MazeGenerator::Update(Character* character, int &gameState)
 {
 	character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
 
-	for (int i = 0; i < Game_Maze_Prefabs.size(); i++)
+	if (!character->inCombat)
 	{
-		if (character->Collider->checkCollision(Game_Maze_Prefabs[i]->Collider->aabb, character->position))
+		for (int i = 0; i < Game_Maze_Prefabs.size(); i++)
 		{
-			character->position = character->oldPosition; //oldPlayerPos;
-			character->CheckCollision(Game_Maze_Prefabs[i], typeid(Game_Maze_Prefabs[i]).name());
-			//std::cout << "collision with " << i << endl;
-		}
-	}
-
-	for (int i = 0; i < Game_Maze_Characters.size(); i++)
-	{
-		if (Game_Maze_Characters[i]->health > 0)
-		{
-
-			Game_Maze_Characters[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Characters[i]->position.x, (GLfloat)Game_Maze_Characters[i]->position.z, 0.5);
-
-			if (character->Collider->checkCollision(character->Collider, Game_Maze_Characters[i]->Collider))
+			if (character->Collider->checkCollision(Game_Maze_Prefabs[i]->Collider->aabb, character->position))
 			{
-				character->position = character->oldPosition;
-				character->CheckCollision(Game_Maze_Characters[i], typeid(Game_Maze_Characters[i]).name());
-				character->CheckQuestGoal(Game_Maze_Characters[i]);
+				character->position = character->oldPosition; //oldPlayerPos;
+				character->CheckCollision(Game_Maze_Prefabs[i], typeid(Game_Maze_Prefabs[i]).name());
+				//std::cout << "collision with " << i << endl;
 			}
 		}
-	}
-	for (int i = 0; i < Game_Maze_Prefabs.size(); i++)
-	{
-		Game_Maze_Prefabs[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Prefabs[i]->position.x, (GLfloat)Game_Maze_Prefabs[i]->position.z, 0.5);
 
-		//if (Game_Maze_Prefabs[i]->Collider->checkCollision(Game_Maze_Prefabs[i]->Collider->aabb, character->position))
-		if (character->Collider->checkCollision(character->Collider, Game_Maze_Prefabs[i]->Collider))
+		for (int i = 0; i < Game_Maze_Characters.size(); i++)
 		{
-			//cout << " COLLISION!!!!!!" << endl;
-			character->position = character->oldPosition; //oldPlayerPos;
-			character->CheckCollision(Game_Maze_Prefabs[i], typeid(Game_Maze_Prefabs[i]).name());
-
-			if (Game_Maze_Prefabs[i]->objectName == "Loot_Drop")
+			if (Game_Maze_Characters[i]->health > 0)
 			{
-				character->inventory->AddRandomItem();
-				character->inventory->show();
-				Game_Maze_Prefabs.pop_back();
-			} else if (Game_Maze_Prefabs[i]->objectName == "Teleporter" && character->currentQuest->status == 1) {
-				gameState = 1;
-				character->position = glm::vec3(10, 1.2, 10);
-				return;
+
+				Game_Maze_Characters[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Characters[i]->position.x, (GLfloat)Game_Maze_Characters[i]->position.z, 1.0);
+
+				if (character->Collider->checkCollision(character->Collider, Game_Maze_Characters[i]->Collider))
+				{
+					character->position = character->oldPosition;
+					character->CheckCollision(Game_Maze_Characters[i], typeid(Game_Maze_Characters[i]).name());
+					character->CheckQuestGoal(Game_Maze_Characters[i]);
+				}
+			}
+		}
+		for (int i = 0; i < Game_Maze_Prefabs.size(); i++)
+		{
+			Game_Maze_Prefabs[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Prefabs[i]->position.x, (GLfloat)Game_Maze_Prefabs[i]->position.z, 0.5);
+
+			//if (Game_Maze_Prefabs[i]->Collider->checkCollision(Game_Maze_Prefabs[i]->Collider->aabb, character->position))
+			if (character->Collider->checkCollision(character->Collider, Game_Maze_Prefabs[i]->Collider))
+			{
+				//cout << " COLLISION!!!!!!" << endl;
+				character->position = character->oldPosition; //oldPlayerPos;
+				character->CheckCollision(Game_Maze_Prefabs[i], typeid(Game_Maze_Prefabs[i]).name());
+
+				if (Game_Maze_Prefabs[i]->objectName == "Loot_Drop")
+				{
+					character->inventory->AddRandomItem();
+					character->inventory->show();
+					Game_Maze_Prefabs.pop_back();
+				}
+				else if (Game_Maze_Prefabs[i]->objectName == "Teleporter" && character->currentQuest->status == 1) {
+					gameState = 1;
+					character->position = glm::vec3(10, 1.2, 10);
+					return;
+				}
 			}
 		}
 	}
 
 	for (int j = 0; j < Game_Maze_Characters.size(); j++)
 	{
-		Game_Maze_Characters[j]->Collider->CollisionCircles((GLfloat)Game_Maze_Characters[j]->position.x, (GLfloat)Game_Maze_Characters[j]->position.z, 0.5);
 		if (Game_Maze_Characters[j]->health > 0)
 		{
 			Game_Maze_Characters[j]->Update();
 			Game_Maze_Characters[j]->detector->CollisionCircles((GLfloat)Game_Maze_Characters[j]->position.x, (GLfloat)Game_Maze_Characters[j]->position.z, 20);
 				
-			if (Game_Maze_Characters[j]->detector->checkCollision(Game_Maze_Characters[j]->detector, character->Collider) && character->status != STATE_COMBAT)
+			if (!character->inCombat)
 			{
-				Game_Maze_Characters[j]->MoveToPlayer(character);
+				if (Game_Maze_Characters[j]->detector->checkCollision(Game_Maze_Characters[j]->detector, character->Collider) && character->status != STATE_COMBAT)
+				{
+					Game_Maze_Characters[j]->MoveToPlayer(character);
+				}
 			}
 		}
 	}
+
+	if (character->inCombat)
+		return;
 
 	for (int i = 0; i < Game_Maze_Walls.size(); i++)
 	{
