@@ -61,8 +61,8 @@ public:
 	glm::vec3 oldPosition;
 	int health = 10;
 	int max_Health = 100;
-	int manaPool = 10;
-	int max_Mana = 10;
+	float manaPool = 100;
+	int max_Mana = 100;
 	int strength = 5;
 	int max_Strength = 10;
 	int defence = 5;
@@ -86,6 +86,7 @@ public:
 	bool enemy = false;
 	bool canDie = true;
 	bool canMove = true;
+	bool canDraw = true;
 	bool inCombat = false;
 	bool playAnimation = true;
 	int currentAnimation = 0;
@@ -119,6 +120,7 @@ public:
 	virtual void CheckQuestGoal(Character* character);
 	virtual void Dead();
 	virtual void MoveToPlayer(Character* character);
+	virtual void RegenMana() { if (inCombat) return; if(manaPool < 100) manaPool += 0.01f; if (manaPool >= 100) manaPool = 100; if (manaPool < 0) manaPool = 0; }
 
 protected:
 

@@ -148,6 +148,9 @@ void CombatInstance::Attack()
 			}*/
 
 		}
+
+		currentCharacter->manaPool += rand() % 5;
 		if (currentCharacter->manaPool < 0) { currentCharacter->manaPool = 0; }
+		if (currentCharacter->manaPool > 100) { currentCharacter->manaPool = 100; }
 	}
 }

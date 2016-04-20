@@ -24,7 +24,7 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 	canDie = true;
 	rotation = 0;
 	health = 100;
-	manaPool = 10;
+	manaPool = 100;
 	scale = s_scale;
 	position = s_position;
 	Collider = new Collisions();
@@ -82,6 +82,7 @@ void PlayableCharacter::Update(Camera* camera)
 {
 	Input();
 	Animate();
+	RegenMana();
 
 	if (camera != NULL)
 		camera->SetPlayerStatus(status, this);

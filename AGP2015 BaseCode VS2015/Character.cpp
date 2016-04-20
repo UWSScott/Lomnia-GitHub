@@ -151,6 +151,7 @@ glm::vec3 Character::getModelEye()
 void Character::EnterCombat(Character* opponent)
 {
 	status = STATE_COMBAT;
+	inCombat = true;
 	combatInstance = new CombatInstance(this, opponent);
 	canMove = false;
 }
@@ -160,6 +161,7 @@ void Character::LeaveCombat()
 	status = STATE_NORMAL;
 	delete combatInstance;
 	combatInstance = NULL;
+	inCombat = false;
 	canMove = true;
 
 	if (isDead())
@@ -170,6 +172,9 @@ void Character::LeaveCombat()
 
 void Character::draw(glm::mat4 object)
 {
+	if (!canDraw || isDead())
+		return;
+
 	glUseProgram(shaderProgram);
 	glCullFace(GL_FRONT);
 	glActiveTexture(GL_TEXTURE0);
@@ -193,6 +198,9 @@ void Character::draw(glm::mat4 object)
 
 void Character::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 {
+	if (!canDraw || isDead())
+		return;
+
 	glUseProgram(s_shaderUsed);
 	glCullFace(GL_FRONT);
 	glActiveTexture(GL_TEXTURE1);
@@ -273,7 +281,7 @@ void Character::CheckCollision(Gameobject* s_gameobject, string idType)
 {
 
 
-	cout << " idType : " << idType << endl;
+	cout << " idType : " << idType <<  " " << s_gameobject->objectName << endl ;
 	//(Character)s_gameobject->
 	//cout << dynamic_cast <Prefab*>(s_gameobject)->position.x << endl;
 	if (status == STATE_COMBAT || combatInstance != NULL)
@@ -290,7 +298,7 @@ void Character::CheckCollision(Gameobject* s_gameobject, string idType)
 			d->EnterCombat(this);
 		}
 
-		cout << " ****** ENEMY NAME IS " << d->characterName << " " << status << " " << canMove << " " << endl;
+		//cout << " ****** ENEMY NAME IS " << d->characterName << " " << status << " " << canMove << " " << endl;
 
 	}
 
@@ -352,6 +360,7 @@ void Character::Update()
 	}*/
 
 	Animate();
+	RegenMana();
 	//if (combatInstance == NULL)
 	//	cout << " FSAFAS HIHIHIH 2222 ";
 }
