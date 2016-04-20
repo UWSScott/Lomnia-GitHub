@@ -501,7 +501,7 @@ void init(void)
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/Shop_001.obj"), Resource_Managment->LoadTexture("Models/Textures/Shop_001.bmp"), glm::vec3(0.7, 0.7, 0.7), glm::vec3(19.1, 0, 70.05), 0, glm::vec3(20, 5.7, 73), glm::vec3(16, -1.0, 66.5)));
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/Shop_002.obj"), Resource_Managment->LoadTexture("Models/Textures/Shop_001.bmp"), glm::vec3(1.3, 1.3, 1.3), glm::vec3(104.1, 0, -9.9), -90, glm::vec3(108, 3.8, -7.4), glm::vec3(102.5, -1.0, -9.8)));
 
-
+	
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/Well.obj"), Resource_Managment->LoadTexture("Models/Textures/Well.bmp"), glm::vec3(2.0, 2.0, 2.0), glm::vec3(61.1, 1.25, 0), 30, glm::vec3(64.7, 3.1, 3), glm::vec3(58.5, -1.0, -3)));
 
 	Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/Teleporter.obj"), Resource_Managment->LoadTexture("Models/Textures/Well.bmp"), glm::vec3(0.4, 0.4, 0.4), glm::vec3(39, 0.36, 0), 0, glm::vec3(37.4, 2.0, 2.4), glm::vec3(34.4, -1.0, -2.5)));
@@ -548,6 +548,9 @@ void init(void)
 	Game_Hub_Characters[7]->enemy = false;
 	//Game_Hub_Characters[4]->enemy = true;
 	//Game_Hub_Characters[4]->health = -1;
+	//shop guy
+	//Game_Hub_Prefabs.push_back(Prefab(shaderProgram, Resource_Managment->LoadObject("Models/Models/zf19.MD2.obj"), Resource_Managment->LoadTexture("Models/Textures/Shop_001.bmp"), glm::vec3(0.7, 0.7, 0.7), glm::vec3(-49.1, 0, -46.89), -99, glm::vec3(-44, 5.7, -45.5), glm::vec3(-52, -1.0, -50)));
+	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(18, 1.3, 71.5), shaderProgram));
 	Game_Hub_Characters[4]->rotation = 90;
 
 	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
@@ -611,15 +614,20 @@ void update(void) {
 		{
 			for (int j = 0; j < Game_Hub_Characters.size(); j++)
 			{
-				if (Game_Hub_Characters[j]->Collider->checkCollision(Game_Hub_Prefabs[i].Collider->aabb, Game_Hub_Characters[j]->position))
+				if (j != 9) // so shop keeper can be drawn inside shop, dont check it for collision with buildings
 				{
-					Game_Hub_Characters[j]->position = Game_Hub_Characters[j]->oldPosition;
+					if (Game_Hub_Characters[j]->Collider->checkCollision(Game_Hub_Prefabs[i].Collider->aabb, Game_Hub_Characters[j]->position))
+					{
+						Game_Hub_Characters[j]->position = Game_Hub_Characters[j]->oldPosition;
+					}
 				}
 			}
 		}
 
 		for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
 		{
+			
+
 			if (character->Collider->checkCollision(Game_Hub_Prefabs[i].Collider->aabb, character->position))
 			{
 				character->position = character->oldPosition; //oldPlayerPos;
@@ -700,6 +708,9 @@ void update(void) {
 			shopMusicPlaying = true;
 		}
 
+		Game_Hub_Characters[9]->position[2] = 74;
+
+
 		if (bronzeSilverGoldOption)
 		{
 
@@ -731,6 +742,7 @@ void update(void) {
 				shopMusicPlaying = false;
 				bronzeSilverGoldOption = false;
 				character->inventory->show();
+				Game_Hub_Characters[9]->position[2] = 71;
 			}
 		}
 
@@ -762,6 +774,7 @@ void update(void) {
 				character->status = STATE_NORMAL;
 				shopMusicPlaying = false;
 				lightMediumStrongOption = false;
+				Game_Hub_Characters[9]->position[2] = 71;
 		//		character->inventory->show();
 			}
 
