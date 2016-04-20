@@ -6,7 +6,6 @@
 
 Inventory::Inventory()
 {
-	//menuUI = new UI;
 	gold = 1000.00f; 
 	equippedWeapon = new Sword(1); 
 }

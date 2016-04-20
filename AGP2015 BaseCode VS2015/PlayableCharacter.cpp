@@ -76,6 +76,8 @@ void PlayableCharacter::Input()
 		combatInstance->Update();
 		//BlockAttack();
 		CombatAttacks();
+
+	
 	}
 }
 
@@ -92,7 +94,7 @@ void PlayableCharacter::Update(Camera* camera)
 		equipWeapon(); // check if new weapon has been equipped, if so change to it.
 
 
-	std::cout << "Weapon damage: " << weapon->attackPower << std::endl;
+	
 }
 
 
