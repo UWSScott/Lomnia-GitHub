@@ -633,6 +633,7 @@ void update(void) {
 					gameState = MAZE;
 					gameStateInt = gameState;
 					maze->EnterTheMazetrix(character, Resource_Managment);
+					character->status = STATE_MAZE;
 					return;
 					//maze->SpawnCharacter(character);
 					//for (int i = 0; i < Game_Maze_Characters.size(); i++)
@@ -995,7 +996,7 @@ void RenderScene(GLuint refShaderProgram) {
 
 		if (currentPass == 1)
 			terrain->draw(mvStack.top(), refShaderProgram, currentPass);
-		maze->draw(mvStack.top(), refShaderProgram, currentPass);
+		maze->draw(mvStack.top(), &Game_Camera, refShaderProgram, currentPass);
 
 		/*for (int i = 0; i < Game_Maze_Characters.size(); i++)
 		{

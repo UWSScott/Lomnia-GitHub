@@ -22,6 +22,7 @@ glm::vec3 Camera::MoveRight(glm::vec3 pos, GLfloat angle, GLfloat d)
 
 void Camera::InitalStats()
 {
+	Collider = new Collisions();
 	position = { 0.0f, 2.5f, 10.0f };
 	at = { 0.0f, 1.0f, -6.0 };
 	up = { 0.0f, 1.0f, 0.0f };
@@ -33,10 +34,11 @@ void Camera::InitalStats()
 
 	songs = new HSAMPLE[5];
 	songs[0] = fileLoader->loadSample("Sound/Music/Menu_Music.wav"); //Menu
-	songs[1] = fileLoader->loadSample("Sound/Music/Ambient_Hub.wav"); //Ambient
+	songs[1] = fileLoader->loadSample("Sound/Music/Ambient_Hub.wav");; //Ambient
 	songs[2] = fileLoader->loadSample("Sound/Music/Battle_of_the_Titans.wav"); //Combat
 	songs[3] = fileLoader->loadSample("Sound/Music/Shop_Music.wav"); //Vendor
 	songs[4] = fileLoader->loadSample("Sound/Music/Death_Music.wav"); //Death
+	songs[5] = fileLoader->loadSample("Sound/Music/Maze_Music.wav"); //Maze
 	delete fileLoader;
 }
 
@@ -45,6 +47,7 @@ void Camera::Sound(HCHANNEL &channel, int soundFile)
 {
 	BASS_ChannelPause(channel);
 	channel = BASS_SampleGetChannel(songs[soundFile], FALSE);
+
 	//BASS_ChannelSetAttribute(ch, BASS_ATTRIB_FREQ, 0);
 	//BASS_ChannelSetAttribute(ch, BASS_ATTRIB_VOL, 0.5);
 	//BASS_ChannelSetAttribute(ch, BASS_ATTRIB_PAN, -1);
@@ -239,12 +242,14 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 	switch (camera_Type)
 	{
 	case FIRST_PERSON:
+	case 3:
 		position.x = modelEye.x;
 		position.y = modelEye.y + 1.5f;
 		position.z = modelEye.z + -1.0f;
 		rotation = playerRotation;
 		break;
 	case THIRD_PERSON:
+	case 5:
 		position.x = modelEye.x;
 		position.y = modelEye.y + 1.5f;
 		position.z = modelEye.z + 4.0f;
@@ -312,8 +317,6 @@ void Camera::SetPlayerStatus(int status, PlayableCharacter* character)
 	{
 		if (camera_Type < 4)
 		{
-			
-			
 			camera_Type = status;
 		
 			//cout << "NEW CAMERA STATUS: " << status;

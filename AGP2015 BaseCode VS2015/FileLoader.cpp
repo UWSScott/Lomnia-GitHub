@@ -45,6 +45,19 @@ GLuint FileLoader::loadBitmap(char *fname, bool repeatTexture)
 
 /* Loads sound of game events.
 	-Taken from lab tutorials-*/
+HSAMPLE FileLoader::loadSample(char * filename, bool repeat)
+{
+	HSAMPLE sam;
+	if (sam = BASS_SampleLoad(FALSE, filename, 0, 0, 1, (BASS_SAMPLE_OVER_POS, BASS_SAMPLE_LOOP)))
+		std::cout << "sample " << filename << " loaded!" << std::endl;
+	else
+	{
+		std::cout << "Can't load sample " << filename;
+		exit(0);
+	}
+	return sam;
+}
+
 HSAMPLE FileLoader::loadSample(char * filename)
 {
 	HSAMPLE sam;

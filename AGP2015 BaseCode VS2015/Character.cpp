@@ -158,7 +158,11 @@ void Character::EnterCombat(Character* opponent)
 
 void Character::LeaveCombat()
 {
-	status = STATE_NORMAL;
+	if (inMaze)
+		status = STATE_MAZE;
+	else
+		status = STATE_NORMAL;
+
 	delete combatInstance;
 	combatInstance = NULL;
 	inCombat = false;

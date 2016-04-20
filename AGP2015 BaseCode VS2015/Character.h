@@ -86,7 +86,7 @@ public:
 	bool enemy = false;
 	bool canDie = true;
 	bool canMove = true;
-	bool canDraw = true;
+	bool inMaze = false;
 	bool inCombat = false;
 	bool playAnimation = true;
 	int currentAnimation = 0;

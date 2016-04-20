@@ -6,11 +6,12 @@ using namespace std;
 #include "MazePrefab.h"
 #include "FileLoader.h"
 #include "Character.h"
+#include "Camera.h"
 #include <ctime>
 #include <vector>
-//template<typename T>
 
 class Character;
+class Camera;
 
 #define SIZE 17
 // CELL STRUCTURE
@@ -59,7 +60,7 @@ public:
 
 	virtual void SetDepthMap(GLuint s_depthMap);// { depthMapTexture = s_depthMap; };
 	virtual void Update(Character* character, int &gameState);
-	virtual void draw(glm::mat4 object, GLuint s_shaderProgram, int pass);
+	virtual void draw(glm::mat4 object, Camera* gameCamera, GLuint s_shaderProgram, int pass);
 	//virtual void ClearMemory<class T>(vector<Character*> &s_ArrList);
 	GLuint baseShaderProgram; 
 };

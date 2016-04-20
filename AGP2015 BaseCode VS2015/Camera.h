@@ -4,7 +4,7 @@
 #define FIRST_PERSON 0
 #define THIRD_PERSON 1
 #define COMBAT_CINEMATIC 2
-#define FREE_VIEW 5
+#define FREE_VIEW 8
 #define DEATH_CINEMATIC 4
 
 

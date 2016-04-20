@@ -21,6 +21,7 @@ using namespace std;
 #define STATE_COMBAT 2
 #define STATE_DEATH 4
 #define STATE_SHOP 3
+#define STATE_MAZE 5
 
 
 class Gameobject
@@ -30,6 +31,7 @@ public:
 	glm::vec3 position = glm::vec3(1,1,1);
 	glm::vec3 scale = glm::vec3(1,1,1);
 	float rotation = 0;
+	bool canDraw = true;
 	string collisionName = "DEFAULT";
 	Collisions* Collider;// = new Collisions();
 	rt3d::materialStruct material;

@@ -53,6 +53,8 @@ void MazeGenerator::Update(Character* character, int &gameState)
 				else if (Game_Maze_Prefabs[i]->objectName == "Teleporter" && character->currentQuest->status == 1) {
 					gameState = 1;
 					character->position = glm::vec3(10, 1.2, 10);
+					character->inMaze = false;
+					character->status = STATE_NORMAL;
 					return;
 				}
 			}
@@ -68,6 +70,7 @@ void MazeGenerator::Update(Character* character, int &gameState)
 				
 			if (!character->inCombat)
 			{
+
 				if (Game_Maze_Characters[j]->detector->checkCollision(Game_Maze_Characters[j]->detector, character->Collider) && character->status != STATE_COMBAT)
 				{
 					Game_Maze_Characters[j]->MoveToPlayer(character);
@@ -101,18 +104,44 @@ void MazeGenerator::Update(Character* character, int &gameState)
 	character->oldPosition = character->position;
 }
 
-void MazeGenerator::draw(glm::mat4 object,  GLuint s_shaderProgram, int pass)
+void MazeGenerator::draw(glm::mat4 object, Camera* gameCamera, GLuint s_shaderProgram, int pass)
 {
 	//glm::mat4 modelview(1.0);
 	for (auto&& child : Game_Maze_Prefabs) { child->draw(object, s_shaderProgram, pass);}
 	for (auto&& child : Game_Maze_Characters) { if(!child->isDead()) child->draw(object, s_shaderProgram, pass); }
 
-	for (int i = 0; i<SIZE; i++) {
-		for (int j = 0; j<SIZE; j++) 
+	gameCamera->Collider->CollisionCircles((GLfloat)gameCamera->position.x, (GLfloat)gameCamera->position.z, 0.1);
+
+	//Game_Maze_Prefabs[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Prefabs[i]->position.x, (GLfloat)Game_Maze_Prefabs[i]->position.z, 0.5);
+
+	for (int i = 0; i < Game_Maze_Walls.size(); i++)
+	{
+		Game_Maze_Walls[i]->draw(object, s_shaderProgram, pass);
+		/*Game_Maze_Walls[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Walls[i]->position.x, (GLfloat)Game_Maze_Walls[i]->position.z, 0.5);
+		for (int j = 0; j < Game_Maze_Characters.size(); j++)
 		{
-			Maze_Tiles[i][j]->draw(object, s_shaderProgram, pass);
+		//if (Game_Maze_Characters[j]->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, Game_Maze_Characters[j]->position))
+		if (Game_Maze_Characters[j]->Collider->checkCollision(character->Collider, Game_Maze_Characters[j]->Collider))
+		{
+		Game_Maze_Characters[j]->position = Game_Maze_Characters[j]->oldPosition;
 		}
+		}
+
+		//if (Game_Maze_Walls[i]->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, character->position))
+		if (character->Collider->checkCollision(character->Collider, Game_Maze_Walls[i]->Collider))
+		{
+		character->position = character->oldPosition;
+		}*/
 	}
+
+	//for (int i = 0; i<SIZE; i++) {
+	//	for (int j = 0; j<SIZE; j++) 
+	//	{
+
+
+	//		Maze_Tiles[i][j]->draw(object, s_shaderProgram, pass);
+	//	}
+	//}
 }
 
 void MazeGenerator::EnterTheMazetrix(Character* playerCharacter, ResourceManager* resManager)
@@ -121,7 +150,7 @@ void MazeGenerator::EnterTheMazetrix(Character* playerCharacter, ResourceManager
 	for (auto&& child : Game_Maze_Prefabs) { delete child; }
 	Game_Maze_Prefabs.clear();
 	Game_Maze_Characters.clear();
-
+	playerCharacter->inMaze = true;
 	//CreateTarget(playerCharacter->currentQuest, resManager);
 	Game_Maze_Characters.push_back(SpawnCharacter(CreateTarget(playerCharacter->currentQuest, resManager)));
 	SpawnCharacter(playerCharacter);

@@ -19,6 +19,7 @@ public:
 	~FileLoader(){};
 	GLuint loadBitmap(char *fname, bool repeatTexture = false);
 	HSAMPLE loadSample(char * filename);
+	HSAMPLE loadSample(char * filename, bool repeat);
 	//HSAMPLE *samples = NULL;
 };
 
