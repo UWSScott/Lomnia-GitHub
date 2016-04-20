@@ -182,25 +182,25 @@ void UI::button(GLuint button, GLuint time) {
 		rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
 	}
 
-	if (keys[SDL_SCANCODE_1]) combat->Input(LightAttack());
-	if (keys[SDL_SCANCODE_2]) combat->Input(HeavyAttack());
-	if (keys[SDL_SCANCODE_3]) combat->Input(Poison());
-	if (keys[SDL_SCANCODE_4]) combat->Input(Stun());
-	if (keys[SDL_SCANCODE_5]) combat->Input(Flee());
+	if (keys[SDL_SCANCODE_1]) combat->Input(new LightAttack());
+	if (keys[SDL_SCANCODE_2]) combat->Input(new HeavyAttack());
+	if (keys[SDL_SCANCODE_3]) combat->Input(new Poison());
+	if (keys[SDL_SCANCODE_4]) combat->Input(new Stun());
+	if (keys[SDL_SCANCODE_5]) combat->Input(new Flee());
 
 
 
 	/////////out puting the queued attacks//////////
 
-	std::list<C_Attack>::iterator itt = combat->queuedAttacks.begin();
+	//std::vector<C_Attack>::iterator itt = combat->queuedAttacks.begin();
 	list<int> displayQueue = list<int>();
-	std::list<int>::iterator itt2 = displayQueue.begin();
+	//std::list<int>::iterator itt2 = displayQueue.begin();
 
 
 
-
-	for (itt = combat->queuedAttacks.begin(); itt != combat->queuedAttacks.end(); itt++) {
-		cout << itt->attackText << " ";
+	for (auto&& child : combat->queuedAttacks) {
+	//for //(itt = combat->queuedAttacks.begin(); itt != combat->queuedAttacks.end(); itt++) {
+		//cout << itt->attackText << " ";
 
 		/////////////////Code for queued attack list display thing////////////////
 

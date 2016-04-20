@@ -73,8 +73,12 @@ void CombatInstance::Damage(int damageValue)
 	}
 }
 
-void CombatInstance::Input(C_Attack selected_Attack)
+void CombatInstance::Input(C_Attack* selected_Attack)
 {
+	//if (ItemUse* d = dynamic_cast<ItemUse*>(selected_Attack))
+	//{
+	//	cout << " GO TFRRDSAJKFLDSJFLASDKFLADSKFLDSK " << endl;
+	//}
 	queuedAttacks.push_back(selected_Attack);
 }
 
@@ -82,23 +86,34 @@ void CombatInstance::Attack()
 {
 	if (currentCharacter == NULL || currentCharacter->isDead() || opponent == NULL || opponent->isDead())
 	{
-		cout << "FSFADSFAFDFASFDSAFDA" << endl;
+		///cout << "FSFADSFAFDFASFDSAFDA" << endl;
 		return;
 	}
 
 	if (currentCharacter->refreshTime <= 0)
 	{
-		cout << currentCharacter->characterName << "("<<currentCharacter->health<<")" << " should be attacking! : " << opponent->characterName << " has (attacks) : " << queuedAttacks.size() << endl;
+		for (auto&& child : queuedAttacks) { cout << " attack: " << typeid(child).name(); }
+
+
+		cout << "{}{}{}{}" << currentCharacter->characterName << "("<<currentCharacter->health<<")" << " should be attacking! : " << opponent->characterName << " has (attacks) : " << queuedAttacks.size() << endl;
 
 		if (queuedAttacks.size() > 0)
 		{
-			std::list<C_Attack>::iterator it = queuedAttacks.begin();
-			std::advance(it, 0);
-			it->SetCharacterReference(currentCharacter);
-			opponent->combatInstance->BeingAttacked(*it);
-			currentCharacter->refreshTime += it->Refresh();
-			currentCharacter->manaPool -= it->GetManaCost();
-			it = queuedAttacks.erase(it);
+			//std::list<C_Attack>::iterator it = queuedAttacks.begin();
+			//std::advance(it, 0);
+			C_Attack* currentAttack = queuedAttacks[0];
+			if (ItemUse* d = dynamic_cast<ItemUse*>(currentAttack))
+			{
+				d->Attack(*currentCharacter, *currentCharacter);
+			} else {
+				cout << " Is not an item use! ? " << endl;
+				currentAttack->SetCharacterReference(currentCharacter);
+				opponent->combatInstance->BeingAttacked(*currentAttack);
+			}
+			currentCharacter->refreshTime += currentAttack->Refresh();
+			currentCharacter->manaPool -= currentAttack->GetManaCost();
+			queuedAttacks.pop_back();
+			//it = queuedAttacks.erase(it);
 		} else {
 			vector<C_Attack> availableAttacks = vector<C_Attack>();
 			LightAttack defualtAttack_1 = LightAttack();

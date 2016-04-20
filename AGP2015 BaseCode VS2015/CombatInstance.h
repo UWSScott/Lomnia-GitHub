@@ -10,6 +10,7 @@
 #include "ItemUse.h"
 #include <ctime>
 class C_Attack;
+class ItemUse;
 class Character;
 
 class CombatInstance
@@ -27,14 +28,15 @@ public:
 	Character *opponent;
 	Character *currentCharacter;
 	C_Attack incomingAttack;
-	list<C_Attack> queuedAttacks = list<C_Attack>();
+	vector<C_Attack*> queuedAttacks = vector<C_Attack*>();
+	//list<C_Attack> queuedAttacks = list<C_Attack>();
 
 	void Update();
 	void EndCombat();
 	void Damage(int damageValue);
 	void Attack();
 	void BeingAttacked(C_Attack s_attack);
-	void Input(C_Attack selected_Attack);
+	void Input(C_Attack* selected_Attack);
 
 	bool paused = false;
 };
