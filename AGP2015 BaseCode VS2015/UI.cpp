@@ -195,168 +195,168 @@ void UI::button(GLuint button, GLuint time) {
 	std::list<C_Attack>::iterator itt = combat->queuedAttacks.begin();
 	list<int> displayQueue = list<int>();
 	std::list<int>::iterator itt2 = displayQueue.begin();
-	
-	
-	
-	
+
+
+
+
 	for (itt = combat->queuedAttacks.begin(); itt != combat->queuedAttacks.end(); itt++) {
 		cout << itt->attackText << " ";
 
-	/////////////////Code for queued attack list display thing////////////////
-
-
-	
+		/////////////////Code for queued attack list display thing////////////////
 
 
 
 
-	//	int texture = combat->queuedAttacks.size();
 
 
 
-	//	if (itt->attackText == "Light Attack" && itt->attackCompleted == false) {
-	//		texture = 0;
-	//		displayQueue.push_back(0);
-	//	}
-	//	else
-	//		if (itt->attackText == "Heavy Attack" && itt->attackCompleted == false) {
-	//			texture = 1;
-	//			displayQueue.push_back(1);
-	//		}
-	//	if (itt->attackText == "Poison" && itt->attackCompleted == false) {
-	//		texture = 2;
-	//		displayQueue.push_back(2);
-	//	}
-	//	if (itt->attackText == "Stun" && itt->attackCompleted == false) {
-	//		texture = 3;
-	//		displayQueue.push_back(3);
-	//	}
-	//	if (itt->attackText == "Flee" && itt->attackCompleted == false) {
-	//		texture = 4;
-	//		displayQueue.push_back(4);
-	//	}
-
-	//	for (GLfloat i = 0; i < combat->queuedAttacks.size(); i++) {
-	//		for (itt2 = displayQueue.begin(); itt2 != displayQueue.end(); itt2++) {
-
-
-	//			glm::mat4 stack = glm::mat4(1.0);
-	//			stack = glm::translate(stack, glm::vec3(-0.7 + (i / 5), -0.4, 0.0f));
-	//			stack = glm::scale(stack, glm::vec3(0.1f, 0.1f, 0.0f));
-	//			rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
-	//			rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
-	//			glBindTexture(GL_TEXTURE_2D, Buttons[*itt2]);
-	//			rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
-	//			cout << *itt2 << endl;
-
-	//		}
-	//	}
-
-
-		//itt->attackCompleted
-
-	//}
-
-	glEnable(GL_DEPTH_TEST);
+		//	int texture = combat->queuedAttacks.size();
 
 
 
-	//
-	//start = std::clock();
-	//
-	//double duration = 0;
+		//	if (itt->attackText == "Light Attack" && itt->attackCompleted == false) {
+		//		texture = 0;
+		//		displayQueue.push_back(0);
+		//	}
+		//	else
+		//		if (itt->attackText == "Heavy Attack" && itt->attackCompleted == false) {
+		//			texture = 1;
+		//			displayQueue.push_back(1);
+		//		}
+		//	if (itt->attackText == "Poison" && itt->attackCompleted == false) {
+		//		texture = 2;
+		//		displayQueue.push_back(2);
+		//	}
+		//	if (itt->attackText == "Stun" && itt->attackCompleted == false) {
+		//		texture = 3;
+		//		displayQueue.push_back(3);
+		//	}
+		//	if (itt->attackText == "Flee" && itt->attackCompleted == false) {
+		//		texture = 4;
+		//		displayQueue.push_back(4);
+		//	}
+
+		//	for (GLfloat i = 0; i < combat->queuedAttacks.size(); i++) {
+		//		for (itt2 = displayQueue.begin(); itt2 != displayQueue.end(); itt2++) {
+
+
+		//			glm::mat4 stack = glm::mat4(1.0);
+		//			stack = glm::translate(stack, glm::vec3(-0.7 + (i / 5), -0.4, 0.0f));
+		//			stack = glm::scale(stack, glm::vec3(0.1f, 0.1f, 0.0f));
+		//			rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+		//			rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+		//			glBindTexture(GL_TEXTURE_2D, Buttons[*itt2]);
+		//			rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+		//			cout << *itt2 << endl;
+
+		//		}
+		//	}
+
+
+			//itt->attackCompleted
+
+		//}
+
+		glEnable(GL_DEPTH_TEST);
+
+
+
+		//
+		//start = std::clock();
+		//
+		//double duration = 0;
 
 
 
 
-	//cout << "drawing button" << endl;
+		//cout << "drawing button" << endl;
 
-	//int timeLimit = 1;
-	//int scale = 1;
-	//GLfloat timeDifference = 0;
-	////cout << duration << "  " << timeLimit << endl;
+		//int timeLimit = 1;
+		//int scale = 1;
+		//GLfloat timeDifference = 0;
+		////cout << duration << "  " << timeLimit << endl;
 
-	//
-	//
+		//
+		//
 
-	//do {
-	//	glUseProgram(shaderProgram);//Use texture-only shaderProgram for text rendering
-	//	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
-	//	
-	//		duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
-
-
-	//		glm::mat4 stack = glm::mat4(1.0);
-	//		stack = glm::translate(stack, glm::vec3(0.0f, 0, 0.0f));
-	//		stack = glm::scale(stack, glm::vec3(0.4f /scale, 0.4f / scale, 0.0f));
-	//		rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
-	//		rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
-	//		glBindTexture(GL_TEXTURE_2D, textures[4]);
-	//		rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+		//do {
+		//	glUseProgram(shaderProgram);//Use texture-only shaderProgram for text rendering
+		//	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+		//	
+		//		duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
 
 
-	//		stack = glm::mat4(1.0);
-	//		stack = glm::translate(stack, glm::vec3(0.0f, 0, 0.0f));
-	//		stack = glm::scale(stack, glm::vec3(0.2f / scale, 0.2f / scale, 0.0f));
-	//		rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
-	//		rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
-	//		glBindTexture(GL_TEXTURE_2D, button);
-	//		rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
-
-	//		
-
-	//		if (duration >= timeLimit) {
-	//			scale++;
-	//			timeLimit += 1;
-	//			cout << "if statment" << endl; 
-
-	//		}
-	//		
-	//		
-	//		
-
-	//		cout << timeLimit << "  " << duration << "  " << start << endl;
-	//		cout << "While statmnent" << endl;
-	//		
+		//		glm::mat4 stack = glm::mat4(1.0);
+		//		stack = glm::translate(stack, glm::vec3(0.0f, 0, 0.0f));
+		//		stack = glm::scale(stack, glm::vec3(0.4f /scale, 0.4f / scale, 0.0f));
+		//		rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+		//		rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+		//		glBindTexture(GL_TEXTURE_2D, textures[4]);
+		//		rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
 
 
-	//}while (duration < time);
+		//		stack = glm::mat4(1.0);
+		//		stack = glm::translate(stack, glm::vec3(0.0f, 0, 0.0f));
+		//		stack = glm::scale(stack, glm::vec3(0.2f / scale, 0.2f / scale, 0.0f));
+		//		rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+		//		rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+		//		glBindTexture(GL_TEXTURE_2D, button);
+		//		rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
 
-	//
+		//		
+
+		//		if (duration >= timeLimit) {
+		//			scale++;
+		//			timeLimit += 1;
+		//			cout << "if statment" << endl; 
+
+		//		}
+		//		
+		//		
+		//		
+
+		//		cout << timeLimit << "  " << duration << "  " << start << endl;
+		//		cout << "While statmnent" << endl;
+		//		
+
+
+		//}while (duration < time);
+
+		//
 
 
 
-	//glEnable(GL_DEPTH_TEST);
-}
-
-
-void UI::statusBar(GLfloat y, GLuint healthBool, float health) {
-	glUseProgram(shaderProgram);//Use texture-only shaderProgram for text rendering
-	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
-
-	glm::mat4 stack = glm::mat4(1.0);
-	stack = glm::translate(stack, glm::vec3(-0.4f, y, 0.0f));
-	stack = glm::scale(stack, glm::vec3(0.51f, 0.04f, 0.0f));
-	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
-	glBindTexture(GL_TEXTURE_2D, textures[2]);
-	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
-
-	stack = glm::mat4(1.0);
-	stack = glm::translate(stack, glm::vec3(-0.4f, y, 0.0f));
-	stack = glm::scale(stack, glm::vec3(health, 0.03f, 0.0f));
-	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
-	if (healthBool == 0)
-		glBindTexture(GL_TEXTURE_2D, textures[1]);
-	if (healthBool == 1)
-		glBindTexture(GL_TEXTURE_2D, textures[3]);
-	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
-	glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
+	}
 
 }
+	void UI::statusBar(GLfloat y, GLuint healthBool, float health) {
+		glUseProgram(shaderProgram);//Use texture-only shaderProgram for text rendering
+		glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+
+		glm::mat4 stack = glm::mat4(1.0);
+		stack = glm::translate(stack, glm::vec3(-0.4f, y, 0.0f));
+		stack = glm::scale(stack, glm::vec3(0.51f, 0.04f, 0.0f));
+		rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+		rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+		glBindTexture(GL_TEXTURE_2D, textures[2]);
+		rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+		stack = glm::mat4(1.0);
+		stack = glm::translate(stack, glm::vec3(-0.4f, y, 0.0f));
+		stack = glm::scale(stack, glm::vec3(health, 0.03f, 0.0f));
+		rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+		rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+		if (healthBool == 0)
+			glBindTexture(GL_TEXTURE_2D, textures[1]);
+		if (healthBool == 1)
+			glBindTexture(GL_TEXTURE_2D, textures[3]);
+		rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+		glEnable(GL_DEPTH_TEST);
+
+	}
 
 
-UI::~UI()
-{
-}
+	UI::~UI()
+	{
+	}
