@@ -940,7 +940,7 @@ void RenderScene(GLuint refShaderProgram) {
 		if (openShop)
 		{
 
-			ui->textBox(text[2], skyboxProgram, -0.55, textures[2], true, names[0]);
+			ui->textBox(text[2], -0.55, true, names[0]);
 		}
 
 
@@ -964,12 +964,14 @@ void RenderScene(GLuint refShaderProgram) {
 		}*/
 
 	}
-	//ui->textBox(text[0], skyboxProgram, -0.55, textures[2], true, names[0]);
-	//ui->textBox(text[1], skyboxProgram, -0.75, textures[2], false, names[0]);
-	//ui->button(skyboxProgram, textures[6], button[0], 10);
+	ui->button(button[0], 2);
+	//ui->textBox(text[0], -0.55, true, names[0]);
+	//ui->textBox(text[1], -0.75, false, names[0]);
+
+
 	//character->manaPool = 10;
-	ui->statusBar(skyboxProgram, 0.9, textures[3], textures[4], (float)character->health / 200);
-	ui->statusBar(skyboxProgram, 0.8, textures[5], textures[4], (float)character->manaPool / 20);
+	ui->statusBar(0.9, 0, (float)character->health / 200);
+	ui->statusBar(0.8, 1, (float)character->manaPool / 20);
 
 	currentPass++;
 

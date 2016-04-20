@@ -16,7 +16,7 @@
 #include "DefencePotion.h"
 #include "SpeedPotion.h"
 #include "StrengthPotion.h"
-#include "UI.h"
+//#include "UI.h"
 
 using namespace std;
 
@@ -51,7 +51,7 @@ public:
 	int getSize();
 	int getCount(string id);
 	Inventory();
-	UI * menuUI;
+	//UI * menuUI;
 
 	vector<Item*> items;
 	vector<Item*>::iterator iter;
