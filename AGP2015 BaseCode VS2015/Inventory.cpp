@@ -8,6 +8,7 @@ Inventory::Inventory()
 {
 	//menuUI = new UI;
 	gold = 1000.00f; 
+	equippedWeapon = new Sword(1); 
 }
 
 void Inventory::addItem(string itemNameID, int rarityOrPotency)
@@ -149,16 +150,19 @@ void Inventory::buyItem(string itemNameID, int rarityOrPotency)
 		{
 			Sword* tempSword = new Sword(rarityOrPotency);
 			items.push_back(tempSword);
+			equippedWeapon = tempSword; 
 		}
 		else if (itemNameID == "Axe")
 		{
 			Axe* tempAxe = new Axe(rarityOrPotency);
 			items.push_back(tempAxe);
+			equippedWeapon = tempAxe;
 		}
 		else if (itemNameID == "Knives")
 		{
 			Knives* tempKnives = new Knives(rarityOrPotency);
 			items.push_back(tempKnives);
+			equippedWeapon = tempKnives;
 
 		}
 
@@ -287,6 +291,12 @@ void Inventory::UseItem(string itemNameID, Character* character)
 
 	foundItem->Use(character);
 	removeItem(itemNameID);
+
+}
+
+Weapon* Inventory::equipWeapon()
+{
+	return equippedWeapon; 
 }
 
 void Inventory::show()

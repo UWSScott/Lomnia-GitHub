@@ -18,7 +18,8 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 	meshObject = tmpModel.ReadMD2Model(modelName);
 	md2VertCount = tmpModel.getVertDataSize() / 3;
 
-	weapon = new Weapon("Scott's Saber", "Models/Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
+	//weapon = new Weapon("Scott's Saber", "Models/Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
+	weapon = new Sword(1); // starts with bronze sword. 
 	weapon->setEquiped(true);
 
 	canDie = true;
@@ -86,6 +87,12 @@ void PlayableCharacter::Update(Camera* camera)
 
 	if (camera != NULL)
 		camera->SetPlayerStatus(status, this);
+
+	if (weapon != inventory->equippedWeapon)
+		equipWeapon(); // check if new weapon has been equipped, if so change to it.
+
+
+	std::cout << "Weapon damage: " << weapon->attackPower << std::endl;
 }
 
 
@@ -161,6 +168,11 @@ void PlayableCharacter::CombatAttacks()
 			cout << " PLAYER HEALED " << endl;
 		}
 	}
+}
+
+void PlayableCharacter::equipWeapon()
+{
+	weapon = inventory->equipWeapon(); 
 }
 
 void PlayableCharacter::BlockAttack()

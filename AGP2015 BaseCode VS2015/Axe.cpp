@@ -30,3 +30,7 @@ Axe::Axe(int rarity)
 		break;
 	}
 }
+
+
+
+
