@@ -100,7 +100,7 @@ void CombatInstance::Attack()
 			currentCharacter->manaPool -= it->GetManaCost();
 			it = queuedAttacks.erase(it);
 		} else {
-			int attackOption = rand() % 5 + 1;
+			vector<C_Attack> availableAttacks = vector<C_Attack>();
 			LightAttack defualtAttack_1 = LightAttack();
 			HeavyAttack defualtAttack_2 = HeavyAttack();
 			Poison defualtAttack_3 = Poison();
@@ -111,7 +111,17 @@ void CombatInstance::Attack()
 			defualtAttack_3.SetCharacterReference(currentCharacter);
 			defualtAttack_4.SetCharacterReference(currentCharacter);
 
-			switch (attackOption)
+			availableAttacks.push_back(defualtAttack_1);
+			if (currentCharacter->manaPool >= defualtAttack_2.GetManaCost()) { availableAttacks.push_back(defualtAttack_2); }
+			if (currentCharacter->manaPool >= defualtAttack_3.GetManaCost()) { availableAttacks.push_back(defualtAttack_3); }
+			if (currentCharacter->manaPool >= defualtAttack_4.GetManaCost()) { availableAttacks.push_back(defualtAttack_4); }
+			int attackOption = rand() % availableAttacks.size();
+
+			opponent->combatInstance->BeingAttacked(availableAttacks[attackOption]);
+			currentCharacter->refreshTime += availableAttacks[attackOption].Refresh();
+			currentCharacter->manaPool -= availableAttacks[attackOption].GetManaCost();
+
+			/*switch (attackOption)
 			{
 			case 1:
 				opponent->combatInstance->BeingAttacked(defualtAttack_1);
@@ -135,8 +145,9 @@ void CombatInstance::Attack()
 				break;
 			default:
 				break;
-			}
+			}*/
 
 		}
+		if (currentCharacter->manaPool < 0) { currentCharacter->manaPool = 0; }
 	}
 }
