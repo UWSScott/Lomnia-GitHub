@@ -95,7 +95,10 @@ GLuint labels[5];
 bool shopMusicPlaying = false; 
 bool bronzeSilverGoldOption = false; 
 bool lightMediumStrongOption = false; 
+bool buying = false; 
 string item;
+
+
 
 rt3d::lightStruct light0 = {
 	{ 0.3f, 0.3f, 0.3f, 0.3f }, // ambient
@@ -661,6 +664,11 @@ void update(void) {
 				{
 					names[0] = ui->createTexture(" ", textFont);
 					openShop = true;
+					buying = true;
+				}
+				else if (i == 11)
+				{
+					openShop = true;
 				}
 				else
 				{
@@ -712,123 +720,141 @@ void update(void) {
 			shopMusicPlaying = true;
 		}
 
-		Game_Hub_Characters[9]->position[2] = 74;
-
-
-		if (bronzeSilverGoldOption)
+		if (buying)
 		{
+			
 
-			text[2] = ui->createTexture("1. Bronze 2. Silver 3. Gold ", textFont);
-			
-			
-			if (keys[SDL_SCANCODE_1]) // if bronze
+			Game_Hub_Characters[9]->position[2] = 74;
+
+
+			if (bronzeSilverGoldOption)
 			{
-				character->inventory->buyItem(item, RARITY_BRONZE);
-			
-				openShop = false;
-			}
-			else if (keys[SDL_SCANCODE_2]) // if silver
-			{
-				character->inventory->buyItem(item, RARITY_SILVER);
-		
-				openShop = false;
-			}
-			else if (keys[SDL_SCANCODE_3]) // if gold
-			{
-				character->inventory->buyItem(item, RARITY_GOLD);
-				
-				openShop = false;
+
+				text[2] = ui->createTexture("1. Bronze 2. Silver 3. Gold ", textFont);
+
+
+				if (keys[SDL_SCANCODE_1]) // if bronze
+				{
+					character->inventory->buyItem(item, RARITY_BRONZE);
+
+					openShop = false;
+				}
+				else if (keys[SDL_SCANCODE_2]) // if silver
+				{
+					character->inventory->buyItem(item, RARITY_SILVER);
+
+					openShop = false;
+				}
+				else if (keys[SDL_SCANCODE_3]) // if gold
+				{
+					character->inventory->buyItem(item, RARITY_GOLD);
+
+					openShop = false;
+				}
+
+				if (openShop == false) // if shop closed, stop music and return camera to normal 
+				{
+					character->status = STATE_NORMAL;
+					shopMusicPlaying = false;
+					bronzeSilverGoldOption = false;
+					character->inventory->show();
+					Game_Hub_Characters[9]->position[2] = 71;
+					buying = false; 
+				}
 			}
 
-			if (openShop == false) // if shop closed, stop music and return camera to normal 
+			if (lightMediumStrongOption)
 			{
+
+				text[2] = ui->createTexture("1. Light 2. Medium 3. Strong", textFont);
+				if (keys[SDL_SCANCODE_1]) // if light
+				{
+					character->inventory->buyItem(item, POTION_POTENCY_LIGHT);
+
+					openShop = false;
+				}
+				else if (keys[SDL_SCANCODE_2]) // if medium
+				{
+					character->inventory->buyItem(item, POTION_POTENCY_MEDIUM);
+
+					openShop = false;
+				}
+				else if (keys[SDL_SCANCODE_3]) // if strong
+				{
+					character->inventory->buyItem(item, POTION_POTENCY_STRONG);
+
+					openShop = false;
+				}
+
+				if (openShop == false) // if shop closed, stop music and return camera to normal 
+				{
+					character->status = STATE_NORMAL;
+					shopMusicPlaying = false;
+					lightMediumStrongOption = false;
+					Game_Hub_Characters[9]->position[2] = 71;
+					buying = false; 
+					//		character->inventory->show();
+				}
+
+			}
+
+			if (openShop)
+			{
+				if (!bronzeSilverGoldOption && !lightMediumStrongOption)
+				{
+					text[2] = ui->createTexture("1. Health Potion 2. Mana Potion 3. Sword 4.Axe 5.Knives", textFont);
+
+					if (keys[SDL_SCANCODE_1]) // if health potion
+					{
+
+						//character->inventory->buyItem("HealthPotion", 1); // price currently not correct for potions, working out with potency
+						//openShop = false;
+
+						lightMediumStrongOption = true;
+						item = "HealthPotion";
+					}
+					else if (keys[SDL_SCANCODE_2]) // if mana potion
+					{
+						/*character->inventory->buyItem("ManaPotion", 1);
+						openShop = false;*/
+
+						lightMediumStrongOption = true;
+						item = "ManaPotion";
+
+					}
+					else if (keys[SDL_SCANCODE_3]) // if sword
+					{
+						bronzeSilverGoldOption = true;
+						item = "Sword";
+
+					}
+					else if (keys[SDL_SCANCODE_4]) // if axe
+					{
+						bronzeSilverGoldOption = true;
+						item = "Axe";
+					}
+					else if (keys[SDL_SCANCODE_5]) //if knives
+					{
+						bronzeSilverGoldOption = true;
+						item = "Knives";
+					}
+
+				}
+
+			}
+		}
+		else // if buying is false but shop is open, must be selling
+		{
+			text[2] = ui->createTexture("Selling shop", textFont);
+			if (keys[SDL_SCANCODE_1]) 
+			{
+				openShop = false; 
 				character->status = STATE_NORMAL;
 				shopMusicPlaying = false;
-				bronzeSilverGoldOption = false;
-				character->inventory->show();
-				Game_Hub_Characters[9]->position[2] = 71;
-			}
-		}
-
-		if (lightMediumStrongOption)
-		{
-
-			text[2] = ui->createTexture("1. Light 2. Medium 3. Strong", textFont);
-			if (keys[SDL_SCANCODE_1]) // if light
-			{
-				character->inventory->buyItem(item, POTION_POTENCY_LIGHT);
-
-				openShop = false;
-			}
-			else if (keys[SDL_SCANCODE_2]) // if medium
-			{
-				character->inventory->buyItem(item, POTION_POTENCY_MEDIUM);
-
-				openShop = false;
-			}
-			else if (keys[SDL_SCANCODE_3]) // if strong
-			{
-				character->inventory->buyItem(item, POTION_POTENCY_STRONG);
-
-				openShop = false;
 			}
 
-			if (openShop == false) // if shop closed, stop music and return camera to normal 
-			{
-				character->status = STATE_NORMAL;
-				shopMusicPlaying = false;
-				lightMediumStrongOption = false;
-				Game_Hub_Characters[9]->position[2] = 71;
-		//		character->inventory->show();
-			}
 
 		}
-
-		if (openShop)
-		{
-			if (!bronzeSilverGoldOption && !lightMediumStrongOption)
-			{
-				text[2] = ui->createTexture("1. Health Potion 2. Mana Potion 3. Sword 4.Axe 5.Knives", textFont);
-
-				if (keys[SDL_SCANCODE_1]) // if health potion
-				{
-				
-					//character->inventory->buyItem("HealthPotion", 1); // price currently not correct for potions, working out with potency
-					//openShop = false;
-
-					lightMediumStrongOption = true;
-					item = "HealthPotion";
-				}
-				else if (keys[SDL_SCANCODE_2]) // if mana potion
-				{
-					/*character->inventory->buyItem("ManaPotion", 1);
-					openShop = false;*/
-
-					lightMediumStrongOption = true;
-					item = "ManaPotion"; 
-				
-				}
-				else if (keys[SDL_SCANCODE_3]) // if sword
-				{
-					bronzeSilverGoldOption = true;
-					item = "Sword"; 
-				
-				}
-				else if (keys[SDL_SCANCODE_4]) // if axe
-				{
-					bronzeSilverGoldOption = true;
-					item = "Axe";
-				}
-				else if (keys[SDL_SCANCODE_5]) //if knives
-				{
-					bronzeSilverGoldOption = true;
-					item = "Knives";
-				}
-
-			}
-
-		}
-
 	}
 	else if (gameState == COMBAT)
 	{
