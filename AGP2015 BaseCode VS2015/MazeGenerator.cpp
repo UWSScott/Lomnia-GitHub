@@ -6,7 +6,7 @@ void MazeGenerator::Update(Character* character, int &gameState)
 {
 	character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
 
-	if (!character->inCombat)
+	if (character->combatInstance == NULL)
 	{
 		for (int i = 0; i < Game_Maze_Prefabs.size(); i++)
 		{
@@ -23,7 +23,7 @@ void MazeGenerator::Update(Character* character, int &gameState)
 			if (Game_Maze_Characters[i]->health > 0)
 			{
 
-				Game_Maze_Characters[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Characters[i]->position.x, (GLfloat)Game_Maze_Characters[i]->position.z, 1.0);
+				Game_Maze_Characters[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Characters[i]->position.x, (GLfloat)Game_Maze_Characters[i]->position.z, 1.3);
 
 				if (character->Collider->checkCollision(character->Collider, Game_Maze_Characters[i]->Collider))
 				{
@@ -68,7 +68,7 @@ void MazeGenerator::Update(Character* character, int &gameState)
 			Game_Maze_Characters[j]->Update();
 			Game_Maze_Characters[j]->detector->CollisionCircles((GLfloat)Game_Maze_Characters[j]->position.x, (GLfloat)Game_Maze_Characters[j]->position.z, 20);
 				
-			if (!character->inCombat)
+			if (character->combatInstance == NULL)
 			{
 
 				if (Game_Maze_Characters[j]->detector->checkCollision(Game_Maze_Characters[j]->detector, character->Collider) && character->status != STATE_COMBAT)

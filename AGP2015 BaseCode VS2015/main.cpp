@@ -599,7 +599,7 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void update(void) {
 
-	cout << " arn pos: " << character->position.x << "  y: " << character->position.y << " z: " << character->position.z << " rotation: " << character->rotation << endl;
+	//ut << " arn pos: " << character->position.x << "  y: " << character->position.y << " z: " << character->position.z << " rotation: " << character->rotation << endl;
 	gameStateInt = gameState;
 
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
@@ -631,8 +631,6 @@ void update(void) {
 
 		for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
 		{
-			
-
 			if (character->Collider->checkCollision(Game_Hub_Prefabs[i].Collider->aabb, character->position))
 			{
 				character->position = character->oldPosition; //oldPlayerPos;
@@ -644,7 +642,7 @@ void update(void) {
 					gameState = MAZE;
 					gameStateInt = gameState;
 					maze->EnterTheMazetrix(character, Resource_Managment);
-					character->status = STATE_MAZE;
+					//character->status = STATE_MAZE;
 					return;
 					//maze->SpawnCharacter(character);
 					//for (int i = 0; i < Game_Maze_Characters.size(); i++)

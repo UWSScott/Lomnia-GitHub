@@ -55,7 +55,7 @@ void Camera::Sound(HCHANNEL &channel, int soundFile)
 		std::cout << "Can't play sample" << std::endl;
 
 
-	std::cout << "song int: " << soundFile << std::endl; 
+	//std::cout << "song int: " << soundFile << std::endl; 
 }
 
 void Camera::TranslateTo(float &currentPosition, float &newPosition)
@@ -242,7 +242,7 @@ void Camera::update(glm::vec3 modelEye, float playerRotation)
 	switch (camera_Type)
 	{
 	case FIRST_PERSON:
-	case 3:
+	//case 3:
 		position.x = modelEye.x;
 		position.y = modelEye.y + 1.5f;
 		position.z = modelEye.z + -1.0f;
@@ -311,16 +311,13 @@ void Camera::SetPlayerStatus(int status, PlayableCharacter* character)
 	if (status == STATE_DEATH && camera_Type == FREE_VIEW)
 		return;
 
-
 	int tempholder = camera_Type;
 	if (camera_Type != status)
 	{
-		if (camera_Type < 4)
-		{
+		//if (camera_Type < 5)
+		//{
 			camera_Type = status;
-		
-			//cout << "NEW CAMERA STATUS: " << status;
-		}
+		//}
 
 		Sound(ch, status);
 		if(status == STATE_DEATH)
