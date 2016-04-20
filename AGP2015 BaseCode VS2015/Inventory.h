@@ -16,11 +16,14 @@
 #include "DefencePotion.h"
 #include "SpeedPotion.h"
 #include "StrengthPotion.h"
+//#include "PlayableCharacter.h"
 //#include "UI.h"
 
 using namespace std;
 
 class Character;
+class PlayableCharacter; 
+
 
 
 #define BRONZE_WEAPON_PRICE 100
@@ -50,8 +53,14 @@ public:
 	void removeItem(string itemNameID);
 	int getSize();
 	int getCount(string id);
+	//void equipWeapon(string itemNameID, Character* PlayableCharacter);
 	Inventory();
 	//UI * menuUI;
+	Weapon* equippedWeapon; 
+
+	
+
+	Weapon* equipWeapon();
 
 	vector<Item*> items;
 	vector<Item*>::iterator iter;

@@ -1,6 +1,8 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
+#pragma once
+
 #include "Item.h"
 using namespace std;
 #define RARITY_BRONZE 1

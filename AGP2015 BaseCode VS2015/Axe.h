@@ -7,7 +7,7 @@ class Axe : public Weapon
 {
 public:
 	Axe(int rarity);
-
+	
 };
 
 #endif

@@ -22,6 +22,10 @@ public:
 	virtual void Dead();
 	void Input();
 
+	void equipWeapon();
+
+
+
 protected:
 };
 #endif
