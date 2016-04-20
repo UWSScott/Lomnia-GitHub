@@ -228,9 +228,7 @@ void Inventory::AddRandomItem()
 {
 	// generate a random number
 	// pick a random reward based on that number 
-
-
-	// rand potency or strength
+	// rand potency 
 
 	// 70 % weak, 
 	// 71-90 medium 
@@ -243,19 +241,13 @@ void Inventory::AddRandomItem()
 	string item; 
 	
 
-	if (randomNumber < 70) //70% chance on getting a potion. 
-	{
 		cout << "Making Potion";
 
-	
-
-		
-
 		//mana and health are most likely  30 
-		if ((randomNumber > 0) && (randomNumber <= 35))
+		if ((randomNumber > 0) && (randomNumber <= 50))
 			item = "HealthPotion"; 
 			
-		if ((randomNumber>35) && (randomNumber <= 70))
+		if ((randomNumber>50) && (randomNumber <= 100))
 			item = "ManaPotion"; 
 
 		randomNumber = rand() % 101 + 1;
@@ -268,50 +260,14 @@ void Inventory::AddRandomItem()
 		{
 			potency = POTION_POTENCY_LIGHT;
 		}
-		else if (randomNumber>90 && randomNumber < 101)
+		else if (randomNumber > 90 && randomNumber < 101)
 		{
 			potency = POTION_POTENCY_STRONG;
 		}
+		else
+			potency = POTION_POTENCY_LIGHT;
 
 		addItem(item, potency); 
-
-			/*addItem("ManaPotion", potency);*/
-		//then strength, speed, bonus armour and defence all equally likely (10%)
-	/*	if ((randomNumber>30) && (randomNumber <= 40))
-			addItem("DefencePotion");
-		if ((randomNumber>40) && (randomNumber <= 50))
-			addItem("SpeedPotion");
-		if ((randomNumber>50) && (randomNumber <= 60))
-			addItem("BonusArmourPotion");
-		if ((randomNumber>60) && (randomNumber <= 70))
-			addItem("StrengthPotion");*/
-	}
-	else if (randomNumber > 70) //30% chance on getting a weapon. 
-	{
-		int rarity;
-
-		if (randomNumber < 70) //70% chance on getting a potion. 
-		{
-			rarity = RARITY_BRONZE;
-		}
-		if (randomNumber >= 70 && randomNumber<91) //70% chance on getting a potion. 
-		{
-			rarity = RARITY_SILVER;
-		}
-		else if (randomNumber>90 && randomNumber < 101)
-		{
-			rarity = RARITY_GOLD;
-		}
-
-
-		// 10% each. No need to generate extra random number as already between 70-100. 
-		if ((randomNumber>70) && (randomNumber <= 80))
-			addItem("Sword", rarity);
-		if ((randomNumber>80) && (randomNumber <= 90))
-			addItem("Axe", rarity);
-		if ((randomNumber>90) && (randomNumber <= 100))
-			addItem("Knives", rarity);
-	}
 
 }
 
