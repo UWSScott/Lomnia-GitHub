@@ -16,7 +16,7 @@
 #include "DefencePotion.h"
 #include "SpeedPotion.h"
 #include "StrengthPotion.h"
-#include "UI.h"
+//#include "UI.h"
 
 using namespace std;
 
@@ -39,7 +39,6 @@ private:
 	//vector<string> inventory
 
 public:
-	Inventory();
 	void show();
 	void sellItem(string itemNameID, float price);
 	void buyItem(string itemNameID, int rarityOrPotency);
@@ -51,7 +50,8 @@ public:
 	void removeItem(string itemNameID);
 	int getSize();
 	int getCount(string id);
-	UI * menuUI;
+	Inventory();
+	//UI * menuUI;
 
 	vector<Item*> items;
 	vector<Item*>::iterator iter;
