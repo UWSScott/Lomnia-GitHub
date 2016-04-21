@@ -412,7 +412,47 @@ void Character::MoveToPlayer(Character* character)
 	this->position.z += MoveEye.z*0.01f;
 }
 
+void Character::RotateToFace(Gameobject* s_gameObject)
+{
+	//cos A = glm::DotProduct(v1, v2) / (Length(v1) * Length(v2))
+	glm::vec3 thisC = glm::normalize(this->position);
+	glm::vec3 GameC = glm::normalize(s_gameObject->position);
+	////float temprotation = (glm::dot(thisC, GameC) / glm::length(thisC) * glm::length(GameC));
+	////glm::vec3 newPosition = glm::cross(thisC, GameC);
+	////newPosition * temprotation;
+	////glm::mat4 thingy;
 
+
+	rotation = acos((glm::dot(thisC, GameC)) / (glm::length(thisC) * glm::length(GameC)));
+	rotation = rotation * 180 / 3.14;
+	//cout << characterName <<  " rotations: " << rotation << endl;
+
+	////rotation = glm::acos(temprotation);
+
+
+	//glm::vec3 axis;
+	//float angle;
+	//axis = cross(thisC, GameC);
+	//float d = dot(thisC, GameC);
+	//float l = length(axis);
+	//if (l < 0.01) {
+	//	if (d > 0.0f) {
+	//		angle = 0.0f;
+	//			axis = glm::vec3(0.0f, 0.0f, 0.0f);
+	//	}
+	//	else {
+	//		angle = 180.0f;
+	//		//axis = /*...any axis perpendicular to v1 and v2 (you'll have to do this part)...*/
+	//	}
+	//}
+	//else {
+	//	axis /= l;
+	//	angle = (atan2(l, d)) / DEG_TO_RAD;
+	//}
+
+	//rotation = angle;
+
+}
 
 //bool Character::getHighestDamage(C_Attack attack_1, C_Attack attack_2) { return true; }// (attack_1.damageCalc(*this, *combatInstance->opponent) > attack_2.damageCalc(*this, *combatInstance->opponent)); };
 //bool Character::getFastestAttack(C_Attack& attack_1, C_Attack& attack_2) { return (attack_1.AttackSpeed(this) > attack_2.AttackSpeed(this)); };

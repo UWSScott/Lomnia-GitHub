@@ -121,7 +121,7 @@ public:
 	virtual void Dead();
 	virtual void MoveToPlayer(Character* character);
 	virtual void RegenMana() { if (inCombat) return; if(manaPool < 100) manaPool += 0.01f; if (manaPool >= 100) manaPool = 100; if (manaPool < 0) manaPool = 0; }
-
+	void RotateToFace(Gameobject* s_gameObject);
 protected:
 
 	//bool getHighestDamage(C_Attack attack_1, C_Attack attack_2);

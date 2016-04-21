@@ -66,6 +66,7 @@ void MazeGenerator::Update(Character* character, int &gameState)
 		if (Game_Maze_Characters[j]->health > 0)
 		{
 			Game_Maze_Characters[j]->Update();
+			Game_Maze_Characters[j]->RotateToFace(character);
 			Game_Maze_Characters[j]->detector->CollisionCircles((GLfloat)Game_Maze_Characters[j]->position.x, (GLfloat)Game_Maze_Characters[j]->position.z, 20);
 				
 			if (character->combatInstance == NULL)

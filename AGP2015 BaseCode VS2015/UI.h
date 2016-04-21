@@ -5,6 +5,10 @@
 //#include "Gameobject.h"
 #include <ctime>
 #include "CombatInstance.h"
+#include "Inventory.h"
+#include "PlayableCharacter.h"
+
+
 
 
 
@@ -24,6 +28,10 @@ public:
 	GLuint shaderProgram;
 	GLuint textures[5];
 	GLuint Buttons[5];
+	Inventory *inventoryInfo;
+	int invenSize = 0;
+	PlayableCharacter * arnould;
+
 
 	std::clock_t start;
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
@@ -37,6 +45,11 @@ public:
 
 	void statusBar(GLfloat y, GLuint texture2, float health);
 	void button(GLuint button, GLuint time);
+	void inventory();
+	void updateInven();
+	//GLuint itemTextures[];
+
+	vector<GLuint> itemTextures = vector<GLuint>();
 
 
 	~UI();

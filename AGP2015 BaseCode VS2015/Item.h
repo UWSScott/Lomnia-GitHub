@@ -11,7 +11,7 @@ class Character;
 class Item : public Gameobject
 {
 public:
-	string name = "DEFAULT";
+	char * name = "DEFAULT";
 	string item_ID;
 	float price = 1;
 

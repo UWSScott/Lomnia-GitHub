@@ -106,6 +106,20 @@ void UI::loadRect() {
 
 	combat = new CombatInstance;
 
+	inventoryInfo = new Inventory;
+
+	arnould = new PlayableCharacter;
+	arnould->inventory->AddRandomItem();
+	arnould->inventory->AddRandomItem();
+	arnould->inventory->AddRandomItem();
+	arnould->inventory->AddRandomItem();
+	arnould->inventory->AddRandomItem();
+	//inventoryInfo->AddRandomItem();
+	//inventoryInfo->AddRandomItem();
+	//inventoryInfo->AddRandomItem();
+	//inventoryInfo->AddRandomItem();
+	//inventoryInfo->AddRandomItem();
+	//inventoryInfo->AddRandomItem();
 
 
 
@@ -192,14 +206,15 @@ void UI::button(GLuint button, GLuint time) {
 
 	/////////out puting the queued attacks//////////
 
-	//std::vector<C_Attack>::iterator itt = combat->queuedAttacks.begin();
+	//std::vec<C_Attack>::iterator itt = combat->queuedAttacks.begin();
 	list<int> displayQueue = list<int>();
-	//std::list<int>::iterator itt2 = displayQueue.begin();
+	std::list<int>::iterator itt2 = displayQueue.begin();
 
 
 
-	for (auto&& child : combat->queuedAttacks) {
-	//for //(itt = combat->queuedAttacks.begin(); itt != combat->queuedAttacks.end(); itt++) {
+
+	//for (itt = combat->queuedAttacks.begin(); itt != combat->queuedAttacks.end(); itt++) {
+	for (auto&& combat_Attack : combat->queuedAttacks) {
 		//cout << itt->attackText << " ";
 
 		/////////////////Code for queued attack list display thing////////////////
@@ -253,7 +268,7 @@ void UI::button(GLuint button, GLuint time) {
 		//	}
 
 
-			//itt->attackCompleted
+		//itt->attackCompleted
 
 		//}
 
@@ -330,33 +345,90 @@ void UI::button(GLuint button, GLuint time) {
 	}
 
 }
-	void UI::statusBar(GLfloat y, GLuint healthBool, float health) {
-		glUseProgram(shaderProgram);//Use texture-only shaderProgram for text rendering
-		glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+void UI::statusBar(GLfloat y, GLuint healthBool, float health) {
+	glUseProgram(shaderProgram);//Use texture-only shaderProgram for text rendering
+	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+
+	glm::mat4 stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(-0.4f, y, 0.0f));
+	stack = glm::scale(stack, glm::vec3(0.51f, 0.04f, 0.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, textures[2]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+	stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(-0.4f, y, 0.0f));
+	stack = glm::scale(stack, glm::vec3(health, 0.03f, 0.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	if (healthBool == 0)
+		glBindTexture(GL_TEXTURE_2D, textures[1]);
+	if (healthBool == 1)
+		glBindTexture(GL_TEXTURE_2D, textures[3]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+	glEnable(GL_DEPTH_TEST);
+
+}
+
+
+void UI::updateInven() {
+
+	int j = 0;
+	if (invenSize != arnould->inventory->items.size()) {
+		invenSize = arnould->inventory->items.size();
+
+		for (auto&& object_Item : arnould->inventory->items)
+		{
+			int tmp = createTexture(object_Item->name, textFont);
+			itemTextures.push_back(tmp);
+			//itemTextures[j] = createTexture(object_Item->name, textFont);
+		}
+
+		//for (arnould->inventory->iter = arnould->inventory->items.begin(); arnould->inventory->iter != arnould->inventory->items.end(); arnould->inventory->iter++) {
+		//	itemTextures[j] = createTexture((**arnould->inventory->iter).name, textFont);
+		//	cout << "for loop " << (**arnould->inventory->iter).name << j << endl;
+		//	j++;
+		//}
+	}
+
+}
+
+
+
+void UI::inventory() {
+
+	arnould->inventory->show();
+	updateInven();
+
+	glm::mat4 stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(0.0f, 0, 0.0f));
+	stack = glm::scale(stack, glm::vec3(0.5f, 0.4f, 0.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+	int i = 0;
+
+	for (int j = 0; j < itemTextures.size(); j++) {// auto&& object_Item : itemTextures) {
+
 
 		glm::mat4 stack = glm::mat4(1.0);
-		stack = glm::translate(stack, glm::vec3(-0.4f, y, 0.0f));
-		stack = glm::scale(stack, glm::vec3(0.51f, 0.04f, 0.0f));
+		stack = glm::translate(stack, glm::vec3(-0.7f, 0.8 - i, 0.0f));
+		stack = glm::scale(stack, glm::vec3(0.1f, 0.1f, 0.0f));
 		rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
 		rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
-		glBindTexture(GL_TEXTURE_2D, textures[2]);
+		glBindTexture(GL_TEXTURE_2D, itemTextures[j]);
 		rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
-
-		stack = glm::mat4(1.0);
-		stack = glm::translate(stack, glm::vec3(-0.4f, y, 0.0f));
-		stack = glm::scale(stack, glm::vec3(health, 0.03f, 0.0f));
-		rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
-		rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
-		if (healthBool == 0)
-			glBindTexture(GL_TEXTURE_2D, textures[1]);
-		if (healthBool == 1)
-			glBindTexture(GL_TEXTURE_2D, textures[3]);
-		rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
-		glEnable(GL_DEPTH_TEST);
-
+		i += 0.2;
 	}
 
 
-	UI::~UI()
-	{
-	}
+
+
+}
+
+
+UI::~UI()
+{
+}
