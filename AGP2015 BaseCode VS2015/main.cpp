@@ -917,7 +917,7 @@ void update(void) {
 		}*/
 		gameStateInt = gameState;
 		//cout << " game state before: " << gameStateInt << endl;
-		maze->Update(character, gameStateInt);
+		maze->Update(character, &Game_Camera, gameStateInt);
 		//cout << " game state after: " << gameStateInt << endl;
 		if (gameStateInt == 1)
 			gameState = HUB;
@@ -1043,7 +1043,7 @@ void RenderScene(GLuint refShaderProgram) {
 
 		if (currentPass == 1)
 			terrain->draw(mvStack.top(), refShaderProgram, currentPass);
-		maze->draw(mvStack.top(), &Game_Camera, refShaderProgram, currentPass);
+		maze->draw(mvStack.top(), character, &Game_Camera, refShaderProgram, currentPass);
 
 		/*for (int i = 0; i < Game_Maze_Characters.size(); i++)
 		{
@@ -1059,8 +1059,8 @@ void RenderScene(GLuint refShaderProgram) {
 
 	//character->manaPool = 10;
 	ui->statusBar(0.9, 0, (float)character->health / 200);
-	ui->statusBar(0.8, 1, (float)character->manaPool / 20);
-	ui->inventory();
+	ui->statusBar(0.8, 1, (float)character->manaPool / 200);
+	//ui->inventory();
 	currentPass++;
 
 	// remember to use at least one pop operation per push...

@@ -2,7 +2,7 @@
 #include "EnemyType.h"
 #define CUBE_DOWN -2.7
 
-void MazeGenerator::Update(Character* character, int &gameState)
+void MazeGenerator::Update(Character* character, Camera* gameCamera, int &gameState)
 {
 	character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
 
@@ -59,6 +59,22 @@ void MazeGenerator::Update(Character* character, int &gameState)
 				}
 			}
 		}
+	} else {
+		//gameCamera->Collider->CollisionCircles((GLfloat)gameCamera->position.x, (GLfloat)gameCamera->position.z, 1.0);
+
+		//cout << " maze wall size: " << Game_Maze_Walls.size() << endl;
+		//for (int i = 0; i < Game_Maze_Walls.size(); i++)
+		//{
+		//	Game_Maze_Walls[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Walls[i]->testPosition.x, (GLfloat)Game_Maze_Walls[i]->testPosition.z, 3.0);
+		//	//if (gameCamera->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, gameCamera->position))
+		//	if (gameCamera->Collider->checkCollision(gameCamera->Collider, Game_Maze_Walls[i]->Collider))
+		//	{
+		//		cout << " collidied" << endl;
+		//		Game_Maze_Walls[i]->canDraw = false;
+		//	} else {
+		//		Game_Maze_Walls[i]->canDraw = true;
+		//	}
+		//}
 	}
 
 	for (int j = 0; j < Game_Maze_Characters.size(); j++)
@@ -83,10 +99,24 @@ void MazeGenerator::Update(Character* character, int &gameState)
 	if (character->inCombat)
 		return;
 
+	gameCamera->Collider->CollisionCircles((GLfloat)gameCamera->position.x, (GLfloat)gameCamera->position.z, 0.1);
+
 	for (int i = 0; i < Game_Maze_Walls.size(); i++)
 	{
-		/*Game_Maze_Walls[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Walls[i]->position.x, (GLfloat)Game_Maze_Walls[i]->position.z, 0.5);
-		for (int j = 0; j < Game_Maze_Characters.size(); j++)
+		//Game_Maze_Walls[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Walls[i]->position.x, (GLfloat)Game_Maze_Walls[i]->position.z, 0.5);
+		//for (int j = 0; j < Game_Maze_Characters.size(); j++)
+		//{
+		//	//if (Game_Maze_Characters[j]->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, Game_Maze_Characters[j]->position))
+		//	if (Game_Maze_Characters[j]->Collider->checkCollision(gameCamera->Collider, Game_Maze_Characters[j]->Collider))
+		//	{
+		//		cout << " COLLIDED!!!! " << endl;
+		//		Game_Maze_Characters[j]->canDraw = false;
+		//	} else {
+		//		Game_Maze_Characters[j]->canDraw = true;
+		//	}
+		//}
+
+		/*for (int j = 0; j < Game_Maze_Characters.size(); j++)
 		{
 			//if (Game_Maze_Characters[j]->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, Game_Maze_Characters[j]->position))
 			if (Game_Maze_Characters[j]->Collider->checkCollision(character->Collider, Game_Maze_Characters[j]->Collider))
@@ -105,34 +135,30 @@ void MazeGenerator::Update(Character* character, int &gameState)
 	character->oldPosition = character->position;
 }
 
-void MazeGenerator::draw(glm::mat4 object, Camera* gameCamera, GLuint s_shaderProgram, int pass)
+void MazeGenerator::draw(glm::mat4 object, Character* character, Camera* gameCamera, GLuint s_shaderProgram, int pass)
 {
 	//glm::mat4 modelview(1.0);
 	for (auto&& child : Game_Maze_Prefabs) { child->draw(object, s_shaderProgram, pass);}
 	for (auto&& child : Game_Maze_Characters) { if(!child->isDead()) child->draw(object, s_shaderProgram, pass); }
 
-	gameCamera->Collider->CollisionCircles((GLfloat)gameCamera->position.x, (GLfloat)gameCamera->position.z, 0.1);
 
-	//Game_Maze_Prefabs[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Prefabs[i]->position.x, (GLfloat)Game_Maze_Prefabs[i]->position.z, 0.5);
-
+	////Game_Maze_Prefabs[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Prefabs[i]->position.x, (GLfloat)Game_Maze_Prefabs[i]->position.z, 0.5);
+	gameCamera->Collider->CollisionCircles((GLfloat)gameCamera->position.x, (GLfloat)gameCamera->position.z, 1.0);
 	for (int i = 0; i < Game_Maze_Walls.size(); i++)
 	{
+		//if (character->combatInstance != NULL)
+		//{
+		//	Game_Maze_Walls[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Walls[i]->testPosition.x, (GLfloat)Game_Maze_Walls[i]->testPosition.z, Game_Maze_Walls[i]->scale.x * 1.5f);
+		//	//if (gameCamera->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, gameCamera->position))
+		//	if (gameCamera->Collider->checkCollision(gameCamera->Collider, Game_Maze_Walls[i]->Collider) == false)
+		//	{
+		//		//cout << " collidied" << endl;
+		//		Game_Maze_Walls[i]->draw(object, s_shaderProgram, pass);
+		//	}
+		//} else {
+		//	Game_Maze_Walls[i]->draw(object, s_shaderProgram, pass);
+		//}
 		Game_Maze_Walls[i]->draw(object, s_shaderProgram, pass);
-		/*Game_Maze_Walls[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Walls[i]->position.x, (GLfloat)Game_Maze_Walls[i]->position.z, 0.5);
-		for (int j = 0; j < Game_Maze_Characters.size(); j++)
-		{
-		//if (Game_Maze_Characters[j]->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, Game_Maze_Characters[j]->position))
-		if (Game_Maze_Characters[j]->Collider->checkCollision(character->Collider, Game_Maze_Characters[j]->Collider))
-		{
-		Game_Maze_Characters[j]->position = Game_Maze_Characters[j]->oldPosition;
-		}
-		}
-
-		//if (Game_Maze_Walls[i]->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, character->position))
-		if (character->Collider->checkCollision(character->Collider, Game_Maze_Walls[i]->Collider))
-		{
-		character->position = character->oldPosition;
-		}*/
 	}
 
 	//for (int i = 0; i<SIZE; i++) {

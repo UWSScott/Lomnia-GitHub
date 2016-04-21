@@ -32,6 +32,9 @@ MazePrefab::MazePrefab(GLuint s_shaderProgram, GLuint s_meshObject, GLuint s_mes
 
 void MazePrefab::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 {
+	if (!canDraw)
+		return;
+
 	glUseProgram(s_shaderUsed);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture);
