@@ -168,10 +168,10 @@ void PlayableCharacter::CombatAttacks()
 
 	if (keys[SDL_SCANCODE_H])
 	{
-		cout << " got here for healthHealthPotion  " << inventory->getCount("HealthPotion") << endl;
+		//cout << " got here for healthHealthPotion  " << inventory->getCount("HealthPotion") << endl;
 		if (inventory->getCount("HealthPotion") > 0)
 		{
-			cout << " got here for health!!! YOU HAVE HALTH POTS!";
+			cout << " HealthPotion count : " << inventory->getCount("HealthPotion") << endl;
 			combatInstance->Input(new ItemUse(inventory->FindItem("HealthPotion")));
 			//cout << " Health Restored! " << endl;
 		}
@@ -181,8 +181,8 @@ void PlayableCharacter::CombatAttacks()
 	{
 		if (inventory->getCount("ManaPotion") > 0)
 		{
+			cout << " Mana count : " << inventory->getCount("ManaPotion") << endl;
 			combatInstance->Input(new ItemUse(inventory->FindItem("ManaPotion")));
-			//cout << " Mana Restored! " << endl;
 		}
 	}
 }

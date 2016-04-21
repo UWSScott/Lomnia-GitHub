@@ -104,9 +104,16 @@ void CombatInstance::Attack()
 			C_Attack* currentAttack = queuedAttacks[0];
 			if (ItemUse* d = dynamic_cast<ItemUse*>(currentAttack))
 			{
-				d->Attack(*currentCharacter, *currentCharacter);
+				if (currentCharacter->inventory->getCount(d->GetItem()->name) > 0)
+				{
+					d->Attack(*currentCharacter, *currentCharacter);
+					currentCharacter->inventory->removeItem(d->GetItem()->name);
+				} else {
+					queuedAttacks.pop_back();
+					Attack();
+					return;
+				}
 			} else {
-				cout << " Is not an item use! ? " << endl;
 				currentAttack->SetCharacterReference(currentCharacter);
 				opponent->combatInstance->BeingAttacked(*currentAttack);
 			}
