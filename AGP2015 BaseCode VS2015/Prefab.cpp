@@ -52,6 +52,9 @@ Prefab::Prefab(string ItemID, GLuint s_shaderProgram, OBJHolder* modelInfo, Text
 
 void Prefab::draw(glm::mat4 object)
 {
+	if (!canDraw)
+		return;
+
 	glUseProgram(shaderProgram);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -64,6 +67,9 @@ void Prefab::draw(glm::mat4 object)
 
 void Prefab::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 {
+	if (!canDraw)
+		return;
+
 	glUseProgram(s_shaderUsed);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture);

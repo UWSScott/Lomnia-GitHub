@@ -58,9 +58,9 @@ public:
 	Character* SpawnCharacter(Character* character);
 	Gameobject* SpawnGameobject(Gameobject* character);
 
-	virtual void SetDepthMap(GLuint s_depthMap);// { depthMapTexture = s_depthMap; };
-	virtual void Update(Character* character, int &gameState);
-	virtual void draw(glm::mat4 object, Camera* gameCamera, GLuint s_shaderProgram, int pass);
+	virtual void SetDepthMap(GLuint s_depthMap); //{ depthMapTexture = s_depthMap; };
+	virtual void Update(Character* character, Camera* gameCamera, int &gameState);
+	virtual void draw(glm::mat4 object, Character* character, Camera* gameCamera, GLuint s_shaderProgram, int pass);
 	//virtual void ClearMemory<class T>(vector<Character*> &s_ArrList);
 	GLuint baseShaderProgram; 
 };
