@@ -5,28 +5,35 @@
 Medkit::Medkit(int potency)
 {
 	name = "HealthPotion";
+	rarityOrPotency = potency;
+
+
 	switch (potency) 
 	{
 	case POTION_POTENCY_LIGHT:
 		restoreValue = 30;
-		std::cout << "made light potion" << std::endl;
+		price = 1;
+		std::cout << "made h light potion" << std::endl;
 		break;
 	case POTION_POTENCY_MEDIUM:
 		restoreValue = 50;
-		std::cout << "made medium potion" << std::endl;
+		std::cout << "made h medium potion" << std::endl;
+		price =2; 
 		break;
 	case POTION_POTENCY_STRONG:
 		restoreValue = 80;
-		std::cout << "made strong potion" << std::endl;
+		price = 3;
+		std::cout << "made h strong potion" << std::endl;
 		break;
 	default:
 		restoreValue = 30;
+		price = 4; 
 		std::cout << "made light potion" << std::endl;
 		break;
 	}
 
 	objectName = "HealthPotion";
-	price = 12.00f;
+
 
 }
 

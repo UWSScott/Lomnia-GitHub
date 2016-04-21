@@ -96,6 +96,7 @@ bool shopMusicPlaying = false;
 bool bronzeSilverGoldOption = false; 
 bool lightMediumStrongOption = false; 
 bool buying = false; 
+bool sellPotion = false; 
 string item;
 
 
@@ -402,7 +403,7 @@ void CalculateFrameRate()
 	if (currentTime - lastTime > 1.0f)
 	{
 		lastTime = currentTime;
-		if (1 == 1) fprintf(stderr, "\nCurrent Frames Per Second: %d\n\n", (int)framesPerSecond);
+	//	if (1 == 1) fprintf(stderr, "\nCurrent Frames Per Second: %d\n\n", (int)framesPerSecond);
 		framesPerSecond = 0;
 	}
 }
@@ -556,10 +557,12 @@ void init(void)
 	Game_Hub_Characters[4]->enemy = true;
 	Game_Hub_Characters[4]->canDraw = false;
 	Game_Hub_Characters[4]->health = -1;
-	
-	//shop guy
-	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(18, 1.3, 71.5), shaderProgram));
 	Game_Hub_Characters[4]->rotation = 90;
+
+	//shop guys
+	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(18, 1.3, 71.5), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(107, 1.3, -8.2), shaderProgram));
+	Game_Hub_Characters[10]->rotation = 274;
 
 	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
 	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_2", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
@@ -567,7 +570,7 @@ void init(void)
 	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_4", Resource_Managment->LoadMD2("Models/quigon.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
 
 
-	//NPCs in the hub area
+	//NPCs in the hub areaw
 	//Game_Hub_Characters.push_back(Character("Arnold", "Models/arnould.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram));
 
 	//NPCS that serve a purpose (shop owners/traders) 
@@ -602,7 +605,7 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void update(void) {
 
-	//ut << " arn pos: " << character->position.x << "  y: " << character->position.y << " z: " << character->position.z << " rotation: " << character->rotation << endl;
+//	cout << " arn pos: " << character->position.x << "  y: " << character->position.y << " z: " << character->position.z << " rotation: " << character->rotation << endl;
 	gameStateInt = gameState;
 
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
@@ -629,7 +632,7 @@ void update(void) {
 		{
 			for (int j = 0; j < Game_Hub_Characters.size(); j++)
 			{
-				if (j != 9) // so shop keeper can be drawn inside shop, dont check it for collision with buildings
+				if (j != 9 && j!=10) // so shop keepers can be drawn inside shops, dont check them for collision with buildings
 				{
 					if (Game_Hub_Characters[j]->Collider->checkCollision(Game_Hub_Prefabs[i].Collider->aabb, Game_Hub_Characters[j]->position))
 					{
@@ -720,6 +723,7 @@ void update(void) {
 
 	if (openShop)
 	{
+		//character->inventory->show();
 		if (shopMusicPlaying == false)
 		{
 			Game_Camera.SetPlayerStatus(3, character);
@@ -727,10 +731,7 @@ void update(void) {
 			shopMusicPlaying = true;
 		}
 
-		if (buying)
-		{
-			
-
+		
 			Game_Hub_Characters[9]->position[2] = 74;
 
 
@@ -742,19 +743,39 @@ void update(void) {
 
 				if (keys[SDL_SCANCODE_1]) // if bronze
 				{
-					character->inventory->buyItem(item, RARITY_BRONZE);
+					if (buying)
+					{
+						character->inventory->buyItem(item, RARITY_BRONZE);
+					}
+					else
+					{
+						character->inventory->sellItem(item, RARITY_BRONZE);
+					}
 
 					openShop = false;
 				}
 				else if (keys[SDL_SCANCODE_2]) // if silver
 				{
-					character->inventory->buyItem(item, RARITY_SILVER);
-
+					if (buying)
+					{
+						character->inventory->buyItem(item, RARITY_SILVER);
+					}
+					else
+					{
+						character->inventory->sellItem(item, RARITY_SILVER);
+					}
 					openShop = false;
 				}
 				else if (keys[SDL_SCANCODE_3]) // if gold
 				{
-					character->inventory->buyItem(item, RARITY_GOLD);
+					if (buying)
+					{
+						character->inventory->buyItem(item, RARITY_GOLD);
+					}
+					else
+					{
+						character->inventory->sellItem(item, RARITY_GOLD);
+					}
 
 					openShop = false;
 				}
@@ -767,6 +788,7 @@ void update(void) {
 					character->inventory->show();
 					Game_Hub_Characters[9]->position[2] = 71;
 					buying = false; 
+					
 				}
 			}
 
@@ -776,19 +798,39 @@ void update(void) {
 				text[2] = ui->createTexture("1. Light 2. Medium 3. Strong", textFont);
 				if (keys[SDL_SCANCODE_1]) // if light
 				{
-					character->inventory->buyItem(item, POTION_POTENCY_LIGHT);
+					if (buying)
+					{
+						character->inventory->buyItem(item, POTION_POTENCY_LIGHT);
+					}
+					else
+					{
+						character->inventory->sellItem(item, POTION_POTENCY_LIGHT);
+					}
 
 					openShop = false;
 				}
 				else if (keys[SDL_SCANCODE_2]) // if medium
 				{
-					character->inventory->buyItem(item, POTION_POTENCY_MEDIUM);
-
+					if (buying)
+					{
+						character->inventory->buyItem(item, POTION_POTENCY_MEDIUM);
+					}
+					else
+					{
+						character->inventory->sellItem(item, POTION_POTENCY_MEDIUM);
+					}
 					openShop = false;
 				}
 				else if (keys[SDL_SCANCODE_3]) // if strong
 				{
-					character->inventory->buyItem(item, POTION_POTENCY_STRONG);
+					if (buying)
+					{
+						character->inventory->buyItem(item, POTION_POTENCY_STRONG);
+					}
+					else
+					{
+						character->inventory->sellItem(item, POTION_POTENCY_STRONG);
+					}
 
 					openShop = false;
 				}
@@ -814,17 +856,11 @@ void update(void) {
 					if (keys[SDL_SCANCODE_1]) // if health potion
 					{
 
-						//character->inventory->buyItem("HealthPotion", 1); // price currently not correct for potions, working out with potency
-						//openShop = false;
-
 						lightMediumStrongOption = true;
 						item = "HealthPotion";
 					}
 					else if (keys[SDL_SCANCODE_2]) // if mana potion
 					{
-						/*character->inventory->buyItem("ManaPotion", 1);
-						openShop = false;*/
-
 						lightMediumStrongOption = true;
 						item = "ManaPotion";
 
@@ -849,19 +885,67 @@ void update(void) {
 				}
 
 			}
-		}
-		else // if buying is false but shop is open, must be selling
-		{
-			text[2] = ui->createTexture("Selling shop", textFont);
-			if (keys[SDL_SCANCODE_1]) 
-			{
-				openShop = false; 
-				character->status = STATE_NORMAL;
-				shopMusicPlaying = false;
-			}
+		
+		//else // if buying is false but shop is open, must be selling
+		//{
+		//	if (sellPotion)
+		//	{
 
+		//		text[2] = ui->createTexture("1. Light 2. Medium 3. Strong", textFont);
+		//		if (keys[SDL_SCANCODE_1]) // if light
+		//		{
+		//			character->inventory->buyItem(item, POTION_POTENCY_LIGHT);
 
-		}
+		//			openShop = false;
+		//		}
+
+		//		if (openShop == false) // if shop closed, stop music and return camera to normal 
+		//		{
+		//			character->status = STATE_NORMAL;
+		//			shopMusicPlaying = false;
+		//			lightMediumStrongOption = false;
+		//			Game_Hub_Characters[9]->position[2] = 71;
+		//			buying = false;
+		//			//		character->inventory->show();
+		//		}
+
+		//	}
+		//	if (!sellPotion)
+		//	{
+		//	//	Game_Hub_Characters[10]->position[0] = 109;
+		//		text[2] = ui->createTexture("1. Sell Potion  2. Sell Weapon 3. Sell All ", textFont);
+		//		if (keys[SDL_SCANCODE_1])
+		//		{
+		//			sellPotion = true; 
+		//			//if have health potion
+		//			//show can sell health potion
+		//	//		Item test = character->inventory->FindItem("HealthPotion"); 
+
+		//			if ((character->inventory->hasItem("HealthPotion")) && (character->inventory->hasItem("ManaPotion")))
+		//			{
+
+		//				text[2] = ui->createTexture("1. Sell health potion 2. Sell Mana Potion", textFont);
+
+		//			}
+		//			else if (character->inventory->hasItem("ManaPotion"))
+		//			{
+		//				text[2] = ui->createTexture("2. Sell Mana Potion", textFont);
+		//			}
+		//			else if (character->inventory->hasItem("HealthPotion"))
+		//			{
+		//				text[2] = ui->createTexture("2. Sell Health Potion", textFont);
+		//			}
+
+		//		}
+		//		if (keys[SDL_SCANCODE_2])
+		//		{
+		//			openShop = false;
+		//			character->status = STATE_NORMAL;
+		//			shopMusicPlaying = false;
+		//			Game_Hub_Characters[10]->position[0] = 107;
+		//		}
+		//	}
+		//}
 	}
 	else if (gameState == COMBAT)
 	{

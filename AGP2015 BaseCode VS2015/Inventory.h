@@ -43,11 +43,12 @@ private:
 
 public:
 	void show();
-	void sellItem(string itemNameID, float price);
+	void sellItem(string itemNameID, int rarity);
 	void buyItem(string itemNameID, int rarityOrPotency);
 	void addItem(string itemNameID, int rarityOrPotency);
 	Item* FindItem(string itemNameID);
-	Item* GetItem(string itemNameID);
+	//Item* GetItem(string itemNameID);
+	bool hasItem(string itemNameID);
 	void AddRandomItem(); // To be called after item pick up / generate random quest reward
 	void UseItem(string itemNameID, Character* character);
 	void removeItem(string itemNameID);

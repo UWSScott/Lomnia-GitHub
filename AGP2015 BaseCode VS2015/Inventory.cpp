@@ -118,7 +118,10 @@ void Inventory::buyItem(string itemNameID, int rarityOrPotency)
 		if (itemNameID == "HealthPotion")
 		{
 			Potion* tempPotion = new Medkit(rarityOrPotency);
+		
 			items.push_back(tempPotion);
+			show();
+			
 		}
 		else if (itemNameID == "ManaPotion")
 		{
@@ -170,16 +173,19 @@ void Inventory::buyItem(string itemNameID, int rarityOrPotency)
 	}
 }
 
-void Inventory::sellItem(string itemNameID, float price)
+void Inventory::sellItem(string itemNameID, int rarity)
 {
 	bool itemFound = false;
 	for (iter = items.begin(); iter != items.end(); iter++)
 	{
-		if ((**iter).name == itemNameID)
+		if (((**iter).name == itemNameID)&&((**iter).rarityOrPotency==rarity))
 		{
-			gold += price;
+			gold = gold + (**iter).price;
+			std::cout << "price: " << (**iter).price << std::endl;
+			std::cout << "gold" << gold << std::endl;
 			items.erase(iter);
 			itemFound = true;
+			cout << "you found it";
 			break;
 		}
 	}
@@ -212,22 +218,6 @@ Item* Inventory::FindItem(string itemNameID)
 	return NULL;
 }
 
-Item* Inventory::GetItem(string itemNameID)
-{
-	bool itemFound = false;
-	Item* tempItem;
-	for (iter = items.begin(); iter != items.end(); iter++)
-	{
-		if ((**iter).name == itemNameID)
-		{
-			tempItem = &**iter;
-			items.erase(iter);
-			return tempItem;
-			break;
-		}
-	}
-	return NULL;
-}
 
 void Inventory::AddRandomItem()
 {
@@ -263,7 +253,7 @@ void Inventory::AddRandomItem()
 		}
 		if (randomNumber >= 70 && randomNumber<91) //70% chance on getting a potion. 
 		{
-			potency = POTION_POTENCY_LIGHT;
+			potency = POTION_POTENCY_MEDIUM;
 		}
 		else if (randomNumber > 90 && randomNumber < 101)
 		{
@@ -291,6 +281,20 @@ void Inventory::UseItem(string itemNameID, Character* character)
 	foundItem->Use(character);
 	removeItem(itemNameID);
 
+}
+
+bool Inventory::hasItem(string itemNameID)
+{
+	bool itemFound = false;
+	for (iter = items.begin(); iter != items.end(); ++iter)
+	{
+		if ((**iter).name == itemNameID)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 Weapon* Inventory::equipWeapon()

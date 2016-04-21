@@ -172,7 +172,7 @@ void PlayableCharacter::CombatAttacks()
 		if (inventory->getCount("HealthPotion") > 0)
 		{
 			cout << " got here for health!!! YOU HAVE HALTH POTS!";
-			combatInstance->Input(new ItemUse(inventory->GetItem("HealthPotion")));
+			combatInstance->Input(new ItemUse(inventory->FindItem("HealthPotion")));
 			//cout << " Health Restored! " << endl;
 		}
 	}
@@ -181,7 +181,7 @@ void PlayableCharacter::CombatAttacks()
 	{
 		if (inventory->getCount("ManaPotion") > 0)
 		{
-			combatInstance->Input(new ItemUse(inventory->GetItem("ManaPotion")));
+			combatInstance->Input(new ItemUse(inventory->FindItem("ManaPotion")));
 			//cout << " Mana Restored! " << endl;
 		}
 	}
