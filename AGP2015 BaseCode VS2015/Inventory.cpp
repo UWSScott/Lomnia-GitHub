@@ -180,12 +180,11 @@ void Inventory::sellItem(string itemNameID, int rarity)
 	{
 		if (((**iter).name == itemNameID)&&((**iter).rarityOrPotency==rarity))
 		{
-			gold = gold + (**iter).price;
-			std::cout << "price: " << (**iter).price << std::endl;
-			std::cout << "gold" << gold << std::endl;
+			gold = gold + ((**iter).price)/2;
+
 			items.erase(iter);
 			itemFound = true;
-			cout << "you found it";
+			cout << "Sold item." << endl;
 			break;
 		}
 	}
