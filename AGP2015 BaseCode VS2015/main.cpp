@@ -611,6 +611,12 @@ void update(void) {
 	character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
 	CalculateFrameRate();
 
+	if (character->health < 1)
+	{
+		character->Respawn();
+		gameState = HUB;
+	}
+
 	if (gameState == HUB)
 	{
 		for (int i = 0; i < Game_Hub_Characters.size(); i++)

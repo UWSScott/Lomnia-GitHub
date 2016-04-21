@@ -136,6 +136,17 @@ bool Character::isDead()
 	return (health <= 0 && canDie);
 }
 
+void Character::Respawn()
+{
+	characterState = STATE_NORMAL;
+	status = STATE_NORMAL;
+	health = 100;
+	coins = (coins / 2);
+	position = { -18.4, 1.2, -95.2 };
+	rotation = 178;
+	//Arnould's House
+}
+
 // returns the current rotation of the model
 int Character::getRotation()
 {
