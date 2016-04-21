@@ -561,7 +561,7 @@ void init(void)
 
 	//shop guys
 	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(18, 1.3, 71.5), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(107, 1.3, -8.2), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(0.8), glm::vec3(107, 1.1, -8.2), shaderProgram));
 	Game_Hub_Characters[10]->rotation = 274;
 
 	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
@@ -672,12 +672,13 @@ void update(void) {
 				}
 				if (i == 10) // colliding with shop
 				{
-					names[0] = ui->createTexture(" ", textFont);
+					names[0] = ui->createTexture("Buy:", textFont);
 					openShop = true;
 					buying = true;
 				}
 				else if (i == 11)
 				{
+					names[0] = ui->createTexture("Sell:", textFont);
 					openShop = true;
 				}
 				else
@@ -731,10 +732,8 @@ void update(void) {
 			shopMusicPlaying = true;
 		}
 
-		
 			Game_Hub_Characters[9]->position[2] = 74;
-
-
+			
 			if (bronzeSilverGoldOption)
 			{
 
