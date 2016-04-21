@@ -35,7 +35,7 @@ void Camera::InitalStats()
 	songs = new HSAMPLE[5];
 	songs[0] = fileLoader->loadSample("Sound/Music/Menu_Music.wav"); //Menu
 	songs[1] = fileLoader->loadSample("Sound/Music/Ambient_Hub.wav");; //Ambient
-	songs[2] = fileLoader->loadSample("Sound/Music/Battle_of_the_Titans.wav"); //Combat
+	songs[2] = fileLoader->loadSample("Sound/Music/Combat_Music.wav"); //Combat
 	songs[3] = fileLoader->loadSample("Sound/Music/Shop_Music.wav"); //Vendor
 	songs[4] = fileLoader->loadSample("Sound/Music/Death_Music.wav"); //Death
 	songs[5] = fileLoader->loadSample("Sound/Music/Maze_Music.wav"); //Maze

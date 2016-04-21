@@ -655,7 +655,7 @@ void update(void) {
 					gameState = MAZE;
 					gameStateInt = gameState;
 					maze->EnterTheMazetrix(character, Resource_Managment);
-					//character->status = STATE_MAZE;
+					character->status = STATE_MAZE;
 					return;
 					//maze->SpawnCharacter(character);
 					//for (int i = 0; i < Game_Maze_Characters.size(); i++)

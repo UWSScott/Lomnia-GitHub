@@ -2,6 +2,8 @@
 #include "EnemyType.h"
 #define CUBE_DOWN -2.7
 
+Character* tempHolderPlayer;
+
 void MazeGenerator::Update(Character* character, Camera* gameCamera, int &gameState)
 {
 	character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
@@ -41,7 +43,7 @@ void MazeGenerator::Update(Character* character, Camera* gameCamera, int &gameSt
 			if (character->Collider->checkCollision(character->Collider, Game_Maze_Prefabs[i]->Collider))
 			{
 				//cout << " COLLISION!!!!!!" << endl;
-				character->position = character->oldPosition; //oldPlayerPos;
+				//character->position = character->oldPosition; //oldPlayerPos;
 				character->CheckCollision(Game_Maze_Prefabs[i], typeid(Game_Maze_Prefabs[i]).name());
 
 				if (Game_Maze_Prefabs[i]->objectName == "Loot_Drop")
@@ -178,6 +180,7 @@ void MazeGenerator::EnterTheMazetrix(Character* playerCharacter, ResourceManager
 	Game_Maze_Prefabs.clear();
 	Game_Maze_Characters.clear();
 	playerCharacter->inMaze = true;
+	tempHolderPlayer = playerCharacter;
 	//CreateTarget(playerCharacter->currentQuest, resManager);
 	Game_Maze_Characters.push_back(SpawnCharacter(CreateTarget(playerCharacter->currentQuest, resManager)));
 	SpawnCharacter(playerCharacter);
@@ -240,7 +243,7 @@ Character* MazeGenerator::SpawnCharacter(Character* character)
 		newPosition = Maze_Tiles[xPos][yPos]->testPosition;
 		//cout << "CUBE DOWN IS: " << CUBE_DOWN << " xPos: " << xPos << " yPos: " << yPos << 
 		//	endl << " maze position: " << newPosition.x << " current cube is: " << newPosition.y << " " << newPosition.z << endl << endl;
-	} while (newPosition.y == 0.5);//Maze_Tiles[xPos][yPos]->testPosition.y != CUBE_DOWN);
+	} while (newPosition.y == 0.5 && (newPosition.x == tempHolderPlayer->position.x && newPosition.z == tempHolderPlayer->position.z)); //Maze_Tiles[xPos][yPos]->testPosition.y != CUBE_DOWN);
 
 	character->position.x = newPosition.x;
 	character->position.z = newPosition.z;
