@@ -69,6 +69,7 @@ public:
 	int max_Defence = 5;
 	int speed = 5;
 	int max_Speed = 10;
+	int currentCompletedQuests = 0;
 	Quest* currentQuest = new Quest();
 	Weapon* weapon = new Weapon();
 	Inventory* inventory = new Inventory();

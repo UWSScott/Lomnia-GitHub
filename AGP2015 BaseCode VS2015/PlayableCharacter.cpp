@@ -29,7 +29,7 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 	scale = s_scale;
 	position = s_position;
 	Collider = new Collisions();
-	currentQuest = new Quest("Kill Blade", "Blade is a nasty man!", "Blade", "OVERLORD", "Models/quigon.MD2", "Models/Textures/Bronze_Skin.bmp", -500, 0);
+	currentQuest = new Quest("Kill Blade", "Blade is a nasty man!", "Blade", "OVERLORD", "Models/quigon.MD2", "Models/Textures/Bronze_Skin.bmp", 500, 0);
 
 	//Potion* tempPotion = new Medkit(1);
 	inventory->addItem("HealthPotion", POTION_POTENCY_MEDIUM);
