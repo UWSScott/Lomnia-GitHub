@@ -548,7 +548,7 @@ void init(void)
 	Game_Hub_Characters.push_back(new Character("END_BOSS", Resource_Managment->LoadMD2("Models/faerie.MD2"), Resource_Managment->LoadTexture("Models/Textures/God_World.bmp"), glm::vec3(1), glm::vec3(13, 1.8, -19.7), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_6", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/White_Fur.bmp"), glm::vec3(1), glm::vec3(30, 1.2, -10), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_7", Resource_Managment->LoadMD2("Models/centaur.MD2"), Resource_Managment->LoadTexture("Models/Textures/Blue_Leather.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 10), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("Blade", Resource_Managment->LoadMD2("Models/blade.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(5, 1.2, -10), shaderProgram));
+	Game_Hub_Characters.push_back(new QuestGiver(Resource_Managment->LoadMD2("Models/blade.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(5, 1.2, -10), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/zf19.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(15, 1.2, -10), shaderProgram));
 	Game_Hub_Characters[7]->enemy = false;
 	//Game_Hub_Characters[4]->enemy = true;
@@ -624,7 +624,7 @@ void update(void) {
 	{
 		for (int i = 0; i < Game_Hub_Characters.size(); i++)
 		{
-			Game_Hub_Characters[i]->RotateToFace(character);
+			//Game_Hub_Characters[i]->RotateToFace(character);
 			Game_Hub_Characters[i]->Update();
 		}
 
@@ -1051,7 +1051,6 @@ void RenderScene(GLuint refShaderProgram) {
 	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 1920.0f / 1080.0f, 1.0f, 1000.0f);
 
 	GLfloat scale(1.0f); // just to allow easy scaling of complete scene
-
 	glm::mat4 modelview(1.0); // set base position for scene
 	mvStack.push(modelview);
 

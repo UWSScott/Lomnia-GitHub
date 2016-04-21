@@ -1,12 +1,12 @@
 #include "Quest.h"
 #include "Character.h"
 
-Quest* quest_1 = new Quest("Kill the Mutated Ripper", "Find the Blue Ripper and eliminate it", "Blue_Ripper", "MINION", "ripper", "Bronze_Skin", 100, 0);
-Quest* quest_2 = new Quest("Destroy Pogo-Bunny", "Locate and kill the upgraded Pogo-Bunny", "Silver_Pogo", "BRUISER", "pogo_buny", "Silver_Skin", 250, 0);
-Quest* quest_3 = new Quest("Slay the Gold Dragon", "Find the Golden Dragon and eliminate it!", "Gold_Dragon", "OVERLORD", "dragon", "Gold_Skin", 500, 0);
-Quest* quest_4 = new Quest("Free Lomnia", "Defeat the god to earn your freedom!", "Tintania", "GODUS", "faerie", "Chain_Link", 0, 0);
+//Quest* quest_1 = new Quest("Kill the Mutated Ripper", "Find the Blue Ripper and eliminate it", "Blue_Ripper", "MINION", "ripper", "Bronze_Skin", 100, 0);
+//Quest* quest_2 = new Quest("Destroy Pogo-Bunny", "Locate and kill the upgraded Pogo-Bunny", "Silver_Pogo", "BRUISER", "pogo_buny", "Silver_Skin", 250, 0);
+//Quest* quest_3 = new Quest("Slay the Gold Dragon", "Find the Golden Dragon and eliminate it!", "Gold_Dragon", "OVERLORD", "dragon", "Gold_Skin", 500, 0);
+//Quest* quest_4 = new Quest("Free Lomnia", "Defeat the god to earn your freedom!", "Tintania", "GODUS", "faerie", "Chain_Link", 0, 0);
 
-Quest* questList[4] = { quest_1, quest_2, quest_3, quest_4 };
+Quest* questList[4] = {};// quest_1, quest_2, quest_3, quest_4 };
 
 Quest::Quest(string s_name, string s_description, string s_ID, string s_type, char* s_targetModel, char* s_targetTexture, int s_reward, int s_status)
 {

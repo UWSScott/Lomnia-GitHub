@@ -29,7 +29,7 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 	scale = s_scale;
 	position = s_position;
 	Collider = new Collisions();
-	currentQuest = new Quest("Kill Blade", "Blade is a nasty man!", "Blade", "OVERLORD", "Models/quigon.MD2", "Models/Textures/Bronze_Skin.bmp", -500, 0);
+	currentQuest = new Quest("Kill Blade", "Blade is a nasty man!", "Blade", "OVERLORD", "Models/quigon.MD2", "Models/Textures/Bronze_Skin.bmp", 500, 0);
 
 	//Potion* tempPotion = new Medkit(1);
 	inventory->addItem("HealthPotion", POTION_POTENCY_MEDIUM);
@@ -168,10 +168,10 @@ void PlayableCharacter::CombatAttacks()
 
 	if (keys[SDL_SCANCODE_H])
 	{
-		cout << " got here for healthHealthPotion  " << inventory->getCount("HealthPotion") << endl;
+		//cout << " got here for healthHealthPotion  " << inventory->getCount("HealthPotion") << endl;
 		if (inventory->getCount("HealthPotion") > 0)
 		{
-			cout << " got here for health!!! YOU HAVE HALTH POTS!";
+			cout << " HealthPotion count : " << inventory->getCount("HealthPotion") << endl;
 			combatInstance->Input(new ItemUse(inventory->FindItem("HealthPotion")));
 			//cout << " Health Restored! " << endl;
 		}
@@ -181,8 +181,8 @@ void PlayableCharacter::CombatAttacks()
 	{
 		if (inventory->getCount("ManaPotion") > 0)
 		{
+			cout << " Mana count : " << inventory->getCount("ManaPotion") << endl;
 			combatInstance->Input(new ItemUse(inventory->FindItem("ManaPotion")));
-			//cout << " Mana Restored! " << endl;
 		}
 	}
 }

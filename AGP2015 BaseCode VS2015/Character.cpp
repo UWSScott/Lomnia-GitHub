@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "Prefab.h"
+#include "EnemyType.h"
 
 struct MostDamageSort {
 	MostDamageSort(Character& character) { this->character = character; }
@@ -305,22 +306,18 @@ void Character::CheckCollision(Gameobject* s_gameobject, string idType)
 
 	if (Character* d = dynamic_cast<Character*>(s_gameobject))
 	{
-
-
 		if (d->enemy)
 		{
 			EnterCombat(d);
 			d->EnterCombat(this);
 		}
-
-		//cout << " ****** ENEMY NAME IS " << d->characterName << " " << status << " " << canMove << " " << endl;
-
+	}
+	
+	if (QuestGiver* d = dynamic_cast<QuestGiver*>(s_gameobject))
+	{
+		this->currentQuest = d->GetQuest(currentCompletedQuests);
 	}
 
-	//if (objectID == "ENEMY")
-	//{
-	//	//EnterCombat()
-	//}
 }
 
 void Character::Animate()

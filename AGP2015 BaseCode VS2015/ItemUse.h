@@ -13,6 +13,7 @@ public:
 	ItemUse() { attackText = "ItemUse";  CreateBlockingButton(); };
 	ItemUse(Item* s_itemObject);
 	void Attack(Character& attacker, Character& opponent);
+	Item* GetItem() { return itemObject; }
 };
 
 

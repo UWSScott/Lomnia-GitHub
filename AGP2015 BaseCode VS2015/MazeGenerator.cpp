@@ -173,8 +173,8 @@ void MazeGenerator::draw(glm::mat4 object, Character* character, Camera* gameCam
 
 void MazeGenerator::EnterTheMazetrix(Character* playerCharacter, ResourceManager* resManager)
 {
-	for (auto&& child : Game_Maze_Characters) { delete child; }
-	for (auto&& child : Game_Maze_Prefabs) { delete child; }
+	//for (auto&& child : Game_Maze_Characters) { delete child; }
+	//for (auto&& child : Game_Maze_Prefabs) { delete child; }
 	Game_Maze_Prefabs.clear();
 	Game_Maze_Characters.clear();
 	playerCharacter->inMaze = true;

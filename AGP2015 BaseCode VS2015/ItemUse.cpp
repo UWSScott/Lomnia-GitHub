@@ -9,5 +9,5 @@ ItemUse::ItemUse(Item* s_itemObject)
 
 void ItemUse::Attack(Character& attacker, Character& opponent)
 {
-	itemObject->Apply(attacker, opponent);
+	itemObject->Use(&attacker);
 }
