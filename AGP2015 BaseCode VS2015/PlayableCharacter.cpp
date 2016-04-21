@@ -32,7 +32,11 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 	currentQuest = new Quest("Kill Blade", "Blade is a nasty man!", "Blade", "OVERLORD", "Models/quigon.MD2", "Models/Textures/Bronze_Skin.bmp", -500, 0);
 
 	//Potion* tempPotion = new Medkit(1);
-	inventory->addItem("Health_Potion", POTION_POTENCY_MEDIUM);
+	inventory->addItem("HealthPotion", POTION_POTENCY_MEDIUM);
+	inventory->addItem("HealthPotion", POTION_POTENCY_MEDIUM);
+	inventory->addItem("ManaPotion", POTION_POTENCY_MEDIUM);
+	inventory->addItem("ManaPotion", POTION_POTENCY_MEDIUM);
+	cout << " health potions count: " << inventory->getCount("HealthPotion");
 
 	FileLoader* fileLoader = new FileLoader;
 	texture = fileLoader->loadBitmap(textureName);
@@ -156,18 +160,29 @@ void PlayableCharacter::CombatAttacks()
 
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 
-	if (keys[SDL_SCANCODE_1]) combatInstance->Input(LightAttack());
-	if (keys[SDL_SCANCODE_2]) combatInstance->Input(HeavyAttack());
-	if (keys[SDL_SCANCODE_3]) combatInstance->Input(Poison());
-	if (keys[SDL_SCANCODE_4]) combatInstance->Input(Stun());
-	if (keys[SDL_SCANCODE_5]) combatInstance->Input(Flee());
+	if (keys[SDL_SCANCODE_1]) combatInstance->Input(new LightAttack());
+	if (keys[SDL_SCANCODE_2]) combatInstance->Input(new HeavyAttack());
+	if (keys[SDL_SCANCODE_3]) combatInstance->Input(new Poison());
+	if (keys[SDL_SCANCODE_4]) combatInstance->Input(new Stun());
+	if (keys[SDL_SCANCODE_5]) combatInstance->Input(new Flee());
 
 	if (keys[SDL_SCANCODE_H])
 	{
-		if (inventory->getCount("Health_Potion") > 0)
+		cout << " got here for healthHealthPotion  " << inventory->getCount("HealthPotion") << endl;
+		if (inventory->getCount("HealthPotion") > 0)
 		{
-			combatInstance->Input(ItemUse(inventory->FindItem("Health_Potion")));
-			cout << " PLAYER HEALED " << endl;
+			cout << " got here for health!!! YOU HAVE HALTH POTS!";
+			combatInstance->Input(new ItemUse(inventory->GetItem("HealthPotion")));
+			//cout << " Health Restored! " << endl;
+		}
+	}
+
+	if (keys[SDL_SCANCODE_J])
+	{
+		if (inventory->getCount("ManaPotion") > 0)
+		{
+			combatInstance->Input(new ItemUse(inventory->GetItem("ManaPotion")));
+			//cout << " Mana Restored! " << endl;
 		}
 	}
 }

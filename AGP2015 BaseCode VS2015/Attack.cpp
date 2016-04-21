@@ -47,7 +47,7 @@ void C_Attack::FailedBlockedAttack(Character& attacker, Character &opponent)
 	cout << attacker.characterName << " FAILED BLOCK ATTACK!" << endl;
 	blockingTime = 0; 
 	blockingStatus = 2;
-	Attack(attacker, opponent,  1);
+	Attack(attacker, opponent, 1);
 }
 
 void C_Attack::BlockedAttack(Character& attacker, Character &opponent)

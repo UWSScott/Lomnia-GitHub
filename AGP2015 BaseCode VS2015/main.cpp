@@ -614,10 +614,17 @@ void update(void) {
 	character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
 	CalculateFrameRate();
 
+	if (character->health < 1)
+	{
+		character->Respawn();
+		gameState = HUB;
+	}
+
 	if (gameState == HUB)
 	{
 		for (int i = 0; i < Game_Hub_Characters.size(); i++)
 		{
+			Game_Hub_Characters[i]->RotateToFace(character);
 			Game_Hub_Characters[i]->Update();
 		}
 
@@ -1137,7 +1144,7 @@ void RenderScene(GLuint refShaderProgram) {
 	//character->manaPool = 10;
 	ui->statusBar(0.9, 0, (float)character->health / 200);
 	ui->statusBar(0.8, 1, (float)character->manaPool / 20);
-
+	ui->inventory();
 	currentPass++;
 
 	// remember to use at least one pop operation per push...
