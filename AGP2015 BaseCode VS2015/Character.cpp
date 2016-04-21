@@ -257,7 +257,7 @@ void Character::CombatAttacks()
 	//Close to death, final gamble!
 	//TODO check if character has health potion first!
 	if (max_damage.GetPossibleDamage() >= combatInstance->opponent->health) { combatInstance->queuedAttacks.push_back(max_damage); return; }
-	if (health <= rand() % 15 && max_damage.GetPossibleDamage() < combatInstance->opponent->health && inventory->getCount("Health_Potion") > 0) { combatInstance->queuedAttacks.push_back(ItemUse(inventory->GetItem("Health_Potion"))); return; }
+	if (health <= rand() % 15 && max_damage.GetPossibleDamage() < combatInstance->opponent->health && inventory->getCount("Health_Potion") > 0) { combatInstance->queuedAttacks.push_back(ItemUse(inventory->FindItem("Health_Potion"))); return; }
 	else if (health <= rand() % 15 && max_damage.GetPossibleDamage() < combatInstance->opponent->health) { combatInstance->queuedAttacks.push_back(Flee()); return; }
 
 	int randomAttack = rand() % 3 + 1;

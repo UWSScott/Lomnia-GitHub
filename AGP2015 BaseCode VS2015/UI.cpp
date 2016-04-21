@@ -200,7 +200,7 @@ void UI::button(GLuint button, GLuint time) {
 
 
 	for (itt = combat->queuedAttacks.begin(); itt != combat->queuedAttacks.end(); itt++) {
-		cout << itt->attackText << " ";
+	//	cout << itt->attackText << " ";
 
 		/////////////////Code for queued attack list display thing////////////////
 

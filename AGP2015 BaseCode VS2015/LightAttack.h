@@ -8,7 +8,7 @@ class LightAttack : public C_Attack
 public:
 	LightAttack() 
 	{
-	attackText = "Light Attack"; 
+	attackText = "Light Attack";  //put Light Attack back in 
 	minDamage = 5;
 	maxDamage = 7;
 	manaCost = 0;

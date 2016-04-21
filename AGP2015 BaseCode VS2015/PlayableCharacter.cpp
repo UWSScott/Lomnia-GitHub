@@ -166,7 +166,7 @@ void PlayableCharacter::CombatAttacks()
 	{
 		if (inventory->getCount("Health_Potion") > 0)
 		{
-			combatInstance->Input(ItemUse(inventory->GetItem("Health_Potion")));
+			combatInstance->Input(ItemUse(inventory->FindItem("Health_Potion")));
 			cout << " PLAYER HEALED " << endl;
 		}
 	}
