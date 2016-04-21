@@ -561,8 +561,8 @@ void init(void)
 
 	//shop guys
 	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(18, 1.3, 71.5), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(0.8), glm::vec3(107, 1.1, -8.2), shaderProgram));
-	Game_Hub_Characters[10]->rotation = 274;
+	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(0.8), glm::vec3(106, 1.1, -7.5), shaderProgram));
+	Game_Hub_Characters[10]->rotation = 93;
 
 	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
 	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_2", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
@@ -605,7 +605,7 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void update(void) {
 
-//	cout << " arn pos: " << character->position.x << "  y: " << character->position.y << " z: " << character->position.z << " rotation: " << character->rotation << endl;
+	cout << " arn pos: " << character->position.x << "  y: " << character->position.y << " z: " << character->position.z << " rotation: " << character->rotation << endl;
 	gameStateInt = gameState;
 
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
@@ -689,8 +689,6 @@ void update(void) {
 
 			}
 		}
-		//
-
 
 		for (int i = 0; i < Game_Hub_Characters.size(); i++)
 		{
@@ -724,6 +722,7 @@ void update(void) {
 
 	if (openShop)
 	{
+		bool soldItem; 
 		//character->inventory->show();
 		if (shopMusicPlaying == false)
 		{
@@ -733,6 +732,10 @@ void update(void) {
 		}
 
 			Game_Hub_Characters[9]->position[2] = 74;
+			Game_Hub_Characters[10]->position[0] = 104;
+			Game_Hub_Characters[10]->position[1] = 1.7;
+			Game_Hub_Characters[10]->position[2] = -3.8;
+			//107, 1.1, -8.2
 			
 			if (bronzeSilverGoldOption)
 			{
@@ -786,6 +789,12 @@ void update(void) {
 					bronzeSilverGoldOption = false;
 					character->inventory->show();
 					Game_Hub_Characters[9]->position[2] = 71;
+
+					Game_Hub_Characters[10]->position[0] = 106;
+					Game_Hub_Characters[10]->position[2] = -7.5;
+					Game_Hub_Characters[10]->position[1] = 1.1;
+	
+
 					buying = false; 
 					
 				}
@@ -840,6 +849,10 @@ void update(void) {
 					shopMusicPlaying = false;
 					lightMediumStrongOption = false;
 					Game_Hub_Characters[9]->position[2] = 71;
+
+					Game_Hub_Characters[10]->position[0] = 106;
+					Game_Hub_Characters[10]->position[2] = -7.5;
+					Game_Hub_Characters[10]->position[1] = 1.1;
 					buying = false; 
 					//		character->inventory->show();
 				}
