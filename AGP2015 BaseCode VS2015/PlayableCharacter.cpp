@@ -72,7 +72,42 @@ void PlayableCharacter::Input()
 
 		if (keys[SDL_SCANCODE_A]) { characterState = IDLE;  rotation -= 1.0f; }
 		if (keys[SDL_SCANCODE_D]) { characterState = IDLE;  rotation += 1.0f; }
-		if (keys[SDL_SCANCODE_W]) { characterState = WALKING;  position = MoveForward(position, rotation, 0.1f); }
+		if (keys[SDL_SCANCODE_W])
+		{
+			if (rotation > 89 && rotation < 186)
+			{
+				if (position[0] + 0.1 < 105.6)
+				{
+					characterState = WALKING;  position = MoveForward(position, rotation, 0.1f);
+				}
+			}
+			else if (rotation > 0 && rotation < 90)
+			{
+				if (position[2] + 0.1 > -50.6)
+				{
+					characterState = WALKING;  position = MoveForward(position, rotation, 0.1f);
+				}
+			}
+			else if (rotation < 0 && rotation > -94)
+			{
+				if (position[0] + 0.1 >-34)
+				{
+					characterState = WALKING;  position = MoveForward(position, rotation, 0.1f);
+				}
+			}
+			else if (rotation < -94 && rotation > -184)
+			{
+				if (position[2] + 0.1 <20)
+				{
+					characterState = WALKING;  position = MoveForward(position, rotation, 0.1f);
+				}
+			}
+		else
+		{
+			characterState = WALKING;  position = MoveForward(position, rotation, 0.1f);
+		}
+		}
+
 		if (keys[SDL_SCANCODE_S]) { characterState = WALKING;  position = MoveForward(position, rotation, -0.1f); }
 		if (keys[SDL_SCANCODE_X]) { characterState = ATTACKING; }
 	}
