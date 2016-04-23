@@ -173,7 +173,7 @@ void Inventory::buyItem(string itemNameID, int rarityOrPotency)
 	}
 }
 
-void Inventory::sellItem(string itemNameID, int rarity)
+bool Inventory::sellItem(string itemNameID, int rarity)
 {
 	bool itemFound = false;
 	for (iter = items.begin(); iter != items.end(); iter++)
@@ -185,13 +185,14 @@ void Inventory::sellItem(string itemNameID, int rarity)
 			items.erase(iter);
 			itemFound = true;
 			cout << "Sold item." << endl;
-			break;
+			return true;
 		}
 	}
 
 	if (itemFound == false)
 	{
 		cout << "Stop trying to break my test program by selling items that you don't have." << endl;
+		return false; 
 	}
 }
 

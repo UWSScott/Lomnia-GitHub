@@ -43,7 +43,7 @@ private:
 
 public:
 	void show();
-	void sellItem(string itemNameID, int rarity);
+	bool sellItem(string itemNameID, int rarity);
 	void buyItem(string itemNameID, int rarityOrPotency);
 	void addItem(string itemNameID, int rarityOrPotency);
 	Item* FindItem(string itemNameID);

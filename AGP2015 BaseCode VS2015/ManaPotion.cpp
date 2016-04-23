@@ -11,17 +11,17 @@ ManaPotion::ManaPotion(int potency)
 	{
 	case POTION_POTENCY_LIGHT:
 		restoreValue = 30; 
-		price = 1;
+		price = LIGHT_POTION_PRICE;
 		std::cout << "made m light potion" << std::endl;
 		break;
 	case POTION_POTENCY_MEDIUM:
 		restoreValue = 50;
 		std::cout << "made m medium potion" << std::endl;
-		price = 2;
+		price = MEDIUM_POTION_PRICE;
 		break;
 	case POTION_POTENCY_STRONG:
 		restoreValue = 80; 
-		price = 3;
+		price = STRONG_POTION_PRICE;
 		std::cout << "made m strong potion" << std::endl;
 		break;
 	default:
@@ -33,11 +33,8 @@ ManaPotion::ManaPotion(int potency)
 
 	// for now setting all potions to light until i set up potency / rarity for all items. Will be changed :)
 
-	
 	objectName = "ManaPotion";
 	
-
-
 }
 
 void ManaPotion::Use(Character* character)
