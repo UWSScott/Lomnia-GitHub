@@ -33,6 +33,7 @@ void Quest::Conditions(Character* enemy)
 		{
 			cout << endl << "STATUS: QUEST COMPLETE" << endl;
 			status = 1;
+
 		}
 		else
 		{

@@ -315,9 +315,13 @@ void Character::CheckCollision(Gameobject* s_gameobject, string idType)
 	
 	if (QuestGiver* d = dynamic_cast<QuestGiver*>(s_gameobject))
 	{
-		this->currentQuest = d->GetQuest(currentCompletedQuests);
+		//check quest and implement
+		if (currentQuest->status != 0)
+		{
+			currentCompletedQuests++;
+			this->currentQuest = d->GetQuest(currentCompletedQuests);
+		}
 	}
-
 }
 
 void Character::Animate()
