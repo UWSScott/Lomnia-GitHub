@@ -8,7 +8,7 @@
 
 Quest* questList[4] = {};// quest_1, quest_2, quest_3, quest_4 };
 
-Quest::Quest(string s_name, string s_description, string s_ID, string s_type, char* s_targetModel, char* s_targetTexture, int s_reward, int s_status)
+Quest::Quest(char* s_name, char* s_description, string s_ID, string s_type, char* s_targetModel, char* s_targetTexture, int s_reward, int s_status)
 {
 	name = s_name;
 	description = s_description;
