@@ -293,6 +293,15 @@ void Character::CombatAttacks()
 
 void Character::InitalStats(GLuint setShaderProgram) {}
 
+void Character::LevelUp()
+{
+	this->max_Health += 50;
+	this->max_Mana += 50;
+	this->strength += 5;
+	this->speed += 5;
+	this->defence += 10;
+}
+
 void Character::CheckCollision(Gameobject* s_gameobject, string idType)
 {
 
@@ -320,6 +329,7 @@ void Character::CheckCollision(Gameobject* s_gameobject, string idType)
 		{
 			currentCompletedQuests++;
 			this->currentQuest = d->GetQuest(currentCompletedQuests);
+			this->LevelUp();
 		}
 	}
 }

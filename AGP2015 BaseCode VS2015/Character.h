@@ -106,6 +106,7 @@ public:
 	virtual void Animate();
 	virtual void Damage(float damageValue) { health -= damageValue; };
 	virtual void InitalStats(GLuint setShaderProgram);
+	virtual void LevelUp();
 	virtual void draw(glm::mat4 object);
 	virtual void draw(glm::mat4 object, GLuint s_shaderUsed, int pass);
 	virtual void GetAvailableAttacks(vector<C_Attack>& attackList);
