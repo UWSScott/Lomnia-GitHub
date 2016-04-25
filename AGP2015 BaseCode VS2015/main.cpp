@@ -224,6 +224,7 @@ bool openShop;
 const GLuint SHADOW_WIDTH = 3840, SHADOW_HEIGHT = 2160;
 //const GLuint SHADOW_WIDTH = 1920, SHADOW_HEIGHT = 1080;
 int currentPass = 0;
+int frameRate = 0;
 GLuint screenHeight = 600;
 GLuint screenWidth = 800;
 
@@ -404,8 +405,18 @@ void CalculateFrameRate()
 	{
 		lastTime = currentTime;
 	//	if (1 == 1) fprintf(stderr, "\nCurrent Frames Per Second: %d\n\n", (int)framesPerSecond);
+		frameRate = (int)framesPerSecond;
 		framesPerSecond = 0;
 	}
+}
+
+
+void StartGame()
+{
+	character->currentQuest->status = 1;
+	character->status = STATE_MAZE;
+	gameState == MAZE;
+	maze->EnterTheMazetrix(character, Resource_Managment);
 }
 
 void init(void)
@@ -584,14 +595,10 @@ void init(void)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
+	StartGame();
 }
 
 
-void SpawnEnemyMaze()
-{
-
-}
 
 
 glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d) {
@@ -604,15 +611,15 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 //ttt
 
 void update(void) {
-
+	CalculateFrameRate();
+	cout << frameRate << endl;
 	//cout << " arn pos: " << character->position.x << "  y: " << character->position.y << " z: " << character->position.z << " rotation: " << character->rotation << endl;
 	gameStateInt = gameState;
 
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	Game_Camera.update(character->getModelEye(), character->getRotation());
-	character->Update(&Game_Camera);
+	character->Update(frameRate, &Game_Camera);
 	character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
-	CalculateFrameRate();
 
 	if (character->health < 1)
 	{
@@ -625,7 +632,7 @@ void update(void) {
 		for (int i = 0; i < Game_Hub_Characters.size(); i++)
 		{
 			//Game_Hub_Characters[i]->RotateToFace(character);
-			Game_Hub_Characters[i]->Update();
+			Game_Hub_Characters[i]->Update(frameRate);
 		}
 
 		for (int i = 0; i < Game_Hub_Prefabs.size(); i++)
@@ -963,7 +970,7 @@ void update(void) {
 	{
 		for (int i = 0; i < Game_Hub_Characters.size(); i++)
 		{
-			Game_Hub_Characters[i]->Update();
+			Game_Hub_Characters[i]->Update(frameRate);
 		}
 
 	}
@@ -1013,7 +1020,7 @@ void update(void) {
 		}*/
 		gameStateInt = gameState;
 		//cout << " game state before: " << gameStateInt << endl;
-		maze->Update(character, &Game_Camera, gameStateInt);
+		maze->Update(character, &Game_Camera, gameStateInt, frameRate);
 		//cout << " game state after: " << gameStateInt << endl;
 		if (gameStateInt == 1)
 			gameState = HUB;
@@ -1029,7 +1036,7 @@ void update(void) {
 		Game_Hub_Characters[i]->oldPosition = Game_Hub_Characters[i]->position;
 	}
 
-	//if (keys[SDL_SCANCODE_R]) character->position.y += 0.1f;
+	if (keys[SDL_SCANCODE_R]) character->position = glm::vec3(-10, character->position.y, -10);
 	//if (keys[SDL_SCANCODE_F]) character->position.y -= 0.1f;
 	//if (keys[SDL_SCANCODE_I]) lightPos.x += 0.1f;
 	//if (keys[SDL_SCANCODE_K]) lightPos.x -= 0.1f;

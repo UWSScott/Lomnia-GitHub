@@ -334,7 +334,7 @@ void Character::CheckCollision(Gameobject* s_gameobject, string idType)
 	}
 }
 
-void Character::Animate()
+void Character::Animate(float frameRate)
 {
 	if (!playAnimation)
 		return;
@@ -348,11 +348,11 @@ void Character::Animate()
 
 
 
-	tmpModel.Animate(currentAnimation, 0.1);
+	tmpModel.Animate(currentAnimation, 0.1, frameRate);
 	rt3d::updateMesh(meshObject, RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
 }
 
-void Character::Update()
+void Character::Update(float frameRate)
 {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 
@@ -385,7 +385,7 @@ void Character::Update()
 		if (keys[SDL_SCANCODE_M]) characterState = ATTACKING;
 	}*/
 
-	Animate();
+	Animate(frameRate);
 	RegenMana();
 	//if (combatInstance == NULL)
 	//	cout << " FSAFAS HIHIHIH 2222 ";

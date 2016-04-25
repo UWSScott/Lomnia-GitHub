@@ -120,10 +120,10 @@ void PlayableCharacter::Input()
 	}
 }
 
-void PlayableCharacter::Update(Camera* camera)
+void PlayableCharacter::Update(float frameRate, Camera* camera)
 {
 	Input();
-	Animate();
+	Animate(frameRate);
 	RegenMana();
 
 	if (camera != NULL)

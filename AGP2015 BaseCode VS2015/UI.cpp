@@ -64,7 +64,7 @@ void UI::loadRect() {
 	meshObjects = modelInfo->model;
 	meshIndexCount = modelInfo->meshCount;
 
-	modelInfo = Resource_Managment->LoadObject("Models/sphere.obj");
+	//modelInfo = Resource_Managment->LoadObject("Models/cube.obj");
 
 	arrowObjects = modelInfo->model;
 	arrowIndexCount = modelInfo->meshCount;

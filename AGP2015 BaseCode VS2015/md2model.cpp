@@ -42,26 +42,10 @@
 #include "stdafx.h" //http://sourceforge.net/p/wpbdc/website/ci/master/tree/Judge/StdAfx.h
 
 float frameRateModifier = 1;
-int CalculateFrameRate()
-{
-	static float framesPerSecond = 0.0f;       // This will store our fps
-	static float lastTime = 0.0f;       // This will hold the time from the last frame
-	float currentTime = GetTickCount() * 0.001f;
-	++framesPerSecond;
-	if (currentTime - lastTime > 1.0f)
-	{
-		lastTime = currentTime;
-		int currentFrames = (int)framesPerSecond;
-		//if (1 == 1) fprintf(stderr, "\nCurrent Frames Per Second: %d\n\n", (int)framesPerSecond);
-		framesPerSecond = 0;
-		return currentFrames;
-	}
-	return -1;
-}
 
-void GetAnimationSpeed()
+void GetAnimationSpeed(float frameRate)
 {
-	int frameRate = CalculateFrameRate();
+	//int frameRate = CalculateFrameRate();
 	//std::cout << "Current frameRate: : " << frameRate << std::endl;
 	if (frameRate >= 60)
 	{
@@ -69,11 +53,11 @@ void GetAnimationSpeed()
 	} else if (frameRate >= 45) {
 		frameRateModifier = 1.40;
 	} else if (frameRate >= 30) {
-		frameRateModifier = 1.75;
+		frameRateModifier = 1.50;
 	} else if (frameRate >= 15) {
-		frameRateModifier = 1.00;
+		frameRateModifier = 1.80;
 	} else {
-		frameRateModifier = 1.75;
+		frameRateModifier = 2.00;
 	}
 }
 
@@ -352,9 +336,9 @@ void md2model::FreeModel ()
 * and next frame = current frame + 1
 */
 
-void md2model::Animate (int animation, float dt)
+void md2model::Animate (int animation, float dt, float frameRate)
 {
-	GetAnimationSpeed();
+	GetAnimationSpeed(frameRate);
 	int start = animFrameList[animation * 2];
 	int end =  animFrameList[animation * 2 + 1];
 	if ((currentFrame < start) || (currentFrame > end))

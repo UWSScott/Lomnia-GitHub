@@ -102,8 +102,8 @@ public:
 	Character(string s_characterName, char *modelName, char *textureName, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram);
 	Character(string s_characterName, MD2Holder* modelInfo, TextureHolder* textureInfo, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram);
 	Character(string s_characterName, MD2Holder* modelInfo, TextureHolder* textureInfo, glm::vec3 s_scale, glm::vec3 s_position, GLuint s_shaderprogram, int s_health, int s_strength, int s_speed, int s_defence);
-	virtual void Update();
-	virtual void Animate();
+	virtual void Update(float frameRate);
+	virtual void Animate(float frameRate);
 	virtual void Damage(float damageValue) { health -= damageValue; };
 	virtual void InitalStats(GLuint setShaderProgram);
 	virtual void LevelUp();
