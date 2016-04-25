@@ -70,7 +70,7 @@ bool pressedButton = false;
 GLuint shaderProgram;
 GLuint skyboxProgram;
 
-enum GameStates { COMBAT, HUB, MAZE }; // Game states
+enum GameStates { COMBAT, HUB, MAZE, MENU }; // Game states
 GameStates gameState;
 int gameStateInt = 0;
 
@@ -432,7 +432,7 @@ void init(void)
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		cout << " ERROR ;";
 
-	gameState = HUB; // Game starts in hub area by default
+	gameState = MENU; // Game starts in hub area by default
 
 	shaderProgram = rt3d::initShaders("phong-tex.vert", "phong-tex.frag");
 	rt3d::setLight(shaderProgram, light0);
@@ -458,11 +458,11 @@ void init(void)
 	textures[5] = loadBitmap("Models/Textures/mana texture.bmp");
 
 	ui->loadRect();
-	text[0] = ui->createTexture("Ahh, the mighty Arnould the wild!", textFont);
-	text[1] = ui->createTexture("Your challenger this time is the raging beast known as fred!", textFont);
-	text[2] = ui->createTexture("Welcome to the shop.", textFont);
-	names[0] = ui->createTexture("Ian:", textFont);
-	button[0] = ui->createTexture("G", textFont);
+	text[0] = ui->createTexture("Ahh, the mighty Arnould the wild!");
+	text[1] = ui->createTexture("Your challenger this time is the raging beast known as fred!");
+	text[2] = ui->createTexture("Welcome to the shop.");
+	names[0] = ui->createTexture("Ian:");
+	button[0] = ui->createTexture("G");
 
 	/*static_character[0] = new Character("Arnold", "Models/walker.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(1, 0, 0), shaderProgram);
 	static_character[1] = new Character("Arnold", "Models/ddz.MD2", "hobgoblin2.bmp", glm::vec3(1), glm::vec3(3, 0, 0), shaderProgram);
@@ -672,13 +672,13 @@ void update(void) {
 				}
 				if (i == 10) // colliding with shop
 				{
-					names[0] = ui->createTexture("Buy:", textFont);
+					names[0] = ui->createTexture("Buy:");
 					openShop = true;
 					buying = true;
 				}
 				else if (i == 11)
 				{
-					names[0] = ui->createTexture("Sell:", textFont);
+					names[0] = ui->createTexture("Sell:");
 					openShop = true;
 				}
 				else
@@ -740,7 +740,7 @@ void update(void) {
 			if (bronzeSilverGoldOption)
 			{
 
-				text[2] = ui->createTexture("1. Bronze 2. Silver 3. Gold ", textFont);
+				text[2] = ui->createTexture("1. Bronze 2. Silver 3. Gold ");
 
 
 				if (keys[SDL_SCANCODE_1]) // if bronze
@@ -803,7 +803,7 @@ void update(void) {
 			if (lightMediumStrongOption)
 			{
 
-				text[2] = ui->createTexture("1. Light 2. Medium 3. Strong", textFont);
+				text[2] = ui->createTexture("1. Light 2. Medium 3. Strong");
 				if (keys[SDL_SCANCODE_1]) // if light
 				{
 					if (buying)
@@ -863,7 +863,7 @@ void update(void) {
 			{
 				if (!bronzeSilverGoldOption && !lightMediumStrongOption)
 				{
-					text[2] = ui->createTexture("1. Health Potion 2. Mana Potion 3. Sword 4.Axe 5.Knives", textFont);
+					text[2] = ui->createTexture("1. Health Potion 2. Mana Potion 3. Sword 4.Axe 5.Knives");
 
 					if (keys[SDL_SCANCODE_1]) // if health potion
 					{
@@ -1124,13 +1124,19 @@ void RenderScene(GLuint refShaderProgram) {
 
 			ui->textBox(text[2], -0.55, true, names[0]);
 		}
-
+		ui->statusBar(0.9, 0, (float)character->health / 200);
+		ui->statusBar(0.8, 1, (float)character->manaPool / 200);
 
 	}
 	else if (gameState == COMBAT)
 	{
 		if (currentPass == 1)
 			terrain->draw(mvStack.top(), refShaderProgram, currentPass);
+
+		ui->statusBar(0.9, 0, (float)character->health / 200);
+		ui->statusBar(0.8, 1, (float)character->manaPool / 200);
+		ui->button();
+		
 	}
 	else if (gameState == MAZE)
 	{
@@ -1139,6 +1145,11 @@ void RenderScene(GLuint refShaderProgram) {
 			terrain->draw(mvStack.top(), refShaderProgram, currentPass);
 		maze->draw(mvStack.top(), character, &Game_Camera, refShaderProgram, currentPass);
 
+		ui->statusBar(0.9, 0, (float)character->health / 200);
+		ui->statusBar(0.8, 1, (float)character->manaPool / 200);
+
+		ui->QuestMarker(mvStack.top(), refShaderProgram, character, Game_Maze_Characters);
+
 		/*for (int i = 0; i < Game_Maze_Characters.size(); i++)
 		{
 			if (Game_Maze_Characters[i]->health > 0)
@@ -1146,15 +1157,23 @@ void RenderScene(GLuint refShaderProgram) {
 		}*/
 
 	}
-	ui->button(button[0], 2);
+
+	else if (gameState == MENU) {
+		ui->mainMenu();
+		if (ui->triggerHub() == true) {
+			gameState = HUB;
+		}
+	}
+	
+	
 	//ui->textBox(text[0], -0.55, true, names[0]);
 	//ui->textBox(text[1], -0.75, false, names[0]);
 
 
 	//character->manaPool = 10;
-	ui->statusBar(0.9, 0, (float)character->health / 200);
-	ui->statusBar(0.8, 1, (float)character->manaPool / 200);
-	//ui->inventory();
+
+	//ui->inventory(character);
+
 	currentPass++;
 
 	// remember to use at least one pop operation per push...

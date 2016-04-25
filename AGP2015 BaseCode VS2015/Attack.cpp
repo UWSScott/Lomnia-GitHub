@@ -19,10 +19,12 @@ float C_Attack::AttackSpeed(Character* character)
 
 float C_Attack::damageCalc(Character& a, Character& b) //A is attacker, B is victim
 {
-	float res = b.ResSelect(resType); //Sets the resistance value according to the element of the attack being used (eg. fireRes for fire attacks)
-	int damage = (a.strength +  (rand() % maxDamage + minDamage)); //Damage is comprised of both statistic strength and the power of the weapon
+	int weaponPower = 1;
+	if (a.characterName == "Arnould")weaponPower = a.weapon->attackPower;
 
-	damage = (damage - b.defence)*res;
+	int damage = (a.strength + weaponPower + (rand() % maxDamage + minDamage)); //Damage is comprised of both statistic strength and the power of the weapon
+
+	damage = (damage - b.defence);
 	if (damage < 1)
 		damage = 1;
 	cout << attackText << " deals " << damage << " points of damage to " << b.characterName << "! " << endl << endl;

@@ -293,6 +293,15 @@ void Character::CombatAttacks()
 
 void Character::InitalStats(GLuint setShaderProgram) {}
 
+void Character::LevelUp()
+{
+	this->max_Health += 50;
+	this->max_Mana += 50;
+	this->strength += 5;
+	this->speed += 5;
+	this->defence += 10;
+}
+
 void Character::CheckCollision(Gameobject* s_gameobject, string idType)
 {
 
@@ -315,9 +324,14 @@ void Character::CheckCollision(Gameobject* s_gameobject, string idType)
 	
 	if (QuestGiver* d = dynamic_cast<QuestGiver*>(s_gameobject))
 	{
-		this->currentQuest = d->GetQuest(currentCompletedQuests);
+		//check quest and implement
+		if (currentQuest->status != 0)
+		{
+			currentCompletedQuests++;
+			this->currentQuest = d->GetQuest(currentCompletedQuests);
+			this->LevelUp();
+		}
 	}
-
 }
 
 void Character::Animate()
