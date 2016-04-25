@@ -605,7 +605,7 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void update(void) {
 
-	cout << " arn pos: " << character->position.x << "  y: " << character->position.y << " z: " << character->position.z << " rotation: " << character->rotation << endl;
+	//cout << " arn pos: " << character->position.x << "  y: " << character->position.y << " z: " << character->position.z << " rotation: " << character->rotation << endl;
 	gameStateInt = gameState;
 
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
@@ -1029,19 +1029,18 @@ void update(void) {
 		Game_Hub_Characters[i]->oldPosition = Game_Hub_Characters[i]->position;
 	}
 
-	if (keys[SDL_SCANCODE_R]) character->position.y += 0.1f;
-	if (keys[SDL_SCANCODE_F]) character->position.y -= 0.1f;
-	if (keys[SDL_SCANCODE_I]) lightPos.x += 0.1f;
-	if (keys[SDL_SCANCODE_K]) lightPos.x -= 0.1f;
-	if (keys[SDL_SCANCODE_J]) lightPos.z += 0.1f;
-	if (keys[SDL_SCANCODE_L]) lightPos.z -= 0.1f;
-	if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
-	if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
-	if (keys[SDL_SCANCODE_N]) character->inventory->AddRandomItem();
-	if (keys[SDL_SCANCODE_Q]) SpawnFinalBoss();
-
-	if (keys[SDL_SCANCODE_7]) gameState = HUB;
-	if (keys[SDL_SCANCODE_Y]) gameState = MAZE;
+	//if (keys[SDL_SCANCODE_R]) character->position.y += 0.1f;
+	//if (keys[SDL_SCANCODE_F]) character->position.y -= 0.1f;
+	//if (keys[SDL_SCANCODE_I]) lightPos.x += 0.1f;
+	//if (keys[SDL_SCANCODE_K]) lightPos.x -= 0.1f;
+	//if (keys[SDL_SCANCODE_J]) lightPos.z += 0.1f;
+	//if (keys[SDL_SCANCODE_L]) lightPos.z -= 0.1f;
+	//if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
+	//if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
+	//if (keys[SDL_SCANCODE_N]) character->inventory->AddRandomItem();
+	//if (keys[SDL_SCANCODE_Q]) SpawnFinalBoss();
+	//if (keys[SDL_SCANCODE_7]) gameState = HUB;
+	//if (keys[SDL_SCANCODE_Y]) gameState = MAZE;
 }
 
 
