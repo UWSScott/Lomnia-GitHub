@@ -29,10 +29,10 @@ public:
 		md2VertCount = modelInfo->md2VertCount;
 		texture = textureInfo->texture;
 
-		health = 70;
+		health = 15;
 		speed = 15;
-		strength = 15;
-		defence = 10;
+		strength = 5;
+		defence = 5;
 	};
 
 	~Minion() {};
@@ -73,9 +73,9 @@ public:
 		md2VertCount = modelInfo->md2VertCount;
 		texture = textureInfo->texture;
 
-		health = 125;
-		speed = 25;
-		strength = 25;
+		health = 50;
+		speed = 20;
+		strength = 15;
 		defence = 10;
 	};
 
@@ -115,9 +115,9 @@ public:
 		md2VertCount = modelInfo->md2VertCount;
 		texture = textureInfo->texture;
 
-		health = 250;
+		health = 170;
 		speed = 30;
-		strength = 40;
+		strength = 25;
 		defence = 15;
 	};
 
@@ -156,9 +156,9 @@ public:
 		md2VertCount = modelInfo->md2VertCount;
 		texture = textureInfo->texture;
 
-		health = 350;
+		health = 250;
 		speed = 35;
-		strength = 55;
+		strength = 35;
 		defence = 25;
 	};
 
