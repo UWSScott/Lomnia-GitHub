@@ -276,7 +276,9 @@ void MazeGenerator::Initialize(Cell Level[][SIZE], GLuint shaderProgram)
 			Level[i-1][j-1].bot_wall = true;
 			Level[i-1][j-1].left_wall = true;
 			Level[i-1][j-1].right_wall = true;
-			Maze_Tiles[i-1][j-1] = new MazePrefab(shaderProgram, prefab.getObject(), prefab.meshIndexCount, prefab.texture, glm::vec3(3, 1.6, 3), glm::vec3(i * 6, 0.5, j * 6));
+			int xPosition = i - 8;
+			int yPosition = j - 8;
+			Maze_Tiles[i-1][j-1] = new MazePrefab(shaderProgram, prefab.getObject(), prefab.meshIndexCount, prefab.texture, glm::vec3(3, 1.6, 3), glm::vec3(xPosition * 6, 0.5, yPosition * 6));
 			Game_Maze_Walls.push_back(Maze_Tiles[i - 1][j - 1]);
 		}
 	}
