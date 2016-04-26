@@ -17,6 +17,7 @@ public:
 	Weapon(string s_objectName, char *modelName, char *textureName, int s_cost, float s_damage, float s_speed, string s_type, int s_rarity, GLuint s_shaderprogram);
 	~Weapon() {};
 	virtual void InitalStats(GLuint s_shaderprogram);
+	void draw(glm::mat4 object, GLuint s_shaderUsed, int pass);
 	void draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimation, int playerRotation);
 	void draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimation, int playerRotation, GLuint s_shaderUsed, GLuint depthTexture, int pass);
 	bool getEquiped() { return equiped; }
@@ -34,5 +35,10 @@ protected:
 	GLuint md2VertCount = 0;
 	GLuint shaderProgram;
 	HSAMPLE *samples = NULL;
+
+	glm::vec3 modelAt;
+	glm::vec3 modelUp;
+
+	virtual glm::vec3 MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d);
 };
 #endif

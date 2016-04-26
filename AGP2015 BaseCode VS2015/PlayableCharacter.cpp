@@ -18,8 +18,8 @@ PlayableCharacter::PlayableCharacter(string s_characterName, char *modelName, ch
 	meshObject = tmpModel.ReadMD2Model(modelName);
 	md2VertCount = tmpModel.getVertDataSize() / 3;
 
-	//weapon = new Weapon("Scott's Saber", "Models/Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
-	weapon = new Sword(1); // starts with bronze sword. 
+	weapon = new Weapon("Scott's Saber", "Models/Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
+	//weapon = new Sword(1); // starts with bronze sword. 
 	weapon->setEquiped(true);
 
 	canDie = true;
@@ -161,6 +161,9 @@ void PlayableCharacter::draw(glm::mat4 object)
 
 void PlayableCharacter::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 {
+	//if (weapon != NULL && weapon->getEquiped())
+		weapon->draw(object, position, currentAnimation, rotation, s_shaderUsed, depthMapTexture, pass);
+
 	glUseProgram(s_shaderUsed);
 	glCullFace(GL_FRONT);
 	glActiveTexture(GL_TEXTURE1);
@@ -177,9 +180,6 @@ void PlayableCharacter::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
 	rt3d::setUniformMatrix4fv(s_shaderUsed, "modelview", glm::value_ptr(object));
 	rt3d::drawMesh(meshObject, md2VertCount, GL_TRIANGLES);
 	glCullFace(GL_BACK);
-
-	if (weapon != NULL && weapon->getEquiped())
-		weapon->draw(object, position, currentAnimation, rotation, s_shaderUsed, depthMapTexture, pass);
 }
 
 //void PlayableCharacter::CheckQuestGoal(Character *character)

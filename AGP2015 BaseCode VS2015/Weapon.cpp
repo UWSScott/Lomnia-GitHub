@@ -1,5 +1,10 @@
 #include "Weapon.h"
 
+glm::vec3 Weapon::MoveForward(glm::vec3 cam, GLfloat angle, GLfloat d)
+{
+	return glm::vec3(cam.x + d*std::sin(angle*DEG_TO_RAD), cam.y, cam.z - d*std::cos(angle*DEG_TO_RAD));
+}
+
 Weapon::Weapon(string s_objectName, char *modelName, char *textureName, int s_cost, float s_damage, float s_speed, string s_type, int s_rarity, GLuint s_shaderprogram)
 {
 	collisionName = s_objectName;
@@ -11,6 +16,8 @@ Weapon::Weapon(string s_objectName, char *modelName, char *textureName, int s_co
 		{ 1.0f, 0.8f, 0.8f, 1.0f }, // specular
 		2.0f  // shininess
 	};
+
+	equiped = true;
 
 	scale = glm::vec3(1, 1, 1);
 	//position = glm::vec3(3, 3, 3);
@@ -27,9 +34,9 @@ Weapon::Weapon(string s_objectName, char *modelName, char *textureName, int s_co
 	samples[3] = fileLoader->loadSample("Sound/Win.wav");*/
 	delete fileLoader;
 
-	//meshObject = tmpModel.ReadMD2Model("arnould.MD2");
+	meshObject = tmpModel.ReadMD2Model("arnould.MD2");
 	//md2VertCount = tmpModel.getVertDataSize();
-	meshObject = tmpModel.ReadMD2Model("Partical_sword.md2");
+	//meshObject = tmpModel.ReadMD2Model("Models/Partical_sword.MD2"); //"Partical_sword.md2");
 	md2VertCount = tmpModel.getVertDataCount();
 }
 
@@ -63,6 +70,8 @@ void Weapon::InitalStats(GLuint s_shaderprogram)
 //Weapon isn't drawing correctly now?... TODO: fix.
 void Weapon::draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimation, int playerRotation)
 {
+
+	//cout << " DRAWING fkdsjfkasjfaskfasdk32432432 position: " << playerPosition.x << " " << playerPosition.y << " " << playerPosition.z << endl;
 
 	glUseProgram(shaderProgram);
 	glCullFace(GL_FRONT);
@@ -111,8 +120,33 @@ void Weapon::draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimati
 	glCullFace(GL_BACK);
 }
 
+void Weapon::draw(glm::mat4 object, GLuint s_shaderUsed, int pass)
+{
+	glUseProgram(s_shaderUsed);
+	glCullFace(GL_FRONT);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, depthMapTexture);
+
+	//glBindTexture(GL_TEXTURE_2D, texture);
+	modelAt = MoveForward(position, rotation, 1.0f);
+	object = glm::translate(object, MoveForward(position, rotation, 1.0f));
+	object = glm::rotate(object, float((90.0f - rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
+	object = glm::scale(object, glm::vec3(scale.x, scale.y, scale.z));
+	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
+
+	rt3d::setUniformMatrix4fv(s_shaderUsed, "modelview", glm::value_ptr(object));
+	rt3d::drawMesh(meshObject, md2VertCount / 3, GL_TRIANGLES);
+
+	glCullFace(GL_BACK);
+}
+
 void Weapon::draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimation, int playerRotation, GLuint s_shaderUsed, GLuint depthTexture, int pass)
 {
+
+	//cout << " DRAWING position: " << playerPosition.x << " " << playerPosition.y << " " << playerPosition.z << endl;
+
 	glUseProgram(s_shaderUsed);
 	glCullFace(GL_FRONT);
 	glActiveTexture(GL_TEXTURE1);
@@ -125,7 +159,6 @@ void Weapon::draw(glm::mat4 object, glm::vec3 playerPosition, int currentAnimati
 	object = glm::scale(object, scale* glm::vec3(0.05));
 	object = glm::rotate(object, float(90.0f*DEG_TO_RAD), glm::vec3(-1.0f, 0.0f, 0.0f));
 	object = glm::scale(object, scale);
-
 
 	rt3d::setUniformMatrix4fv(s_shaderUsed, "modelview", glm::value_ptr(object));
 	rt3d::drawMesh(meshObject, md2VertCount / 3, GL_TRIANGLES);

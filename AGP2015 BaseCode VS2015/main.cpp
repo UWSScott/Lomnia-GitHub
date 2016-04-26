@@ -214,6 +214,9 @@ Skybox* skyboxTest;
 MazeGenerator* maze;
 Prefab* houseTest;// = new Prefab();
 Terrain* terrain;// = new Terrain();
+Weapon* testWeapon;
+//weapon = new Weapon("Scott's Saber", "Models/Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
+//weapon->setEquiped(true);
 
 GLuint normalShadowProgram;
 GLuint realShadowShader;
@@ -496,6 +499,10 @@ void init(void)
 	Game_Camera.InitalStats();
 	character->InitalStats(shaderProgram);
 
+	testWeapon = new Weapon("Scott's Saber", "Models/Partical_sword.MD2", "hobgoblin2.bmp", 0, 5, 5, "SWORD", 1, shaderProgram);
+	testWeapon->setEquiped(true);
+	character->weapon = testWeapon;
+
 	houseTest = new Prefab(shaderProgram, "cube.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(500.0, 0.1, 500.0), glm::vec3(0, 0, 0));
 	terrain = new Terrain(shaderProgram, "Models/Desert_Terrain_New_Low.obj", "Models/Textures/Terrain_Sand.bmp", glm::vec3(1, 1, 1), glm::vec3(300, 0, -300), 0);
 
@@ -613,7 +620,7 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void update(void) {
 	CalculateFrameRate();
-	cout << frameRate << endl;
+	
 	//cout << " arn pos: " << character->position.x << "  y: " << character->position.y << " z: " << character->position.z << " rotation: " << character->rotation << endl;
 	gameStateInt = gameState;
 
@@ -637,7 +644,7 @@ void update(void) {
 
 	if (gameState == HUB)
 	{
-		if (character->currentQuest->name = "Free Lomnia")
+		if (character->currentQuest->name == "Free Lomnia")
 		{
 			if (bossSpawn == false)
 			{
@@ -987,7 +994,7 @@ void update(void) {
 	//if (keys[SDL_SCANCODE_N]) character->inventory->AddRandomItem();
 	//if (keys[SDL_SCANCODE_Q]) SpawnFinalBoss();
 	//if (keys[SDL_SCANCODE_7]) gameState = HUB;
-	//if (keys[SDL_SCANCODE_Y]) gameState = MAZE;
+	if (keys[SDL_SCANCODE_Z]) cout << frameRate << endl;
 }
 
 
@@ -1066,6 +1073,9 @@ void RenderScene(GLuint refShaderProgram) {
 			Game_Hub_Characters_Shop[i]->draw(mvStack.top());
 		}
 
+		//character->weapon->draw(mvStack.top(), character->position, character->currentAnimation, character->rotation, refShaderProgram, depthMap, currentPass);
+		//testWeapon->draw(mvStack.top(), refShaderProgram, currentPass);
+
 		if (openShop)
 		{
 
@@ -1078,12 +1088,9 @@ void RenderScene(GLuint refShaderProgram) {
 	else if (gameState == COMBAT)
 	{
 		if (currentPass == 1)
+		{
 			terrain->draw(mvStack.top(), refShaderProgram, currentPass);
-
-		ui->statusBar(0.9, 0, (float)character->health / 200);
-		ui->statusBar(0.8, 1, (float)character->manaPool / 200);
-		ui->button();
-		
+		}
 	}
 	else if (gameState == MAZE)
 	{
@@ -1112,6 +1119,12 @@ void RenderScene(GLuint refShaderProgram) {
 		}
 	}
 	
+	if (character->inCombat)
+	{
+		ui->statusBar(0.9, 0, (float)character->health / 200);
+		ui->statusBar(0.8, 1, (float)character->manaPool / 200);
+		ui->button();
+	}
 	
 	//ui->textBox(text[0], -0.55, true, names[0]);
 	//ui->textBox(text[1], -0.75, false, names[0]);
@@ -1151,6 +1164,7 @@ void draw(SDL_Window * window)
 	terrain->SetDepthMap(depthMap);
 	//shadow_Debug->SetDepthMap(depthMap);
 	character->SetDepthMap(depthMap);
+	testWeapon->SetDepthMap(depthMap);
 
 	if (gameState == HUB)
 	{
