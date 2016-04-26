@@ -1,6 +1,9 @@
 #include "Character.h"
 #include "Prefab.h"
 #include "EnemyType.h"
+#include <cmath>
+
+#define PI 3.14159265
 
 struct MostDamageSort {
 	MostDamageSort(Character& character) { this->character = character; }
@@ -436,17 +439,48 @@ void Character::MoveToPlayer(Character* character)
 
 void Character::RotateToFace(Gameobject* s_gameObject)
 {
-	//cos A = glm::DotProduct(v1, v2) / (Length(v1) * Length(v2))
-	glm::vec3 thisC = glm::normalize(this->position);
-	glm::vec3 GameC = glm::normalize(s_gameObject->position);
-	////float temprotation = (glm::dot(thisC, GameC) / glm::length(thisC) * glm::length(GameC));
-	////glm::vec3 newPosition = glm::cross(thisC, GameC);
-	////newPosition * temprotation;
-	////glm::mat4 thingy;
+	int xNonAbs = s_gameObject->position.x - this->position.x;
+	int zNonAbs = s_gameObject->position.z - this->position.z;
+	int tempxRelative = abs(xNonAbs);
+	int tempzRelative = abs(zNonAbs);
+	float xRelative = tempxRelative;
+	float zRelative = tempzRelative;
 
 
-	rotation = acos((glm::dot(thisC, GameC)) / (glm::length(thisC) * glm::length(GameC)));
-	rotation = rotation * 180 / 3.14;
+	if (xRelative == 0 || zRelative == 0)
+		return;
+
+	float difference = (zRelative / xRelative);
+	float rotationRelative = 0;
+
+	int modifierValue = 0;
+	if (xNonAbs > 0 && zNonAbs > 0)
+		rotationRelative = 90 + ((atan(difference) * 180 / PI));
+	else if (xNonAbs > 0 && zNonAbs < 0)
+		rotationRelative = modifierValue + (90 - (atan(difference) * 180 / PI));
+	else if (xNonAbs < 0 && zNonAbs < 0)
+		rotationRelative = 270 + ((atan(difference) * 180 / PI));
+	else if (xNonAbs < 0 && zNonAbs > 0)
+		rotationRelative = 180 + (90 - (atan(difference) * 180 / PI));
+
+
+	//cout << characterName << " rotation: " << rotationRelative << " difference: " << difference << " modifier: " << modifierValue << " xNon: " << xNonAbs << " zNon: " << zNonAbs << "xRel: " << xRelative << " zRelative: " << zRelative << endl;
+	rotation = rotationRelative;
+
+	//glm::vec3 RelativePosition = s_gameObject->position - this->position;
+
+
+	////cos A = glm::DotProduct(v1, v2) / (Length(v1) * Length(v2))
+	//glm::vec3 thisC = glm::normalize(this->position);
+	//glm::vec3 GameC = glm::normalize(s_gameObject->position);
+	//////float temprotation = (glm::dot(thisC, GameC) / glm::length(thisC) * glm::length(GameC));
+	//////glm::vec3 newPosition = glm::cross(thisC, GameC);
+	//////newPosition * temprotation;
+	//////glm::mat4 thingy;
+
+
+	//rotation = acos((glm::dot(thisC, GameC)) / (glm::length(thisC) * glm::length(GameC)));
+	//rotation = rotation * 180 / 3.14;
 	//cout << characterName <<  " rotations: " << rotation << endl;
 
 	////rotation = glm::acos(temprotation);

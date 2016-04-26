@@ -557,7 +557,7 @@ void init(void)
 	Game_Hub_Characters.push_back(new Character("AI_3", Resource_Managment->LoadMD2("Models/pogo_buny.MD2"), Resource_Managment->LoadTexture("Models/Textures/Chain_Link.bmp"), glm::vec3(1), glm::vec3(20, 1.2, 25), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_4", Resource_Managment->LoadMD2("Models/dragon.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(15, 1.2, 20), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("END_BOSS", Resource_Managment->LoadMD2("Models/faerie.MD2"), Resource_Managment->LoadTexture("Models/Textures/God_World.bmp"), glm::vec3(1), glm::vec3(13, 1.8, -19.7), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("AI_6", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/White_Fur.bmp"), glm::vec3(1), glm::vec3(30, 1.2, -10), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("ORGO", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/White_Fur.bmp"), glm::vec3(1), glm::vec3(30, 1.2, -10), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_7", Resource_Managment->LoadMD2("Models/centaur.MD2"), Resource_Managment->LoadTexture("Models/Textures/Blue_Leather.bmp"), glm::vec3(1), glm::vec3(30, 1.2, 10), shaderProgram));
 	Game_Hub_Characters.push_back(new QuestGiver(Resource_Managment->LoadMD2("Models/blade.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(5, 1.2, -10), shaderProgram));
 	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/zf19.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(15, 1.2, -10), shaderProgram));
@@ -571,8 +571,8 @@ void init(void)
 	Game_Hub_Characters[4]->rotation = 90;
 
 	//shop guys
-	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(18, 1.3, 71.5), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(0.8), glm::vec3(106, 1.1, -8.1), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_10", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(18, 1.3, 71.5), shaderProgram));
+	Game_Hub_Characters.push_back(new Character("AI_11", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(0.8), glm::vec3(106, 1.1, -8.1), shaderProgram));
 	Game_Hub_Characters[10]->rotation = -93;
 
 	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
@@ -961,8 +961,8 @@ void update(void) {
 		Game_Hub_Characters[i]->oldPosition = Game_Hub_Characters[i]->position;
 	}
 
-	if (keys[SDL_SCANCODE_R]) character->position.y += 0.1f;
-	if (keys[SDL_SCANCODE_F]) character->position.y -= 0.1f;
+	//if (keys[SDL_SCANCODE_R]) character->position.y += 0.1f;
+	//if (keys[SDL_SCANCODE_F]) character->position.y -= 0.1f;
 	//if (keys[SDL_SCANCODE_I]) lightPos.x += 0.1f;
 	//if (keys[SDL_SCANCODE_K]) lightPos.x -= 0.1f;
 	//if (keys[SDL_SCANCODE_J]) lightPos.z += 0.1f;
