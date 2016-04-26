@@ -22,7 +22,10 @@ float C_Attack::damageCalc(Character& a, Character& b) //A is attacker, B is vic
 	int weaponPower = 1;
 	if (a.characterName == "Arnould")weaponPower = a.weapon->attackPower;
 
-	int damage = (a.strength + weaponPower + (rand() % (maxDamage-minDamage) + minDamage)); //Damage is comprised of both statistic strength and the power of the weapon
+	int variance = maxDamage - minDamage;
+	if (variance < 1) variance = 1;
+
+	int damage = (a.strength + weaponPower + (rand() % (variance) + minDamage)); //Damage is comprised of both statistic strength and the power of the weapon
 
 	damage = (damage - b.defence);
 	if (damage < 1)
