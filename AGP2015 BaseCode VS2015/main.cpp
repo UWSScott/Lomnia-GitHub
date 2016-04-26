@@ -637,7 +637,7 @@ void update(void) {
 
 	if (gameState == HUB)
 	{
-		if (character->currentQuest->name = "Free Lomnia")
+		if (character->currentQuest->name == "Free Lomnia")
 		{
 			if (bossSpawn == false)
 			{
