@@ -572,8 +572,8 @@ void init(void)
 
 	//shop guys
 	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(1), glm::vec3(18, 1.3, 71.5), shaderProgram));
-	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(0.8), glm::vec3(106, 1.1, -7.5), shaderProgram));
-	Game_Hub_Characters[10]->rotation = 93;
+	Game_Hub_Characters.push_back(new Character("AI_9", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Gold_Skin.bmp"), glm::vec3(0.8), glm::vec3(106, 1.1, -8.1), shaderProgram));
+	Game_Hub_Characters[10]->rotation = -93;
 
 	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_1", Resource_Managment->LoadMD2("Models/ripper.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
 	//Game_Maze_Characters.push_back(new Minion("MAZE_AI_2", Resource_Managment->LoadMD2("Models/ogro.MD2"), Resource_Managment->LoadTexture("Models/Textures/Bronze_Skin.bmp"), glm::vec3(1), glm::vec3(50, 1.2, -30), shaderProgram));
@@ -739,9 +739,9 @@ void update(void) {
 		}
 
 			Game_Hub_Characters[9]->position[2] = 74;
-			Game_Hub_Characters[10]->position[0] = 104;
-			Game_Hub_Characters[10]->position[1] = 1.7;
-			Game_Hub_Characters[10]->position[2] = -3.8;
+			Game_Hub_Characters[10]->position[0] = 105.5;
+			Game_Hub_Characters[10]->position[1] = 1.9;
+			Game_Hub_Characters[10]->position[2] = -4;
 			//107, 1.1, -8.2
 			
 			if (bronzeSilverGoldOption)
@@ -788,23 +788,6 @@ void update(void) {
 
 					openShop = false;
 				}
-
-				if (openShop == false) // if shop closed, stop music and return camera to normal 
-				{
-					character->status = STATE_NORMAL;
-					shopMusicPlaying = false;
-					bronzeSilverGoldOption = false;
-					character->inventory->show();
-					Game_Hub_Characters[9]->position[2] = 71;
-
-					Game_Hub_Characters[10]->position[0] = 106;
-					Game_Hub_Characters[10]->position[2] = -7.5;
-					Game_Hub_Characters[10]->position[1] = 1.1;
-	
-
-					buying = false; 
-					
-				}
 			}
 
 			if (lightMediumStrongOption)
@@ -850,20 +833,6 @@ void update(void) {
 					openShop = false;
 				}
 
-				if (openShop == false) // if shop closed, stop music and return camera to normal 
-				{
-					character->status = STATE_NORMAL;
-					shopMusicPlaying = false;
-					lightMediumStrongOption = false;
-					Game_Hub_Characters[9]->position[2] = 71;
-
-					Game_Hub_Characters[10]->position[0] = 106;
-					Game_Hub_Characters[10]->position[2] = -7.5;
-					Game_Hub_Characters[10]->position[1] = 1.1;
-					buying = false; 
-					//		character->inventory->show();
-				}
-
 			}
 
 			if (openShop)
@@ -900,71 +869,27 @@ void update(void) {
 						bronzeSilverGoldOption = true;
 						item = "Knives";
 					}
+					else if (keys[SDL_SCANCODE_ESCAPE]) // closes shop if Esc key is pressed
+					{
+						openShop = false;
+					}
 
 				}
 
 			}
+			if (openShop == false) // if shop closed, stop music and return camera to normal 
+			{
+				character->status = STATE_NORMAL;
+				shopMusicPlaying = false;
+				lightMediumStrongOption = false;
+				Game_Hub_Characters[9]->position[2] = 71;
+
+				Game_Hub_Characters[10]->position[0] = 106;
+				Game_Hub_Characters[10]->position[2] = -8.1;
+				Game_Hub_Characters[10]->position[1] = 1.1;
+				buying = false;
+			}
 		
-		//else // if buying is false but shop is open, must be selling
-		//{
-		//	if (sellPotion)
-		//	{
-
-		//		text[2] = ui->createTexture("1. Light 2. Medium 3. Strong", textFont);
-		//		if (keys[SDL_SCANCODE_1]) // if light
-		//		{
-		//			character->inventory->buyItem(item, POTION_POTENCY_LIGHT);
-
-		//			openShop = false;
-		//		}
-
-		//		if (openShop == false) // if shop closed, stop music and return camera to normal 
-		//		{
-		//			character->status = STATE_NORMAL;
-		//			shopMusicPlaying = false;
-		//			lightMediumStrongOption = false;
-		//			Game_Hub_Characters[9]->position[2] = 71;
-		//			buying = false;
-		//			//		character->inventory->show();
-		//		}
-
-		//	}
-		//	if (!sellPotion)
-		//	{
-		//	//	Game_Hub_Characters[10]->position[0] = 109;
-		//		text[2] = ui->createTexture("1. Sell Potion  2. Sell Weapon 3. Sell All ", textFont);
-		//		if (keys[SDL_SCANCODE_1])
-		//		{
-		//			sellPotion = true; 
-		//			//if have health potion
-		//			//show can sell health potion
-		//	//		Item test = character->inventory->FindItem("HealthPotion"); 
-
-		//			if ((character->inventory->hasItem("HealthPotion")) && (character->inventory->hasItem("ManaPotion")))
-		//			{
-
-		//				text[2] = ui->createTexture("1. Sell health potion 2. Sell Mana Potion", textFont);
-
-		//			}
-		//			else if (character->inventory->hasItem("ManaPotion"))
-		//			{
-		//				text[2] = ui->createTexture("2. Sell Mana Potion", textFont);
-		//			}
-		//			else if (character->inventory->hasItem("HealthPotion"))
-		//			{
-		//				text[2] = ui->createTexture("2. Sell Health Potion", textFont);
-		//			}
-
-		//		}
-		//		if (keys[SDL_SCANCODE_2])
-		//		{
-		//			openShop = false;
-		//			character->status = STATE_NORMAL;
-		//			shopMusicPlaying = false;
-		//			Game_Hub_Characters[10]->position[0] = 107;
-		//		}
-		//	}
-		//}
 	}
 	else if (gameState == COMBAT)
 	{
