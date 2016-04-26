@@ -97,6 +97,7 @@ bool bronzeSilverGoldOption = false;
 bool lightMediumStrongOption = false; 
 bool buying = false; 
 bool sellPotion = false; 
+bool bossSpawn = false;
 string item;
 
 
@@ -623,12 +624,27 @@ void update(void) {
 
 	if (character->health < 1)
 	{
-		character->Respawn();
-		gameState = HUB;
+		if (character->currentQuest->name == "Free Lomnia")
+		{
+			//Game over - Credits
+		}
+		else
+		{
+			character->Respawn();
+			gameState = HUB;
+		}
 	}
 
 	if (gameState == HUB)
 	{
+		if (character->currentQuest->name = "Free Lomnia")
+		{
+			if (bossSpawn == false)
+			{
+				SpawnFinalBoss();
+				bossSpawn = true;
+			}
+		}
 		for (int i = 0; i < Game_Hub_Characters.size(); i++)
 		{
 			//Game_Hub_Characters[i]->RotateToFace(character);
@@ -691,7 +707,6 @@ void update(void) {
 				else
 				{
 					openShop = false;
-
 				}
 
 			}
