@@ -7,7 +7,7 @@ UI::UI()
 }
 
 
-GLuint UI::textToTexture(const char * str, GLuint textID, TTF_Font *font /*SDL_Color colour, GLuint &w,GLuint &h */) {
+GLuint UI::textToTexture(const char * str, GLuint textID/*, TTF_Font *font SDL_Color colour, GLuint &w,GLuint &h */) {
 	//TTF_Font *textFont = font;
 	SDL_Color colour = { 255, 0, 255 };
 	SDL_Color bg = { 0, 0, 0 };
@@ -64,6 +64,12 @@ void UI::loadRect() {
 	meshObjects = modelInfo->model;
 	meshIndexCount = modelInfo->meshCount;
 
+	//modelInfo = Resource_Managment->LoadObject("Models/cube.obj");
+
+	arrowObjects = modelInfo->model;
+	arrowIndexCount = modelInfo->meshCount;
+
+
 
 	if (TTF_Init() == -1)
 		cout << "TTF failed to initialise." << endl;
@@ -87,6 +93,9 @@ void UI::loadRect() {
 	TextureInfo = Resource_Managment->LoadTexture("Models/Textures/Button.bmp");
 	textures[4] = TextureInfo->texture;
 
+	TextureInfo = Resource_Managment->LoadTexture("Models/Textures/Logo.bmp");
+	textures[5] = TextureInfo->texture;
+
 	TextureInfo = Resource_Managment->LoadTexture("Models/Textures/Button_Light_Attack.bmp");
 	Buttons[0] = TextureInfo->texture;
 
@@ -108,26 +117,25 @@ void UI::loadRect() {
 
 	inventoryInfo = new Inventory;
 
-	arnould = new PlayableCharacter;
-	arnould->inventory->AddRandomItem();
-	arnould->inventory->AddRandomItem();
-	arnould->inventory->AddRandomItem();
-	arnould->inventory->AddRandomItem();
-	arnould->inventory->AddRandomItem();
-	//inventoryInfo->AddRandomItem();
-	//inventoryInfo->AddRandomItem();
-	//inventoryInfo->AddRandomItem();
-	//inventoryInfo->AddRandomItem();
-	//inventoryInfo->AddRandomItem();
-	//inventoryInfo->AddRandomItem();
+	titles[0] = createTexture("Quests");
+	titles[1] = createTexture("Inventory");
+
+	questText[3] = createTexture("Name: ");
+	questText[4] = createTexture("Description: ");
+	questText[5] = createTexture("Reward: ");
+
+	const Uint8 *keys = SDL_GetKeyboardState(NULL);
+
+	menuText[0] = createTexture("Start");
+	menuText[1] = createTexture("Quit");
 
 
 
 }
 
-int UI::createTexture(const char * str, TTF_Font *font) {
+int UI::createTexture(const char * str) {
 	GLuint text = 0;
-	text = textToTexture(str, text, font);
+	text = textToTexture(str, text);
 	return text;
 
 }
@@ -142,7 +150,7 @@ void UI::textBox(GLuint text, GLfloat y, bool drawBox, int nameText) {
 	glUseProgram(shaderProgram);//Use texture-only shaderProgram for text rendering
 	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
 							 //labels[0] = ui->textToTexture("work();", labels[0], textFont);
-	glm::mat4 stack = glm::mat4(1.0);
+	stack = glm::mat4(1.0);
 	if (drawBox)
 	{
 
@@ -180,14 +188,49 @@ void UI::textBox(GLuint text, GLfloat y, bool drawBox, int nameText) {
 
 }
 
-void UI::button(GLuint button, GLuint time) {
+int UI::updateButton() {
+	int x = 80;
+	int y = 480;
+
+	while (SDL_PollEvent(&event))
+	{
+
+		/* If a button on the mouse is pressed. */
+		if (event.type == SDL_MOUSEBUTTONDOWN)
+		{
+
+			/* If the left button was pressed. */
+			if (event.button.button == SDL_BUTTON(SDL_BUTTON_LEFT))
+			{
+
+				cout << event.button.x << "    " << event.button.y << endl;
+				for (int i = 0; i < 5; i++)
+				{
+					if (event.button.x > x && event.button.x < x + 80 && event.button.y > y && event.button.y < y + 60)
+					{
+						return i += 1;
+						cout << "what" << endl;
+					}
+
+					x += 80;
+					//y += 60;
+					//cout << x << "   " << y << endl;
+				}
+
+			}
+
+		}
+	}
+}
+
+void UI::button() {
 
 
 	glUseProgram(shaderProgram);//Use texture-only shaderProgram for text rendering
 	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
 
 	for (GLfloat i = 0; i < 5; i++) {
-		glm::mat4 stack = glm::mat4(1.0);
+		stack = glm::mat4(1.0);
 		stack = glm::translate(stack, glm::vec3(-0.7 + (i / 5), -0.7, 0.0f));
 		stack = glm::scale(stack, glm::vec3(0.1f, 0.1f, 0.0f));
 		rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
@@ -196,34 +239,34 @@ void UI::button(GLuint button, GLuint time) {
 		rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
 	}
 
-	if (keys[SDL_SCANCODE_1]) combat->Input(new LightAttack());
-	if (keys[SDL_SCANCODE_2]) combat->Input(new HeavyAttack());
-	if (keys[SDL_SCANCODE_3]) combat->Input(new Poison());
-	if (keys[SDL_SCANCODE_4]) combat->Input(new Stun());
-	if (keys[SDL_SCANCODE_5]) combat->Input(new Flee());
+	int attack = updateButton();
 
+	if (attack == 1) combat->Input(&LightAttack());
+	if (attack == 2) combat->Input(&HeavyAttack());
+	if (attack == 3) combat->Input(&Poison());
+	if (attack == 4) combat->Input(&Stun());
+	if (attack == 5) combat->Input(&Flee());
 
+	glEnable(GL_DEPTH_TEST);
 
 	/////////out puting the queued attacks//////////
 
-	//std::vec<C_Attack>::iterator itt = combat->queuedAttacks.begin();
+	/*std::vector<C_Attack>::iterator itt = combat->queuedAttacks.begin();
 	list<int> displayQueue = list<int>();
 	std::list<int>::iterator itt2 = displayQueue.begin();
 
 
 
 
-	//for (itt = combat->queuedAttacks.begin(); itt != combat->queuedAttacks.end(); itt++) {
-	for (auto&& combat_Attack : combat->queuedAttacks) {
+	for (auto&& combat_Attack : combat->queuedAttacks) {*/
 		//cout << itt->attackText << " ";
 
+
+		
+
+
+
 		/////////////////Code for queued attack list display thing////////////////
-
-
-
-
-
-
 
 		//	int texture = combat->queuedAttacks.size();
 
@@ -272,7 +315,7 @@ void UI::button(GLuint button, GLuint time) {
 
 		//}
 
-		glEnable(GL_DEPTH_TEST);
+
 
 
 
@@ -341,15 +384,16 @@ void UI::button(GLuint button, GLuint time) {
 
 
 
-		//glEnable(GL_DEPTH_TEST);
-	}
+	//}
 
 }
+
+
 void UI::statusBar(GLfloat y, GLuint healthBool, float health) {
 	glUseProgram(shaderProgram);//Use texture-only shaderProgram for text rendering
 	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
 
-	glm::mat4 stack = glm::mat4(1.0);
+	stack = glm::mat4(1.0);
 	stack = glm::translate(stack, glm::vec3(-0.4f, y, 0.0f));
 	stack = glm::scale(stack, glm::vec3(0.51f, 0.04f, 0.0f));
 	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
@@ -372,61 +416,273 @@ void UI::statusBar(GLfloat y, GLuint healthBool, float health) {
 }
 
 
-void UI::updateInven() {
-
-	int j = 0;
+void UI::updateInven(PlayableCharacter *arnould) {
 	if (invenSize != arnould->inventory->items.size()) {
 		invenSize = arnould->inventory->items.size();
-
+		itemTextures.clear();
 		for (auto&& object_Item : arnould->inventory->items)
 		{
-			int tmp = createTexture(object_Item->name, textFont);
+			int tmp = createTexture(object_Item->name);
 			itemTextures.push_back(tmp);
-			//itemTextures[j] = createTexture(object_Item->name, textFont);
 		}
-
-		//for (arnould->inventory->iter = arnould->inventory->items.begin(); arnould->inventory->iter != arnould->inventory->items.end(); arnould->inventory->iter++) {
-		//	itemTextures[j] = createTexture((**arnould->inventory->iter).name, textFont);
-		//	cout << "for loop " << (**arnould->inventory->iter).name << j << endl;
-		//	j++;
-		//}
 	}
 
 }
 
 
 
-void UI::inventory() {
+void UI::inventory(PlayableCharacter *arnould) {
+	glUseProgram(shaderProgram);//Use texture-only shaderProgram for text rendering
+	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
 
 	arnould->inventory->show();
-	updateInven();
-
-	glm::mat4 stack = glm::mat4(1.0);
-	stack = glm::translate(stack, glm::vec3(0.0f, 0, 0.0f));
-	stack = glm::scale(stack, glm::vec3(0.5f, 0.4f, 0.0f));
-	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
-	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
-	int i = 0;
-
-	for (int j = 0; j < itemTextures.size(); j++) {// auto&& object_Item : itemTextures) {
+	updateInven(arnould);
 
 
-		glm::mat4 stack = glm::mat4(1.0);
-		stack = glm::translate(stack, glm::vec3(-0.7f, 0.8 - i, 0.0f));
-		stack = glm::scale(stack, glm::vec3(0.1f, 0.1f, 0.0f));
+	GLfloat i = 0;
+	GLfloat k = 0;
+
+	for (GLfloat j = 0; j < itemTextures.size(); j++) {// auto&& object_Item : itemTextures) {
+
+
+		stack = glm::mat4(1.0);
+		stack = glm::translate(stack, glm::vec3(-0.6 + k, 0.7 - (i), 0.0f));
+		stack = glm::scale(stack, glm::vec3(0.2f, 0.1f, 0.0f));
 		rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
 		rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
 		glBindTexture(GL_TEXTURE_2D, itemTextures[j]);
 		rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
 		i += 0.2;
+		if (j == 6 || j == 12 || j == 18) {
+			k += 0.5;
+			i = 0;
+		}
 	}
+
+
+	glEnable(GL_DEPTH_TEST);
+
+}
+void UI::initQuests(PlayableCharacter *arnould) {
+	if (currentQuest != arnould->currentQuest->ID) {
+		currentQuest = arnould->currentQuest->ID;
+		questText[0] = createTexture(arnould->currentQuest->name);
+		questText[1] = createTexture(arnould->currentQuest->description);
+		//char* reward = (char*)arnould->currentQuest->reward;cout << "Quests!" << reward<<  endl;
+		questText[2] = createTexture("Place holder");
+
+	}
+}
+
+void UI::quest(PlayableCharacter *arnould) {
+	initQuests(arnould);
+
+	glUseProgram(shaderProgram);//Use texture-only shaderProgram for text rendering
+	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+
+	stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(0.0f, 0, 0.0f));
+	stack = glm::scale(stack, glm::vec3(0.8f, 0.8f, 0.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+	stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(-0.7f, 0.7, 0.0f));
+	stack = glm::scale(stack, glm::vec3(0.1f, 0.1f, 0.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, titles[0]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+	stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(-0.7f, 0.5, 0.0f));
+	stack = glm::scale(stack, glm::vec3(0.1f, 0.1f, 0.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, questText[3]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+	stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(-0.4f, 0.5, 0.0f));
+	stack = glm::scale(stack, glm::vec3(0.2f, 0.1f, 0.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, questText[0]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+	stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(-0.6f, 0.3, 0.0f));
+	stack = glm::scale(stack, glm::vec3(0.2f, 0.1f, 0.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, questText[4]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+	stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(0.1f, 0.3, 0.0f));
+	stack = glm::scale(stack, glm::vec3(0.5f, 0.1f, 0.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, questText[1]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+
+	stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(-0.6f, 0.1, 0.0f));
+	stack = glm::scale(stack, glm::vec3(0.2f, 0.1f, 0.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, questText[5]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+	stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(-0.1f, 0.1, 0.0f));
+	stack = glm::scale(stack, glm::vec3(0.3f, 0.1f, 0.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, questText[2]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+	glEnable(GL_DEPTH_TEST);
 
 
 
 
 }
+
+void UI::QuestMarker(glm::mat4 object, GLuint shader, PlayableCharacter *arnould, vector<Character*> Game_Maze_Characters) {
+
+
+	glm::vec3 targetPos;
+
+	for (auto&& object_Item : Game_Maze_Characters) {
+		if (object_Item->characterName == arnould->currentQuest->ID) {
+			targetPos = object_Item->position;
+		}
+	}
+
+	glUseProgram(shaderProgram);//Use texture-only shaderProgram for text rendering
+	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+
+	glUseProgram(shader);
+
+	object = glm::translate(object, glm::vec3(targetPos.x, targetPos.y + 2, targetPos.z - 1));
+	object = glm::rotate(object, float((90.0f - rotation)*DEG_TO_RAD), glm::vec3(0.0f, 1.0f, 0.0f));
+	object = glm::scale(object, glm::vec3(0.3, 0.3, 0.3));
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+
+	rt3d::setUniformMatrix4fv(shader, "modelview", glm::value_ptr(object));
+	rt3d::drawIndexedMesh(arrowObjects, arrowIndexCount, GL_TRIANGLES);
+
+	rotation++;
+
+	glEnable(GL_DEPTH_TEST);
+
+}
+void UI::mainMenu() {
+
+	glm::vec3 position;
+
+	if (startMenu == true)
+	{
+		position = glm::vec3(0.0f, 0.0, 0.0f);
+
+	}
+	else if (quitMenu == true)
+	{
+		position = glm::vec3(0.0f, -0.5, 0.0f);
+	}
+
+	glUseProgram(shaderProgram);//Use texture-only shaderProgram for text rendering
+	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+
+
+	stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(0.0f, 0.0, 0.0f));
+	stack = glm::scale(stack, glm::vec3(1.0f, 1.0f, 1.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, textures[5]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+
+	stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(position));
+	stack = glm::scale(stack, glm::vec3(0.25f, 0.25f, 0.25f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+	stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(0.0f, 0.0, 0.0f));
+	stack = glm::scale(stack, glm::vec3(0.2f, 0.2f, 0.2f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, menuText[0]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+	stack = glm::mat4(1.0);
+	stack = glm::translate(stack, glm::vec3(glm::vec3(0.0f, -0.5, 0.0f)));
+	stack = glm::scale(stack, glm::vec3(0.2f, 0.2f, 0.2f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(stack));
+	glBindTexture(GL_TEXTURE_2D, menuText[1]);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
+
+
+
+
+
+	glEnable(GL_DEPTH_TEST);
+	update();
+
+
+}
+
+void UI::update() {
+	if (keys[SDL_SCANCODE_W]) {
+		//if (startMenu == true) {
+		//	quitMenu = true;
+		//	startMenu = false;
+		//}
+		if (quitMenu == true) {
+			startMenu = true;
+			quitMenu = false;
+		}
+	}
+
+	if (keys[SDL_SCANCODE_S]) {
+		if (startMenu == true) {
+			quitMenu = true;
+			startMenu = false;
+		}
+		/*if (quitMenu == true) {
+		startMenu = true;
+		quitMenu = false;
+		}*/
+	}
+
+	if (keys[SDL_SCANCODE_RETURN]) {
+		if (quitMenu == true) {
+			SDL_Quit();
+		}
+		if (startMenu == true) {
+			hub = true;
+		}
+
+	}
+
+}
+
+bool UI::triggerHub() {
+	return hub;
+}
+
+
+
 
 
 UI::~UI()

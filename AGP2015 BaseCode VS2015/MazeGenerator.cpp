@@ -4,7 +4,7 @@
 
 Character* tempHolderPlayer;
 
-void MazeGenerator::Update(Character* character, Camera* gameCamera, int &gameState)
+void MazeGenerator::Update(Character* character, Camera* gameCamera, int &gameState, float frameRate)
 {
 	character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
 
@@ -61,7 +61,8 @@ void MazeGenerator::Update(Character* character, Camera* gameCamera, int &gameSt
 				}
 			}
 		}
-	} else {
+	}
+	else {
 		//gameCamera->Collider->CollisionCircles((GLfloat)gameCamera->position.x, (GLfloat)gameCamera->position.z, 1.0);
 
 		//cout << " maze wall size: " << Game_Maze_Walls.size() << endl;
@@ -83,10 +84,10 @@ void MazeGenerator::Update(Character* character, Camera* gameCamera, int &gameSt
 	{
 		if (Game_Maze_Characters[j]->health > 0)
 		{
-			Game_Maze_Characters[j]->Update();
+			Game_Maze_Characters[j]->Update(frameRate);
 			Game_Maze_Characters[j]->RotateToFace(character);
 			Game_Maze_Characters[j]->detector->CollisionCircles((GLfloat)Game_Maze_Characters[j]->position.x, (GLfloat)Game_Maze_Characters[j]->position.z, 20);
-				
+
 			if (character->combatInstance == NULL)
 			{
 
@@ -105,33 +106,23 @@ void MazeGenerator::Update(Character* character, Camera* gameCamera, int &gameSt
 
 	for (int i = 0; i < Game_Maze_Walls.size(); i++)
 	{
-		//Game_Maze_Walls[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Walls[i]->position.x, (GLfloat)Game_Maze_Walls[i]->position.z, 0.5);
-		//for (int j = 0; j < Game_Maze_Characters.size(); j++)
-		//{
-		//	//if (Game_Maze_Characters[j]->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, Game_Maze_Characters[j]->position))
-		//	if (Game_Maze_Characters[j]->Collider->checkCollision(gameCamera->Collider, Game_Maze_Characters[j]->Collider))
-		//	{
-		//		cout << " COLLIDED!!!! " << endl;
-		//		Game_Maze_Characters[j]->canDraw = false;
-		//	} else {
-		//		Game_Maze_Characters[j]->canDraw = true;
-		//	}
-		//}
+		if (Game_Maze_Walls[i]->testPosition.y == CUBE_DOWN)
+			return;
 
-		/*for (int j = 0; j < Game_Maze_Characters.size(); j++)
+		Game_Maze_Walls[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Walls[i]->testPosition.x, (GLfloat)Game_Maze_Walls[i]->testPosition.z, 0.1);
+
+		for (int j = 0; j < Game_Maze_Characters.size(); j++)
 		{
-			//if (Game_Maze_Characters[j]->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, Game_Maze_Characters[j]->position))
 			if (Game_Maze_Characters[j]->Collider->checkCollision(character->Collider, Game_Maze_Characters[j]->Collider))
 			{
 				Game_Maze_Characters[j]->position = Game_Maze_Characters[j]->oldPosition;
 			}
 		}
 
-		//if (Game_Maze_Walls[i]->Collider->checkCollision(Game_Maze_Walls[i]->Collider->aabb, character->position))
 		if (character->Collider->checkCollision(character->Collider, Game_Maze_Walls[i]->Collider))
 		{
 			character->position = character->oldPosition;
-		}*/
+		}
 	}
 
 	character->oldPosition = character->position;
@@ -145,7 +136,7 @@ void MazeGenerator::draw(glm::mat4 object, Character* character, Camera* gameCam
 
 
 	////Game_Maze_Prefabs[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Prefabs[i]->position.x, (GLfloat)Game_Maze_Prefabs[i]->position.z, 0.5);
-	gameCamera->Collider->CollisionCircles((GLfloat)gameCamera->position.x, (GLfloat)gameCamera->position.z, 1.0);
+	//gameCamera->Collider->CollisionCircles((GLfloat)gameCamera->position.x, (GLfloat)gameCamera->position.z, 1.0);
 	for (int i = 0; i < Game_Maze_Walls.size(); i++)
 	{
 		//if (character->combatInstance != NULL)

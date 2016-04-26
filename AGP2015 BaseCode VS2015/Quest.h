@@ -13,10 +13,10 @@ class Quest
 {
 public:
 	Quest() {};
-	Quest(string s_name, string s_description, string s_ID, string s_type, char* s_targetModel, char* s_targetTexture, int s_reward, int s_status);
+	Quest(char* s_name, char* s_description, string s_ID, string s_type, char* s_targetModel, char* s_targetTexture, int s_reward, int s_status);
 
-	string name;
-	string description;
+	char* name;
+	char* description;
 	string ID;
 	string type;
 	char* targetModel;

@@ -29,10 +29,10 @@ public:
 		md2VertCount = modelInfo->md2VertCount;
 		texture = textureInfo->texture;
 
-		health = 5;
-		speed = 4;
-		strength = 4;
-		defence = 4;
+		health = 15;
+		speed = 15;
+		strength = 5;
+		defence = 5;
 	};
 
 	~Minion() {};
@@ -73,10 +73,10 @@ public:
 		md2VertCount = modelInfo->md2VertCount;
 		texture = textureInfo->texture;
 
-		health = 5;
-		speed = 4;
-		strength = 4;
-		defence = 4;
+		health = 50;
+		speed = 20;
+		strength = 15;
+		defence = 10;
 	};
 
 	~Bruiser() {};
@@ -115,10 +115,10 @@ public:
 		md2VertCount = modelInfo->md2VertCount;
 		texture = textureInfo->texture;
 
-		health = 5;
-		speed = 4;
-		strength = 4;
-		defence = 4;
+		health = 170;
+		speed = 30;
+		strength = 25;
+		defence = 15;
 	};
 
 	~Overlord() {};
@@ -156,10 +156,10 @@ public:
 		md2VertCount = modelInfo->md2VertCount;
 		texture = textureInfo->texture;
 
-		health = 5;
-		speed = 4;
-		strength = 4;
-		defence = 4;
+		health = 250;
+		speed = 35;
+		strength = 35;
+		defence = 25;
 	};
 
 	~GODUS() {};

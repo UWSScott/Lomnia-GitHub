@@ -293,6 +293,15 @@ void Character::CombatAttacks()
 
 void Character::InitalStats(GLuint setShaderProgram) {}
 
+void Character::LevelUp()
+{
+	this->max_Health += 50;
+	this->max_Mana += 50;
+	this->strength += 5;
+	this->speed += 5;
+	this->defence += 10;
+}
+
 void Character::CheckCollision(Gameobject* s_gameobject, string idType)
 {
 
@@ -315,12 +324,17 @@ void Character::CheckCollision(Gameobject* s_gameobject, string idType)
 	
 	if (QuestGiver* d = dynamic_cast<QuestGiver*>(s_gameobject))
 	{
-		this->currentQuest = d->GetQuest(currentCompletedQuests);
+		//check quest and implement
+		if (currentQuest->status != 0)
+		{
+			currentCompletedQuests++;
+			this->currentQuest = d->GetQuest(currentCompletedQuests);
+			this->LevelUp();
+		}
 	}
-
 }
 
-void Character::Animate()
+void Character::Animate(float frameRate)
 {
 	if (!playAnimation)
 		return;
@@ -334,11 +348,11 @@ void Character::Animate()
 
 
 
-	tmpModel.Animate(currentAnimation, 0.1);
+	tmpModel.Animate(currentAnimation, 0.1, frameRate);
 	rt3d::updateMesh(meshObject, RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
 }
 
-void Character::Update()
+void Character::Update(float frameRate)
 {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 
@@ -371,7 +385,7 @@ void Character::Update()
 		if (keys[SDL_SCANCODE_M]) characterState = ATTACKING;
 	}*/
 
-	Animate();
+	Animate(frameRate);
 	RegenMana();
 	//if (combatInstance == NULL)
 	//	cout << " FSAFAS HIHIHIH 2222 ";
