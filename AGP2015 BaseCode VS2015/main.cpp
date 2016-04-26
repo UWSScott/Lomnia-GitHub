@@ -1036,8 +1036,8 @@ void update(void) {
 		Game_Hub_Characters[i]->oldPosition = Game_Hub_Characters[i]->position;
 	}
 
-	if (keys[SDL_SCANCODE_R]) character->position = glm::vec3(-10, character->position.y, -10);
-	//if (keys[SDL_SCANCODE_F]) character->position.y -= 0.1f;
+	if (keys[SDL_SCANCODE_R]) character->position.y += 0.1f;
+	if (keys[SDL_SCANCODE_F]) character->position.y -= 0.1f;
 	//if (keys[SDL_SCANCODE_I]) lightPos.x += 0.1f;
 	//if (keys[SDL_SCANCODE_K]) lightPos.x -= 0.1f;
 	//if (keys[SDL_SCANCODE_J]) lightPos.z += 0.1f;
