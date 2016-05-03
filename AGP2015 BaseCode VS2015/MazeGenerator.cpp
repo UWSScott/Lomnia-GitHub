@@ -6,7 +6,7 @@ Character* tempHolderPlayer;
 
 void MazeGenerator::Update(Character* character, Camera* gameCamera, int &gameState, float frameRate)
 {
-	character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 0.5);
+	character->Collider->CollisionCircles((GLfloat)character->position.x, (GLfloat)character->position.z, 1.5);
 
 	if (character->combatInstance == NULL)
 	{
@@ -104,26 +104,26 @@ void MazeGenerator::Update(Character* character, Camera* gameCamera, int &gameSt
 
 	gameCamera->Collider->CollisionCircles((GLfloat)gameCamera->position.x, (GLfloat)gameCamera->position.z, 0.1);
 
-	for (int i = 0; i < Game_Maze_Walls.size(); i++)
-	{
-		if (Game_Maze_Walls[i]->testPosition.y == CUBE_DOWN)
-			return;
+	//for (int i = 0; i < Game_Maze_Walls.size(); i++)
+	//{
+	//	if (Game_Maze_Walls[i]->testPosition.y == CUBE_DOWN)
+	//		return;
 
-		Game_Maze_Walls[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Walls[i]->testPosition.x, (GLfloat)Game_Maze_Walls[i]->testPosition.z, 0.1);
+	//	Game_Maze_Walls[i]->Collider->CollisionCircles((GLfloat)Game_Maze_Walls[i]->testPosition.x, (GLfloat)Game_Maze_Walls[i]->testPosition.z, 0.1);
 
-		for (int j = 0; j < Game_Maze_Characters.size(); j++)
-		{
-			if (Game_Maze_Characters[j]->Collider->checkCollision(character->Collider, Game_Maze_Characters[j]->Collider))
-			{
-				Game_Maze_Characters[j]->position = Game_Maze_Characters[j]->oldPosition;
-			}
-		}
+	//	for (int j = 0; j < Game_Maze_Characters.size(); j++)
+	//	{
+	//		if (Game_Maze_Characters[j]->Collider->checkCollision(character->Collider, Game_Maze_Characters[j]->Collider))
+	//		{
+	//			Game_Maze_Characters[j]->position = Game_Maze_Characters[j]->oldPosition;
+	//		}
+	//	}
 
-		if (character->Collider->checkCollision(character->Collider, Game_Maze_Walls[i]->Collider))
-		{
-			character->position = character->oldPosition;
-		}
-	}
+	//	if (character->Collider->checkCollision(character->Collider, Game_Maze_Walls[i]->Collider))
+	//	{
+	//		character->position = character->oldPosition;
+	//	}
+	//}
 
 	character->oldPosition = character->position;
 }
