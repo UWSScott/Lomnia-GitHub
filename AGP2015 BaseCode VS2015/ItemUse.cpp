@@ -4,6 +4,7 @@
 
 ItemUse::ItemUse(Item* s_itemObject)
 {
+	attackText = "ITEM USE";
 	itemObject = s_itemObject;
 }
 

@@ -1092,7 +1092,9 @@ void RenderScene(GLuint refShaderProgram) {
 	//SDL_GL_SwapWindow(window); // swap buffers
 }
 
-
+/*Draw function - Renders the scene twice, first from the lights view and then from the game camera position. 
+If you're using an object that isn't inside the predefined vector lists then you will need to manually update the 
+gameobjects depthmap otherwise shadows will not work for it. - Scott */
 void draw(SDL_Window * window)
 {
 	currentPass = 0;
