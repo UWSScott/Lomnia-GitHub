@@ -20,7 +20,7 @@ public:
 	int rarityOrPotency;
 
 	Item() {};
-	virtual void Apply(Character& attacker, Character& opponent); // Scotts for poison
+//	virtual void Apply(Character& attacker, Character& opponent); // Scotts for poison
 	void virtual Use(Character* character) = 0;
 	//void virtual equip(Character* character) = 0; 
 

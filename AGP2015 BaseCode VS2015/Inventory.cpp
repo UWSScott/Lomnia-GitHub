@@ -10,6 +10,10 @@ Inventory::Inventory()
 	equippedWeapon = new Sword(1); 
 }
 
+
+//******************************************************************************************************************
+// Instantiates items (according to details taken in as parameters) and pushes this item on to the 'items' vector. 
+//******************************************************************************************************************
 void Inventory::addItem(string itemNameID, int rarityOrPotency)
 {
 	// find out what item to add, create item, push onto inventory
@@ -60,6 +64,10 @@ void Inventory::addItem(string itemNameID, int rarityOrPotency)
 	}
 }
 
+
+//******************************************************************************************************************
+// Deletes item (according to detail taken in as parameter) removes it from the 'items' vector. 
+//******************************************************************************************************************
 void Inventory::removeItem(string itemNameID)
 {
 	bool itemFound = false;
@@ -81,6 +89,9 @@ void Inventory::removeItem(string itemNameID)
 	}
 }
 
+//******************************************************************************************************************
+// Checks the player can afford the item, instantiates that item (according to details taken in as parameters) and pushes it on to the 'items' vector. 
+//******************************************************************************************************************
 void Inventory::buyItem(string itemNameID, int rarityOrPotency)
 {
 	int playerChoice;
@@ -173,6 +184,9 @@ void Inventory::buyItem(string itemNameID, int rarityOrPotency)
 	}
 }
 
+//******************************************************************************************************************
+// Removes item (according to details taken in as parameters) from 'items' vector, and adds half of original item cost to player currency. 
+//******************************************************************************************************************
 bool Inventory::sellItem(string itemNameID, int rarity)
 {
 	bool itemFound = false;
@@ -219,6 +233,9 @@ Item* Inventory::FindItem(string itemNameID)
 }
 
 
+//******************************************************************************************************************
+// Adds a random potion of a random potency to inventory, and a random amount of game currency.  
+//******************************************************************************************************************
 void Inventory::AddRandomItem()
 {
 	// generate a random number
@@ -266,6 +283,9 @@ void Inventory::AddRandomItem()
 
 }
 
+//******************************************************************************************************************
+// Checks item is available to use, then calls that items particular 'Use' function if so.  
+//******************************************************************************************************************
 
 void Inventory::UseItem(string itemNameID, Character* character)
 {
@@ -283,6 +303,9 @@ void Inventory::UseItem(string itemNameID, Character* character)
 
 }
 
+//******************************************************************************************************************
+// Checks item is within 'items' vector. 
+//******************************************************************************************************************
 bool Inventory::hasItem(string itemNameID)
 {
 	bool itemFound = false;
@@ -297,11 +320,17 @@ bool Inventory::hasItem(string itemNameID)
 	return false;
 }
 
+//******************************************************************************************************************
+// Returns equippedWeapon, to check outside of class that correct weapon is equipped (and if not, to equip it)
+//******************************************************************************************************************
 Weapon* Inventory::equipWeapon()
 {
 	return equippedWeapon; 
 }
 
+//******************************************************************************************************************
+// Text show: to be used for debugging. 
+//******************************************************************************************************************
 void Inventory::show()
 {
 	cout << "Inventory (Size:" << getSize() << ") :" << endl;
@@ -312,6 +341,9 @@ void Inventory::show()
 	cout << endl << "Gold: " << gold << endl << endl;
 }
 
+//******************************************************************************************************************
+// Returns size of inventory (how many items are being held)
+//******************************************************************************************************************
 int Inventory::getSize()
 {
 	return items.size();
