@@ -123,53 +123,6 @@ rt3d::materialStruct material1 = {
 	1.0f  // shininess
 };
 
-
-
-
-//glm::quat RotationBetweenVectors(glm::vec3 start, glm::vec3 dest) {
-//	start = normalize(start);
-//	dest = normalize(dest);
-//
-//	float cosTheta = dot(start, dest);
-//	glm::vec3 rotationAxis;
-//
-//	if (cosTheta < -1 + 0.001f) {
-//		// special case when vectors in opposite directions:
-//		// there is no "ideal" rotation axis
-//		// So guess one; any will do as long as it's perpendicular to start
-//		rotationAxis = cross(glm::vec3(0.0f, 0.0f, 1.0f), start);
-//		if (gtx::norm::length2(rotationAxis) < 0.01) // bad luck, they were parallel, try again!
-//			rotationAxis = cross(glm::vec3(1.0f, 0.0f, 0.0f), start);
-//
-//		rotationAxis = normalize(rotationAxis);
-//		return gtx::quaternion::angleAxis(180.0f, rotationAxis);
-//	}
-//
-//	rotationAxis = cross(start, dest);
-//
-//	float s = sqrt((1 + cosTheta) * 2);
-//	float invs = 1 / s;
-//
-//	return glm::quat(
-//		s * 0.5f,
-//		rotationAxis.x * invs,
-//		rotationAxis.y * invs,
-//		rotationAxis.z * invs
-//		);
-//
-//}
-
-
-
-
-
-
-
-
-
-
-
-
 // md2 stuff
 md2model tmpModel;
 md2model weapon;
@@ -192,10 +145,6 @@ GLuint button[10];
 const char *skyboxFiles[6] = {
 	"red-sky/red_sky_right.bmp", "red-sky/red_sky_left.bmp", "red-sky/red_sky_back.bmp", "red-sky/red_sky_front.bmp", "red-sky/red_sky_top.bmp", "red-sky/red_sky_top.bmp"
 };
-
-//const char *skyboxFiles[6] = {
-//	"Lomnia_End_Skybox/front.bmp", "Lomnia_End_Skybox/back.bmp", "Lomnia_End_Skybox/left.bmp", "Lomnia_End_Skybox/right.bmp", "Lomnia_End_Skybox/up.bmp", "Lomnia_End_Skybox/down.bmp"
-//};
 
 
 glm::vec3 oldPlayerPos;
@@ -225,12 +174,12 @@ GLuint debugDepthQuad;
 GLuint depthMapFBO = 0;
 GLuint depthMap;
 bool openShop;
-const GLuint SHADOW_WIDTH = 3840, SHADOW_HEIGHT = 2160;
+const GLuint SHADOW_WIDTH = 7680, SHADOW_HEIGHT = 4320;
 //const GLuint SHADOW_WIDTH = 1920, SHADOW_HEIGHT = 1080;
 int currentPass = 0;
 int frameRate = 0;
-GLuint screenHeight = 600;
-GLuint screenWidth = 800;
+GLuint screenHeight = 1080;
+GLuint screenWidth = 1920;
 
 void SpawnFinalBoss()
 {
@@ -349,7 +298,7 @@ SDL_Window * setupRC(SDL_GLContext &context) {
 
 													   // Create 800x600 window 
 	window = SDL_CreateWindow("SDL/GLM/OpenGL Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+		screenWidth, screenHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 	if (!window) // Check window was created OK
 		rt3d::exitFatalError("Unable to create window");
 
@@ -603,7 +552,7 @@ void init(void)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	StartGame();
+	//StartGame();
 }
 
 
@@ -992,7 +941,7 @@ void update(void) {
 	//if (keys[SDL_SCANCODE_O]) lightPos.y += 0.1f;
 	//if (keys[SDL_SCANCODE_P]) lightPos.y -= 0.1f;
 	//if (keys[SDL_SCANCODE_N]) character->inventory->AddRandomItem();
-	//if (keys[SDL_SCANCODE_Q]) SpawnFinalBoss();
+	if (keys[SDL_SCANCODE_Y]) SpawnFinalBoss();
 	//if (keys[SDL_SCANCODE_7]) gameState = HUB;
 	if (keys[SDL_SCANCODE_Z]) cout << frameRate << endl;
 }
@@ -1143,7 +1092,9 @@ void RenderScene(GLuint refShaderProgram) {
 	//SDL_GL_SwapWindow(window); // swap buffers
 }
 
-
+/*Draw function - Renders the scene twice, first from the lights view and then from the game camera position. 
+If you're using an object that isn't inside the predefined vector lists then you will need to manually update the 
+gameobjects depthmap otherwise shadows will not work for it. - Scott */
 void draw(SDL_Window * window)
 {
 	currentPass = 0;

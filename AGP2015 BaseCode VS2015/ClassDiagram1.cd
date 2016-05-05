@@ -1,2 +1,468 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram /> 
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Camera">
+    <Position X="13.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CUACAIKAAAADAAUgZIKQAAAAAAEAAAAAxAABCgIWAAA=</HashCode>
+      <FileName>Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Character">
+    <Position X="20" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AYQQUJSBhAAhiRAYCCKIaAcBDBEKAQCjYCQAqEoACQo=</HashCode>
+      <FileName>Character.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AABB" Collapsed="true">
+    <Position X="48.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAEAAACA=</HashCode>
+      <FileName>Collisions.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Collisions" Collapsed="true">
+    <Position X="50.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAACAAAAAAAAAAQBAAAAIAAAAAACABAAUABAAA=</HashCode>
+      <FileName>Collisions.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Minion" Collapsed="true">
+    <Position X="25.25" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>EnemyType.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bruiser">
+    <Position X="14" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EnemyType.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Overlord">
+    <Position X="16.25" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAACA=</HashCode>
+      <FileName>EnemyType.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GODUS">
+    <Position X="20.75" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EnemyType.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestGiver" Collapsed="true">
+    <Position X="23" Y="16.25" Width="1.5" />
+    <InheritanceLine Type="Character" FixedFromPoint="true">
+      <Path>
+        <Point X="20.812" Y="1.25" />
+        <Point X="20.812" Y="0.875" />
+        <Point X="22.625" Y="0.875" />
+        <Point X="22.625" Y="16.596" />
+        <Point X="23" Y="16.596" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAQAAAAAAAAgAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>EnemyType.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileLoader" Collapsed="true">
+    <Position X="54" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAEACAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileLoader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gameobject">
+    <Position X="26" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAgAAAAKAYAICAQAAAgAUCAAAIARAARE=</HashCode>
+      <FileName>Gameobject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGenerator" Collapsed="true">
+    <Position X="48.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>GAYAAQAwQAEAIYAQAAIAAAIAAAAABgQJAAAAwAAACAE=</HashCode>
+      <FileName>MazeGenerator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazePrefab">
+    <Position X="11" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAIAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MazePrefab.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="md2model" Collapsed="true">
+    <Position X="50.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAgIQAAQgABAAAAAAAAAAAQEAABACQAAAAAAAQIgACU=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayableCharacter">
+    <Position X="18.5" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAQAAIAAAAAEAQIAAAACAAACAAAAAI=</HashCode>
+      <FileName>PlayableCharacter.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Prefab">
+    <Position X="10.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAiIAAAAAAQAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Prefab.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quest" Collapsed="true">
+    <Position X="52.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUBAAAAAAAggAAAIBEAAAACAAAFAIAAAAAAAABAAAA=</HashCode>
+      <FileName>Quest.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Holder">
+    <Position X="29.25" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAABAAAEAAAAAAAAA=</HashCode>
+      <FileName>ResourceManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MD2Holder">
+    <Position X="26.75" Y="18" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAAEAAAgAgAAAAAAAAAIAAA=</HashCode>
+      <FileName>ResourceManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OBJHolder">
+    <Position X="29.25" Y="18" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAACAAgAAAAAAAAAICAA=</HashCode>
+      <FileName>ResourceManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TextureHolder">
+    <Position X="31.25" Y="18" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAgAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>ResourceManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ResourceManager" Collapsed="true">
+    <Position X="54" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAEAAAAABAAglAABAAAAAIABA=</HashCode>
+      <FileName>ResourceManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Skybox">
+    <Position X="5.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEABAAAAhAIAAAAAAQAAAAIAAAAAAAAAARA=</HashCode>
+      <FileName>Skybox.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Terrain">
+    <Position X="8.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Terrain.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI" Collapsed="true">
+    <Position X="55.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARgAChBQEApQAIiCACAAAAIgIEEVMJCgAAQCCAEERg=</HashCode>
+      <FileName>UI.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Weapon">
+    <Position X="44" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAQAAAAAAABAAAAAAKACAgAACEVAQgAAEAACAKAAQA=</HashCode>
+      <FileName>Weapon.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="C_Attack">
+    <Position X="6.5" Y="13.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>QAEEUAAAgABAAIAAgCwAAAYAoIAAiEICAAyAIAAASEA=</HashCode>
+      <FileName>Attack.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CombatInstance" Collapsed="true">
+    <Position X="52.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAKAAAAAAUEwAAAABAAAEIAAAASAAAAAAAECIAA=</HashCode>
+      <FileName>CombatInstance.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Flee">
+    <Position X="7.25" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Flee.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HeavyAttack">
+    <Position X="9.5" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HeavyAttack.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ItemUse">
+    <Position X="11.75" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAEAEAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ItemUse.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LightAttack">
+    <Position X="0.5" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>LightAttack.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Poison">
+    <Position X="2.75" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Poison.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Stun">
+    <Position X="5" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Stun.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Axe">
+    <Position X="41.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Axe.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BonusArmourPotion">
+    <Position X="34.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAACAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BonusArmourPotion.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DefencePotion">
+    <Position X="39.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAEQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DefencePotion.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Inventory" Collapsed="true">
+    <Position X="55.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAQQAAIAAJAAEAAiAAAACAAQIAAACBAAAAgAEAAA=</HashCode>
+      <FileName>Inventory.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Item">
+    <Position X="37.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAABIAAAAAAAAAAAAEAAAECAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Item.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Knives">
+    <Position X="46.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Knives.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ManaPotion">
+    <Position X="28" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAABEAAAAAAAAABAAAAA=</HashCode>
+      <FileName>ManaPotion.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Medkit">
+    <Position X="30.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAABEAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Medkit.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Potion">
+    <Position X="36.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Potion.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpeedPotion">
+    <Position X="32.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAEAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SpeedPotion.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StrengthPotion">
+    <Position X="37" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAEAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>StrengthPotion.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sword">
+    <Position X="44" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sword.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="MostDamageSort" Collapsed="true">
+    <Position X="55.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAEAAAAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Character.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="EfficentSort" Collapsed="true">
+    <Position X="50.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Character.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="FastAttackSort" Collapsed="true">
+    <Position X="54" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAEAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Character.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Cell" Collapsed="true">
+    <Position X="48.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAIAAAAAAAAIAAAAAAAEAAAAAAACACAAAAAA=</HashCode>
+      <FileName>MazeGenerator.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="md2_header_t" Collapsed="true">
+    <Position X="54" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAWACAJAAAAAAAEAABAAAAAAmAAAAAACAAAAAAsAwA=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="md2_skin_t" Collapsed="true">
+    <Position X="48.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="md2_texCoord_t" Collapsed="true">
+    <Position X="50.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIQAAAAAAAA=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="md2_triangle_t" Collapsed="true">
+    <Position X="52.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="md2_vertex_t" Collapsed="true">
+    <Position X="54" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="md2_frame_t" Collapsed="true">
+    <Position X="50.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAACAAAEAAAAAAAAAEAABAA=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="md2_glcmd_t" Collapsed="true">
+    <Position X="52.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIQAAAABAAA=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="md2_model_t" Collapsed="true">
+    <Position X="55.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAQAAAAAgAgAAAAIAAQAAAQA=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="rt3d::vaoBuffers" Collapsed="true">
+    <Position X="50.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAAAAgABAAAAEAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>rt3d.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="rt3d::position" Collapsed="true">
+    <Position X="48.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAQAAAAA=</HashCode>
+      <FileName>rt3dObjLoader.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="rt3d::faceIndex" Collapsed="true">
+    <Position X="52.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBQAAAAAAAA=</HashCode>
+      <FileName>rt3dObjLoader.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="rt3d::lightStruct" Collapsed="true">
+    <Position X="55.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAIAIAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>rt3d.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="rt3d::materialStruct" Collapsed="true">
+    <Position X="48.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAABAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>rt3d.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="md2vec3" Collapsed="true">
+    <Position X="48.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>md2model.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="GameStates" Collapsed="true">
+    <Position X="48.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAKAAAAAAAAACAAAAAAAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
